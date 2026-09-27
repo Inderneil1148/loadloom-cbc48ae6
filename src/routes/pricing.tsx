@@ -72,11 +72,11 @@ function Pricing() {
                   ))}
                 </ul>
 
-                <dl className="mt-6 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border pt-6 text-sm">
+                <dl className="mt-6 space-y-2.5 border-t border-border pt-6 text-sm">
                   {plan.limits.map((limit) => (
-                    <div key={limit.label} className="flex justify-between gap-2">
-                      <dt className="text-muted-foreground">{limit.label}</dt>
-                      <dd className="font-semibold">{limit.value}</dd>
+                    <div key={limit.label} className="flex items-baseline justify-between gap-3">
+                      <dt className="shrink-0 text-muted-foreground">{limit.label}</dt>
+                      <dd className="whitespace-nowrap text-right font-semibold">{limit.value}</dd>
                     </div>
                   ))}
                 </dl>
