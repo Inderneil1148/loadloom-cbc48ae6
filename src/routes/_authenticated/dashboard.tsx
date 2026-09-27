@@ -76,20 +76,20 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-5">
+        <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-5">
           <Logo />
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-muted-foreground sm:inline">{session?.user.email}</span>
-            <Button variant="outline" size="sm" onClick={signOut}>
-              <LogOut /> Sign out
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+            <span className="hidden truncate text-sm text-muted-foreground sm:inline">{session?.user.email}</span>
+            <Button variant="outline" size="sm" onClick={signOut} className="shrink-0">
+              <LogOut /> <span className="hidden xs:inline sm:inline">Sign out</span>
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-7xl px-5 py-8">
+      <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8">
         <p className="eyebrow text-accent">Operations at a glance</p>
-        <h1 className="mt-2 text-3xl font-extrabold">Today's yard</h1>
+        <h1 className="mt-2 text-2xl font-extrabold sm:text-3xl">Today's yard</h1>
 
         {error ? (
           <p className="mt-8 rounded-md border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
