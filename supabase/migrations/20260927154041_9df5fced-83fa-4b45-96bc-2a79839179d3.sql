@@ -1,0 +1,18 @@
+CREATE TABLE public.customers (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), owner_id uuid NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id), name text NOT NULL, contact_name text, phone text, email text, address text, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.customers TO authenticated;
+GRANT ALL ON public.customers TO service_role;
+ALTER TABLE public.customers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Owners manage their customers" ON public.customers FOR ALL TO authenticated USING (auth.uid() = owner_id) WITH CHECK (auth.uid() = owner_id);
+CREATE TRIGGER update_customers_updated_at BEFORE UPDATE ON public.customers FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+CREATE TABLE public.delivery_sites (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), owner_id uuid NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id), name text NOT NULL, address text, map_url text, contact_name text, phone text, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.delivery_sites TO authenticated;
+GRANT ALL ON public.delivery_sites TO service_role;
+ALTER TABLE public.delivery_sites ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Owners manage their delivery sites" ON public.delivery_sites FOR ALL TO authenticated USING (auth.uid() = owner_id) WITH CHECK (auth.uid() = owner_id);
+CREATE TRIGGER update_delivery_sites_updated_at BEFORE UPDATE ON public.delivery_sites FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+CREATE TABLE public.drivers (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), owner_id uuid NOT NULL DEFAULT auth.uid() REFERENCES auth.users(id), name text NOT NULL, phone text, licence_number text, vehicle_id uuid REFERENCES public.vehicles(id) ON DELETE SET NULL, status text NOT NULL DEFAULT 'available' CHECK (status IN ('available','on_trip','off_duty')), created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.drivers TO authenticated;
+GRANT ALL ON public.drivers TO service_role;
+ALTER TABLE public.drivers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Owners manage their drivers" ON public.drivers FOR ALL TO authenticated USING (auth.uid() = owner_id) WITH CHECK (auth.uid() = owner_id);
+CREATE TRIGGER update_drivers_updated_at BEFORE UPDATE ON public.drivers FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
