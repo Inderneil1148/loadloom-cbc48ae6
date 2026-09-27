@@ -6,7 +6,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Logo } from "@/components/site/Logo";
+import { ArrowRight, Building2, Lock, Mail } from "lucide-react";
 import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/auth")({
@@ -87,43 +87,38 @@ function AuthPage() {
     navigate({ to: "/dashboard", replace: true });
   }
 
+  const field =
+    "h-11 border-navy-foreground/15 bg-navy-foreground/5 pl-10 text-navy-foreground placeholder:text-navy-foreground/35";
+
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="hidden flex-col justify-between bg-navy p-12 text-navy-foreground lg:flex">
-        <Logo tone="light" />
-        <div>
-          <p className="eyebrow text-accent">Construction Material Dispatch &amp; Operations OS</p>
-          <h1 className="mt-4 text-4xl font-extrabold leading-tight">
-            Every Load.
-            <br />
-            Accounted For.
-          </h1>
-          <p className="mt-4 max-w-sm text-navy-foreground/65">
-            Orders, trucks, deliveries, proof, invoices and payments — from one system your whole team
-            can use.
-          </p>
-        </div>
-        <p className="text-xs text-navy-foreground/45">
-          From order to delivery, without the WhatsApp chaos.
-        </p>
-      </div>
-
-      <div className="flex items-center justify-center bg-background px-5 py-14">
-        <div className="w-full max-w-sm">
-          <div className="lg:hidden">
-            <Logo />
+    <div className="flex min-h-screen items-center justify-center bg-navy px-4 py-12 text-navy-foreground">
+      <div className="w-full max-w-md">
+        <div className="flex flex-col items-center text-center">
+          <div className="flex items-center gap-3">
+            <span className="grid h-11 w-11 place-items-center rounded-lg bg-accent text-lg font-extrabold text-accent-foreground shadow-lg shadow-accent/30">
+              LL
+            </span>
+            <div className="text-left leading-none">
+              <p className="text-2xl font-extrabold">LoadLoom</p>
+              <p className="mt-1 text-[10px] font-bold tracking-[0.2em] text-accent">DISPATCH OS</p>
+            </div>
           </div>
+          <h1 className="mt-6 text-xl font-bold">
+            {checkEmail ? "Confirm your email" : isSignUp ? "Create your business account" : "Sign in to dispatch OS"}
+          </h1>
+          <p className="mt-1 text-sm text-navy-foreground/60">Every Load. Accounted For.</p>
+        </div>
 
+        <div className="mt-8 rounded-2xl border border-navy-foreground/10 bg-navy-foreground/[0.03] p-6 shadow-2xl sm:p-8">
           {checkEmail ? (
-            <div className="mt-8">
-              <h2 className="text-2xl font-bold">Confirm your email</h2>
-              <p className="mt-3 text-sm text-muted-foreground">
-                We sent a confirmation link to <span className="font-semibold">{email}</span>. Open it
-                to activate your LoadLoom account.
+            <div className="text-center">
+              <p className="text-sm text-navy-foreground/70">
+                We sent a confirmation link to <span className="font-semibold text-navy-foreground">{email}</span>.
+                Open it to activate your account.
               </p>
               <Button
-                variant="outline"
-                className="mt-6"
+                variant="onNavy"
+                className="mt-6 w-full"
                 onClick={() => {
                   setCheckEmail(false);
                   setIsSignUp(false);
@@ -134,79 +129,91 @@ function AuthPage() {
             </div>
           ) : (
             <>
-              <h2 className="mt-8 text-2xl font-bold lg:mt-0">
-                {isSignUp ? "Create your account" : "Sign in to LoadLoom"}
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {isSignUp
-                  ? "Set up your business and start putting loads on record."
-                  : "Welcome back. Pick up where the yard left off."}
-              </p>
-
               <Button
-                variant="outline"
+                type="button"
+                variant="onNavy"
                 size="lg"
-                className="mt-7 w-full"
+                className="w-full"
                 onClick={handleGoogle}
                 disabled={busy}
               >
-                Continue with Google
+                <GoogleIcon /> Continue with Google
               </Button>
 
               <div className="my-6 flex items-center gap-3">
-                <span className="h-px flex-1 bg-border" />
-                <span className="text-xs text-muted-foreground">or use email</span>
-                <span className="h-px flex-1 bg-border" />
+                <span className="h-px flex-1 bg-navy-foreground/10" />
+                <span className="text-xs text-navy-foreground/50">Or use email</span>
+                <span className="h-px flex-1 bg-navy-foreground/10" />
               </div>
 
               <form className="space-y-4" onSubmit={handleSubmit}>
                 {isSignUp && (
                   <div className="space-y-2">
                     <Label htmlFor="business">Business name</Label>
-                    <Input
-                      id="business"
-                      required
-                      value={businessName}
-                      onChange={(e) => setBusinessName(e.target.value)}
-                      placeholder="e.g. Shree Sand Suppliers"
-                    />
+                    <div className="relative">
+                      <Building2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-foreground/40" />
+                      <Input
+                        id="business"
+                        required
+                        className={field}
+                        value={businessName}
+                        onChange={(e) => setBusinessName(e.target.value)}
+                        placeholder="e.g. Shree Sand Suppliers"
+                      />
+                    </div>
                   </div>
                 )}
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@business.in"
-                  />
+                  <Label htmlFor="email">Email address</Label>
+                  <div className="relative">
+                    <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-foreground/40" />
+                    <Input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      className={field}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="operations@yourcompany.com"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    autoComplete={isSignUp ? "new-password" : "current-password"}
-                    required
-                    minLength={8}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="At least 8 characters"
-                  />
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Password</Label>
+                    {!isSignUp && (
+                      <button type="button" onClick={handleForgot} className="text-xs text-accent hover:underline">
+                        Forgot password?
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-foreground/40" />
+                    <Input
+                      id="password"
+                      type="password"
+                      autoComplete={isSignUp ? "new-password" : "current-password"}
+                      required
+                      minLength={8}
+                      className={field}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                    />
+                  </div>
                 </div>
-                <Button type="submit" variant="action" size="lg" className="w-full" disabled={busy}>
-                  {busy ? "Please wait…" : isSignUp ? "Create account" : "Sign in"}
+                <Button type="submit" variant="action" size="lg" className="w-full shadow-lg shadow-accent/25" disabled={busy}>
+                  {busy ? "Please wait…" : isSignUp ? "Create account" : "Sign in to Operations"}
+                  {!busy && <ArrowRight />}
                 </Button>
               </form>
 
-              <p className="mt-6 text-sm text-muted-foreground">
-                {isSignUp ? "Already have an account?" : "New to LoadLoom?"}{" "}
+              <p className="mt-6 border-t border-navy-foreground/10 pt-5 text-center text-sm text-navy-foreground/60">
+                {isSignUp ? "Already have an account?" : "New business to LoadLoom?"}{" "}
                 <button
                   type="button"
-                  className="font-semibold text-foreground underline underline-offset-4"
+                  className="font-semibold text-accent hover:underline"
                   onClick={() => setIsSignUp((v) => !v)}
                 >
                   {isSignUp ? "Sign in" : "Create an account"}
@@ -214,14 +221,37 @@ function AuthPage() {
               </p>
             </>
           )}
-
-          <p className="mt-10 text-xs text-muted-foreground">
-            <Link to="/" className="underline underline-offset-4">
-              Back to loadloom.com
-            </Link>
-          </p>
         </div>
+
+        <p className="mt-6 text-center text-xs text-navy-foreground/45">
+          <Link to="/" className="hover:underline">
+            Back to website
+          </Link>
+        </p>
       </div>
     </div>
+  );
+
+  async function handleForgot() {
+    if (!email) {
+      toast.error("Enter your email address first.");
+      return;
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth`,
+    });
+    if (error) toast.error(error.message);
+    else toast.success("Password reset link sent. Check your inbox.");
+  }
+}
+
+function GoogleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z" />
+      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z" />
+      <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z" />
+      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z" />
+    </svg>
   );
 }
