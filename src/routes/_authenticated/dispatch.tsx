@@ -50,9 +50,9 @@ function DispatchBoard() {
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {STAGES.map(({ status, label }) => {
           const rows = data.filter((d) => d.status === status);
-          return <section key={status} className="min-h-44 rounded-md border border-border bg-card p-3 shadow-panel">
+          return <section key={status} className="rounded-md border border-border bg-card p-3 shadow-panel">
             <div className="flex items-center justify-between border-b border-border pb-2"><h2 className="text-sm font-bold">{label}</h2><span className="text-xs font-semibold tabular-nums text-accent">{rows.length}</span></div>
-            {rows.length ? <div className="divide-y divide-border">{rows.map((d) => <Link key={d.id} to="/deliveries" className="block py-3 hover:text-accent"><div className="flex items-center justify-between gap-2"><span className="truncate font-semibold">{d.orders?.order_no ?? "Unlinked delivery"}</span><StatusBadge value={d.status} /></div><p className="mt-1 text-xs text-muted-foreground">{d.orders?.customer_name ?? "No customer"} · {d.vehicles?.registration ?? "No truck"}</p><p className="text-xs text-muted-foreground">{d.driver_name ?? "No driver"} · {d.orders?.site ?? "No site"}</p></Link>)}</div> : <div className="grid h-28 place-items-center text-center text-xs text-muted-foreground">{isPending ? "Loading…" : <span><Truck className="mx-auto mb-2 size-5" />No loads in this stage</span>}</div>}
+            {rows.length ? <div className="divide-y divide-border">{rows.map((d) => <Link key={d.id} to="/deliveries" className="block py-3 hover:text-accent"><div className="flex items-center justify-between gap-2"><span className="truncate font-semibold">{d.orders?.order_no ?? "Unlinked delivery"}</span><StatusBadge value={d.status} /></div><p className="mt-1 text-xs text-muted-foreground">{d.orders?.customer_name ?? "No customer"} · {d.vehicles?.registration ?? "No truck"}</p><p className="text-xs text-muted-foreground">{d.driver_name ?? "No driver"} · {d.orders?.site ?? "No site"}</p></Link>)}</div> : <div className="grid h-16 place-items-center text-center text-xs text-muted-foreground sm:h-24">{isPending ? "Loading…" : <span>No loads in this stage</span>}</div>}
           </section>;
         })}
       </div>

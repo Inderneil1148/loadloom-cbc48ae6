@@ -80,7 +80,7 @@ export function AppHeader() {
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col bg-sidebar lg:flex">{nav}</aside>
       {menuOpen && <div className="fixed inset-0 z-50 lg:hidden"><div className="absolute inset-0 bg-navy/60" onClick={() => setMenuOpen(false)} /><aside className="relative flex h-full w-[min(18rem,85vw)] flex-col bg-sidebar shadow-lifted">{nav}</aside></div>}
       <header className="sticky top-0 z-30 border-b border-border bg-card lg:ml-60">
-        <div className="mx-auto grid h-14 max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:px-5">
+         <div className="mx-auto grid h-14 max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:px-5 lg:flex lg:justify-between">
           <Button variant="ghost" size="icon" aria-label="Open menu" className="lg:hidden" onClick={() => setMenuOpen(true)}><Menu /></Button>
           <div className="hidden min-w-0 items-center gap-2 text-sm sm:flex"><span className="text-muted-foreground">LoadLoom</span><ChevronRight className="size-3 text-muted-foreground" /><span className="truncate font-semibold">{page}</span></div>
           <span className="truncate font-display text-sm font-bold sm:hidden">{page}</span>
