@@ -1,3 +1,4 @@
+import logoIcon from "@/assets/loadloom-icon.png.asset.json";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -62,7 +63,7 @@ export function AppHeader() {
   const nav = (
     <>
       <div className="flex items-center gap-2.5 border-b border-sidebar-border px-4 py-4">
-        <span className="grid size-8 shrink-0 place-items-center rounded-sm bg-accent font-display text-xs font-extrabold text-accent-foreground">LL</span>
+        <img src={logoIcon.url} alt="LoadLoom" className="size-8 shrink-0 rounded-sm" />
         <div className="min-w-0 flex-1">
           <p className="truncate font-display text-sm font-extrabold text-sidebar-accent-foreground">LoadLoom</p>
           <p className="text-[9px] font-semibold uppercase text-accent">Dispatch OS</p>

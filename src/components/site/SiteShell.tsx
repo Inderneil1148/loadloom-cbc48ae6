@@ -133,7 +133,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
             </div>
           </div>
           <p className="mt-10 border-t border-navy-foreground/10 pt-6 text-xs text-navy-foreground/50">
-            © {new Date().getFullYear()} LoadLoom. Built for bulk construction-material suppliers in India.
+            © 2026 The Social INK / INDERNEILK
           </p>
         </div>
       </footer>

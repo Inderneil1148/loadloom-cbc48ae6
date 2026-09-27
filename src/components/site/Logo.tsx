@@ -1,3 +1,4 @@
+import logoIcon from "@/assets/loadloom-icon.png.asset.json";
 import { Link } from "@tanstack/react-router";
 
 export function Logo({ tone = "dark" }: { tone?: "dark" | "light" }) {
