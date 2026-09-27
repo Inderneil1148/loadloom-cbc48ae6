@@ -219,10 +219,29 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {!data.vehicles.length && <EmptyRow cols={2} />}
             </TableBody>
           </Table>
+          </div>
         </Panel>
       </div>
 
       <Panel title="Deliveries" className="mt-6">
+        <div className="divide-y divide-border sm:hidden">
+          {data.deliveries.slice(0, 8).map((d) => (
+            <div key={d.id} className="px-3 py-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{d.orders?.order_no ?? "—"} · {d.orders?.customer_name}</p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">{d.orders?.site} · {d.vehicles?.registration ?? "—"} · {d.driver_name}</p>
+                </div>
+                <Status value={d.status} />
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Dispatched {fmtDate(d.dispatched_at)} · Delivered {fmtDate(d.delivered_at)}
+              </p>
+            </div>
+          ))}
+          {!data.deliveries.length && <EmptyCard />}
+        </div>
+        <div className="hidden sm:block">
         <Table>
           <TableHeader><TableRow>
             <TableHead>Order</TableHead><TableHead>Site</TableHead><TableHead>Truck / driver</TableHead>
