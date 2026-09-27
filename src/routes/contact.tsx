@@ -23,7 +23,7 @@ export const Route = createFileRoute("/contact")({
       },
     ],
   }),
-  component: Contact;
+  component: Contact,
 });
 
 function Contact() {
