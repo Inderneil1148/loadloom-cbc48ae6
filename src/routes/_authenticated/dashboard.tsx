@@ -4,10 +4,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Package, Truck, MapPin, FileText, Wallet, Database } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AppHeader } from "@/components/app/AppHeader";
+import { supabase } from "@/integrations/supabase/client";
 import { formatINR } from "@/lib/plans";
 import { fetchDashboard, loadSampleData, type DashboardData } from "@/lib/dashboard-data";
 
@@ -36,11 +37,43 @@ const STATUS_TONE: Record<string, keyof typeof TONE> = {
   overdue: "bad", maintenance: "bad", cancelled: "bad",
 };
 
-function Status({ value }: { value: string }) {
+const STATUS_OPTIONS: Record<StatusTable, string[]> = {
+  orders: ["enquiry", "quoted", "confirmed", "assigned", "dispatched", "delivered", "invoiced", "closed", "cancelled"],
+  vehicles: ["available", "on_trip", "maintenance"],
+  deliveries: ["scheduled", "loading", "dispatched", "on_road", "arrived", "delivered"],
+  invoices: ["draft", "sent", "partially_paid", "paid", "overdue"],
+};
+type StatusTable = "orders" | "vehicles" | "deliveries" | "invoices";
+
+
+/** Status badge that opens a menu to change the status, saved straight to the record. */
+function StatusSelect({ table, id, value }: { table: StatusTable; id: string; value: string }) {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async (status: string) => {
+      const { error } = await (supabase.from(table) as any).update({ status }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Couldn't update status"),
+  });
+  const options = STATUS_OPTIONS[table].includes(value) ? STATUS_OPTIONS[table] : [value, ...STATUS_OPTIONS[table]];
   return (
-    <Badge variant="outline" className={`capitalize ${TONE[STATUS_TONE[value] ?? "muted"]}`}>
-      {value.replace(/_/g, " ")}
-    </Badge>
+    <Select value={value} onValueChange={(v) => mutation.mutate(v)} disabled={mutation.isPending}>
+      <SelectTrigger
+        aria-label="Change status"
+        className={`h-auto w-auto gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize shadow-none focus:ring-1 ${TONE[STATUS_TONE[value] ?? "muted"]}`}
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((o) => (
+          <SelectItem key={o} value={o} className="capitalize">
+            {o.replace(/_/g, " ")}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 
@@ -141,7 +174,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                     <p className="truncate font-medium">{o.order_no} · {o.customer_name}</p>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">{o.site} · {o.material} · {Number(o.quantity)} {o.unit}</p>
                   </div>
-                  <Status value={o.status} />
+                  <StatusSelect table="orders" id={o.id} value={o.status} />
                 </div>
                 <div className="mt-2 flex items-center justify-between text-sm">
                   <span className="text-xs text-muted-foreground">{fmtDate(o.order_date)}</span>
@@ -164,7 +197,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                   <TableCell>{o.customer_name}<div className="text-xs text-muted-foreground">{o.site}</div></TableCell>
                   <TableCell>{o.material}<div className="text-xs text-muted-foreground">{Number(o.quantity)} {o.unit}</div></TableCell>
                   <TableCell className="text-right tabular-nums">{formatINR(Number(o.amount))}</TableCell>
-                  <TableCell><Status value={o.status} /></TableCell>
+                  <TableCell><StatusSelect table="orders" id={o.id} value={o.status} /></TableCell>
                 </TableRow>
               ))}
               {!data.orders.length && <EmptyRow cols={5} />}
@@ -181,7 +214,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                   <p className="truncate font-medium">{v.registration}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">{v.vehicle_type} · {Number(v.capacity_tonnes)} t</p>
                 </div>
-                <Status value={v.status} />
+                <StatusSelect table="vehicles" id={v.id} value={v.status} />
               </div>
             ))}
             {!data.vehicles.length && <EmptyCard />}
@@ -193,7 +226,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {data.vehicles.map((v) => (
                 <TableRow key={v.id}>
                   <TableCell className="font-medium">{v.registration}<div className="text-xs text-muted-foreground">{v.vehicle_type} · {Number(v.capacity_tonnes)} t</div></TableCell>
-                  <TableCell><Status value={v.status} /></TableCell>
+                  <TableCell><StatusSelect table="vehicles" id={v.id} value={v.status} /></TableCell>
                 </TableRow>
               ))}
               {!data.vehicles.length && <EmptyRow cols={2} />}
@@ -212,7 +245,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                   <p className="truncate font-medium">{d.orders?.order_no ?? "—"} · {d.orders?.customer_name}</p>
                   <p className="mt-0.5 truncate text-xs text-muted-foreground">{d.orders?.site} · {d.vehicles?.registration ?? "—"} · {d.driver_name}</p>
                 </div>
-                <Status value={d.status} />
+                <StatusSelect table="deliveries" id={d.id} value={d.status} />
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
                 Dispatched {fmtDate(d.dispatched_at)} · Delivered {fmtDate(d.delivered_at)}
@@ -235,7 +268,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                 <TableCell>{d.vehicles?.registration ?? "—"}<div className="text-xs text-muted-foreground">{d.driver_name}</div></TableCell>
                 <TableCell>{fmtDate(d.dispatched_at)}</TableCell>
                 <TableCell>{fmtDate(d.delivered_at)}</TableCell>
-                <TableCell><Status value={d.status} /></TableCell>
+                <TableCell><StatusSelect table="deliveries" id={d.id} value={d.status} /></TableCell>
               </TableRow>
             ))}
             {!data.deliveries.length && <EmptyRow cols={6} />}
@@ -254,7 +287,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                     <p className="truncate font-medium">{i.invoice_no} · {i.customer_name}</p>
                     <p className="mt-0.5 text-xs text-muted-foreground">Due {fmtDate(i.due_date)}</p>
                   </div>
-                  <Status value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} />
+                  <StatusSelect table="invoices" id={i.id} value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} />
                 </div>
                 <div className="mt-2 flex items-center justify-between text-sm">
                   <span className="text-xs text-muted-foreground">of {formatINR(Number(i.amount))}</span>
@@ -276,7 +309,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                   <TableCell className="font-medium">{i.invoice_no}<div className="text-xs text-muted-foreground">{i.customer_name}</div></TableCell>
                   <TableCell>{fmtDate(i.due_date)}</TableCell>
                   <TableCell className="text-right tabular-nums">{formatINR(balance(i))}<div className="text-xs text-muted-foreground">of {formatINR(Number(i.amount))}</div></TableCell>
-                  <TableCell><Status value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} /></TableCell>
+                  <TableCell><StatusSelect table="invoices" id={i.id} value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} /></TableCell>
                 </TableRow>
               ))}
               {!data.invoices.length && <EmptyRow cols={4} />}
