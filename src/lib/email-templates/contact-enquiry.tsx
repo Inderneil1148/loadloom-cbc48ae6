@@ -10,7 +10,7 @@ interface Props {
   message?: string
 }
 
-const Row = ({ label, value }: { label: string; value?: string }) => (
+const Row = ({ label, value }: { label: string; value?: string | undefined }) => (
   <Text style={row}>
     <strong style={{ color: '#0B132B' }}>{label}:</strong> {value || '—'}
   </Text>
