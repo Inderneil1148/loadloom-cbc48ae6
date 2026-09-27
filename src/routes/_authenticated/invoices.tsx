@@ -5,7 +5,7 @@ import { formatINR } from "@/lib/plans";
 const in15 = () => new Date(Date.now() + 15 * 864e5).toISOString().slice(0, 10);
 
 export const Route = createFileRoute("/_authenticated/invoices")({
-  head: () => ({ meta: [{ title: "Invoices — LoadLoom" }, { name: "description", content: "Add, edit and delete invoices." }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Invoices — LoadLoom" }, { name: "description", content: "Add, edit and delete invoices." }, { property: "og:title", content: "Invoices — LoadLoom" }, { property: "og:description", content: "Manage customer invoices and due dates." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: () => (
     <RecordManager
       table="invoices"

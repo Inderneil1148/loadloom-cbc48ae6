@@ -370,8 +370,8 @@ function DashboardBody({ data }: { data: DashboardData }) {
 function Stat({ icon, label, value, sub, alert }: { icon: ReactNode; label: string; value: ReactNode; sub: string; alert?: boolean }) {
   return (
     <div className="min-w-0 rounded-md border border-border bg-card p-3 shadow-panel sm:p-5">
-      <div className="flex items-center justify-between text-muted-foreground [&_svg]:size-4">
-        <span className="eyebrow">{label}</span>{icon}
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-1 text-muted-foreground [&_svg]:size-4">
+        <span className="eyebrow min-w-0 break-words leading-tight">{label}</span>{icon}
       </div>
       <p className="mt-3 break-words text-xl font-extrabold tabular-nums sm:text-2xl">{value}</p>
       <p className={`mt-1 text-xs ${alert ? "font-semibold text-destructive" : "text-muted-foreground"}`}>{sub}</p>

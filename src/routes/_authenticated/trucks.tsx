@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { RecordManager, StatusBadge, opts } from "@/components/app/RecordManager";
 
 export const Route = createFileRoute("/_authenticated/trucks")({
-  head: () => ({ meta: [{ title: "Trucks — LoadLoom" }, { name: "description", content: "Add, edit and delete trucks." }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Trucks — LoadLoom" }, { name: "description", content: "Add, edit and delete trucks." }, { property: "og:title", content: "Trucks — LoadLoom" }, { property: "og:description", content: "Manage your fleet and vehicle availability." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: () => (
     <RecordManager
       table="vehicles"

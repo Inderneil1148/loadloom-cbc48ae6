@@ -18,6 +18,10 @@ export const Route = createFileRoute("/_authenticated/settings")({
     meta: [
       { title: "Settings — LoadLoom" },
       { name: "description", content: "Enterprise profile and material catalog." },
+      { property: "og:title", content: "Settings — LoadLoom" },
+      { property: "og:description", content: "Manage your enterprise profile and material catalog." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
