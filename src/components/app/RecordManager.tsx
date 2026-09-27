@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AppHeader } from "./AppHeader";
+import { usePlan } from "@/hooks/use-plan";
 
 type Row = any;
 type Option = { value: string; label: string };
@@ -112,6 +113,7 @@ export function RecordManager({
   afterSave?: (saved: Row, form: Record<string, string>, editing: Row | null) => Promise<void>;
 }) {
   const qc = useQueryClient();
+  const { can } = usePlan();
   const location = useLocation();
   const navigate = useNavigate();
   const [editing, setEditing] = useState<Row | null>(null);
@@ -215,6 +217,7 @@ export function RecordManager({
 
   function exportCsv() {
     if (!filtered.length) return;
+    if (!can("csv_export")) { toast.error("CSV export is available on Starter and above. Contact us to upgrade."); return; }
     const keys = fields.map((f) => f.name);
     const csv = [keys.join(","), ...filtered.map((r) => keys.map((key) => `"${String(r[key] ?? "").replace(/"/g, '""')}"`).join(","))].join("\r\n");
     const url = URL.createObjectURL(new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8" }));
