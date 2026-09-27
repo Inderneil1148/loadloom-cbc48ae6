@@ -88,7 +88,7 @@ const toInput = (f: Field, v: any) =>
   v == null ? "" : f.type === "datetime" ? new Date(v).toISOString().slice(0, 16) : String(v);
 
 export function RecordManager({
-  table, title, singular, select = "*", orderBy, fields, columns, mobileTitle, mobileMeta, embedded, hint,
+  table, title, singular, select = "*", orderBy, fields, columns, mobileTitle, mobileMeta, embedded, hint, actions,
 }: {
   embedded?: boolean;
   hint?: ReactNode;
@@ -101,6 +101,7 @@ export function RecordManager({
   columns: Column[];
   mobileTitle: (r: Row) => ReactNode;
   mobileMeta: (r: Row) => ReactNode;
+  actions?: (r: Row) => ReactNode;
 }) {
   const qc = useQueryClient();
   const location = useLocation();
@@ -210,6 +211,7 @@ export function RecordManager({
 
   const actions = (r: Row) => (
     <div className="flex justify-end gap-1">
+      {actions?.(r)}
       <Button variant="ghost" size="icon" aria-label={`Edit ${singular}`} onClick={() => openForm(r)}><Pencil /></Button>
       <Button variant="ghost" size="icon" aria-label={`Delete ${singular}`} onClick={() => setToDelete(r)}>
         <Trash2 className="text-destructive" />

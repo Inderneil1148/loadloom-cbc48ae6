@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Building2, ChevronRight, ClipboardList, CreditCard, FileText, LayoutDashboard, Layers3, LogOut, Menu, Package, Plus, Settings, Truck, Wallet, X } from "lucide-react";
+import { Building2, ChevronRight, ClipboardList, CreditCard, FileText, LayoutDashboard, Layers3, LogOut, MapPin, Menu, Package, Plus, Settings, Truck, UserRound, UsersRound, Wallet, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
@@ -12,14 +12,18 @@ const GROUPS = [
     { to: "/dispatch", label: "Dispatch Board", icon: Truck },
     { to: "/orders", label: "Orders & Loads", icon: ClipboardList },
     { to: "/deliveries", label: "Deliveries", icon: Package },
+    { to: "/driver-portal", label: "Driver Portal", icon: UserRound },
   ] },
   { title: "FLEET & MATERIALS", items: [
     { to: "/trucks", label: "Truck Fleet", icon: Truck },
     { to: "/materials", label: "Materials", icon: Layers3 },
+    { to: "/drivers", label: "Drivers", icon: UserRound },
+    { to: "/sites", label: "Delivery Sites", icon: MapPin },
   ] },
   { title: "COMMERCIAL & LEDGER", items: [
     { to: "/invoices", label: "Tax Invoices", icon: FileText },
     { to: "/payments", label: "Payments", icon: CreditCard },
+    { to: "/customers", label: "Customers 360", icon: UsersRound },
   ] },
   { title: "ACCOUNT", items: [{ to: "/settings", label: "Enterprise Profile", icon: Settings }] },
 ] as const;
