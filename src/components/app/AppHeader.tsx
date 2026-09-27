@@ -51,13 +51,14 @@ export function AppHeader() {
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
   const { tier, sub, can } = usePlan();
+  const isDemo = session?.user.email === DEMO_EMAIL;
   const page = GROUPS.map((g) => g.items.find((item) => item.to === location.pathname)?.label).find(Boolean) ?? "Dashboard";
 
   async function signOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
+    navigate(isDemo ? { to: "/demo", replace: true } : { to: "/auth", replace: true });
   }
 
   const nav = (
@@ -109,10 +110,21 @@ export function AppHeader() {
                <Link to="/dashboard" aria-label="Return to dashboard"><LayoutDashboard className="size-4" /><span>Dashboard</span></Link>
              </Button>
            )}
-          <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/orders" search={{ new: true }}><Plus /> <span className="hidden min-[390px]:inline">New Load</span><span className="min-[390px]:hidden">New</span></Link></Button>
+          {isDemo ? (
+            <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/auth" search={{ mode: "signup" }}>Create account</Link></Button>
+          ) : (
+            <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/orders" search={{ new: true }}><Plus /> <span className="hidden min-[390px]:inline">New Load</span><span className="min-[390px]:hidden">New</span></Link></Button>
+          )}
         </div>
       </header>
-      {sub && sub.status !== "active" && (
+      {isDemo && (
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-b border-accent/30 bg-accent/10 px-4 py-2 text-center text-xs text-foreground lg:ml-60">
+          <span><strong>Demo mode</strong> — sample data, every Fleet feature unlocked. Viewing only.</span>
+          <Link to="/pricing" className="font-semibold text-accent underline">See plans</Link>
+          <button type="button" onClick={signOut} className="font-semibold underline">Exit demo</button>
+        </div>
+      )}
+      {!isDemo && sub && sub.status !== "active" && (
         <div className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-center text-xs text-foreground lg:ml-60">
           {sub.status === "pending"
             ? `Your ${TIER_NAMES[sub.requested_plan as keyof typeof TIER_NAMES]} plan request is being reviewed. You're on Free until it's activated.`
