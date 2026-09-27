@@ -86,6 +86,28 @@ export const PLANS: Plan[] = [
   },
 ];
 
+export const FREE_PLAN = {
+  id: "free" as const,
+  name: "Free",
+  positioning: "Get Started",
+  price: 0,
+  promise: "Start managing your daily loads.",
+  audience: "For small suppliers trying LoadLoom with essential dispatch tools.",
+  highlights: [
+    "Orders with automatic totals",
+    "Dispatch board, deliveries and invoices",
+    "Payments and outstanding tracking",
+    "Fleet intelligence overview",
+  ],
+  limits: [
+    { label: "Orders", value: "20 / month" },
+    { label: "Vehicles", value: "4" },
+    { label: "Active customers", value: "5" },
+  ],
+};
+
+export const ALL_PLANS = [FREE_PLAN, ...PLANS];
+
 export const WORKFLOW = [
   "Enquiry",
   "Quote",
