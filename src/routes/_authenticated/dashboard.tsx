@@ -302,9 +302,23 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {!data.invoices.length && <EmptyRow cols={4} />}
             </TableBody>
           </Table>
+          </div>
         </Panel>
 
         <Panel title="Recent payments">
+          <div className="divide-y divide-border sm:hidden">
+            {data.payments.slice(0, 8).map((p) => (
+              <div key={p.id} className="flex items-center justify-between gap-3 px-3 py-3">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{p.customer_name}</p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">{fmtDate(p.paid_on)} · {p.method}{p.reference ? ` · ${p.reference}` : ""}</p>
+                </div>
+                <span className="shrink-0 font-semibold tabular-nums text-success">{formatINR(Number(p.amount))}</span>
+              </div>
+            ))}
+            {!data.payments.length && <EmptyCard />}
+          </div>
+          <div className="hidden sm:block">
           <Table>
             <TableHeader><TableRow>
               <TableHead>Customer</TableHead><TableHead>Date</TableHead><TableHead>Method</TableHead>
