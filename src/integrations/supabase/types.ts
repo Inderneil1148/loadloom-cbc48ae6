@@ -326,51 +326,110 @@ export type Database = {
       }
       orders: {
         Row: {
+          advance_amount: number
           amount: number
           created_at: string
+          customer_id: string | null
           customer_name: string
+          delivery_date: string | null
+          driver_id: string | null
+          gst_percent: number
+          haulage_freight: number
           id: string
           material: string
           order_date: string
           order_no: string
           owner_id: string
           quantity: number
+          rate: number
           site: string | null
+          site_id: string | null
           status: string
+          target_window: string | null
           unit: string
           updated_at: string
+          vehicle_id: string | null
         }
         Insert: {
+          advance_amount?: number
           amount?: number
           created_at?: string
+          customer_id?: string | null
           customer_name: string
+          delivery_date?: string | null
+          driver_id?: string | null
+          gst_percent?: number
+          haulage_freight?: number
           id?: string
           material: string
           order_date?: string
           order_no: string
           owner_id?: string
           quantity?: number
+          rate?: number
           site?: string | null
+          site_id?: string | null
           status?: string
+          target_window?: string | null
           unit?: string
           updated_at?: string
+          vehicle_id?: string | null
         }
         Update: {
+          advance_amount?: number
           amount?: number
           created_at?: string
+          customer_id?: string | null
           customer_name?: string
+          delivery_date?: string | null
+          driver_id?: string | null
+          gst_percent?: number
+          haulage_freight?: number
           id?: string
           material?: string
           order_date?: string
           order_no?: string
           owner_id?: string
           quantity?: number
+          rate?: number
           site?: string | null
+          site_id?: string | null
           status?: string
+          target_window?: string | null
           unit?: string
           updated_at?: string
+          vehicle_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_sites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payments: {
         Row: {

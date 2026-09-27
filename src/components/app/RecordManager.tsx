@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -89,6 +89,7 @@ const toInput = (f: Field, v: any) =>
 
 export function RecordManager({
   table, title, singular, select = "*", orderBy, fields, columns, mobileTitle, mobileMeta, embedded, hint, actions,
+  customForm, dialogTitle, dialogDescription, dialogClassName, submitLabel, preparePayload, afterSave,
 }: {
   embedded?: boolean;
   hint?: ReactNode;
@@ -102,6 +103,13 @@ export function RecordManager({
   mobileTitle: (r: Row) => ReactNode;
   mobileMeta: (r: Row) => ReactNode;
   actions?: (r: Row) => ReactNode;
+  customForm?: (props: { form: Record<string, string>; setForm: (form: Record<string, string>) => void; editing: Row | null }) => ReactNode;
+  dialogTitle?: string;
+  dialogDescription?: string;
+  dialogClassName?: string;
+  submitLabel?: string;
+  preparePayload?: (payload: Row, form: Record<string, string>, editing: Row | null) => Row;
+  afterSave?: (saved: Row, form: Record<string, string>, editing: Row | null) => Promise<void>;
 }) {
   const qc = useQueryClient();
   const location = useLocation();
@@ -145,11 +153,13 @@ export function RecordManager({
         } else if (f.type === "datetime") payload[f.name] = v ? new Date(v).toISOString() : null;
         else payload[f.name] = v || null;
       }
+      const finalPayload = preparePayload ? preparePayload(payload, form, editing) : payload;
       const q = editing
-        ? supabase.from(table as any).update(payload).eq("id", editing.id)
-        : supabase.from(table as any).insert(payload);
-      const { error } = await q;
+        ? supabase.from(table as any).update(finalPayload).eq("id", editing.id).select().single()
+        : supabase.from(table as any).insert(finalPayload).select().single();
+      const { data: saved, error } = await q;
       if (error) throw error;
+      if (afterSave) await afterSave(saved, form, editing);
     },
     onSuccess: () => {
       toast.success(editing ? `${singular} updated` : `${singular} added`);
@@ -293,15 +303,16 @@ export function RecordManager({
       </Wrap>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto">
+        <DialogContent className={dialogClassName ?? "max-h-[90vh] overflow-y-auto"}>
           <DialogHeader>
-            <DialogTitle>{editing ? `Edit ${singular.toLowerCase()}` : `New ${singular.toLowerCase()}`}</DialogTitle>
+            <DialogTitle>{editing ? `Edit ${singular.toLowerCase()}` : dialogTitle ?? `New ${singular.toLowerCase()}`}</DialogTitle>
+            {dialogDescription && !editing && <DialogDescription>{dialogDescription}</DialogDescription>}
           </DialogHeader>
           <form
             className="grid gap-4 sm:grid-cols-2"
             onSubmit={(e) => { e.preventDefault(); save.mutate(); }}
           >
-            {fields.map((f) => {
+            {customForm ? <div className="sm:col-span-2">{customForm({ form, setForm, editing })}</div> : fields.map((f) => {
               const set = (v: string) => setForm((s) => ({ ...s, [f.name]: v }));
               return (
                 <div key={f.name} className="space-y-1.5">
@@ -324,10 +335,11 @@ export function RecordManager({
                 </div>
               );
             })}
-            <DialogFooter className="sm:col-span-2">
+            <DialogFooter className={customForm ? "sticky bottom-0 z-10 -mx-4 -mb-4 border-t border-border bg-background px-4 py-3 sm:-mx-6 sm:-mb-6 sm:px-6" : "sm:col-span-2"}>
               <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
               <Button type="submit" variant="action" disabled={save.isPending}>
-                {save.isPending ? "Saving…" : "Save"}
+                {!save.isPending && !editing && customForm && <Plus />}
+                {save.isPending ? "Saving…" : editing ? "Save changes" : submitLabel ?? "Save"}
               </Button>
             </DialogFooter>
           </form>

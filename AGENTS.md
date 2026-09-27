@@ -12,3 +12,4 @@
 Use a single shared AppHeader on authenticated pages for mobile navigation and desktop sidebar, so navigation stays consistent across operations screens.
 Use the existing deliveries table for dispatch-board stages rather than duplicating trip state, so existing summaries and status updates stay consistent.
 Store customers, delivery sites, and drivers as owner-scoped records rather than deriving their contact details from orders, so account data remains reusable and access-controlled.
+Use the specialized dispatch order form for order creation and editing while RecordManager remains the shared list and CRUD shell, so live commercial calculations do not complicate simpler records.
