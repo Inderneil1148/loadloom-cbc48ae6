@@ -478,6 +478,131 @@ export type Database = {
           },
         ]
       }
+      quotations: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_name: string
+          gst_percent: number
+          haulage_freight: number
+          id: string
+          material: string
+          order_id: string | null
+          owner_id: string
+          quantity: number
+          quote_no: string
+          rate: number
+          site: string | null
+          status: string
+          unit: string
+          updated_at: string
+          valid_until: string | null
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          customer_name: string
+          gst_percent?: number
+          haulage_freight?: number
+          id?: string
+          material: string
+          order_id?: string | null
+          owner_id?: string
+          quantity?: number
+          quote_no: string
+          rate?: number
+          site?: string | null
+          status?: string
+          unit?: string
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_name?: string
+          gst_percent?: number
+          haulage_freight?: number
+          id?: string
+          material?: string
+          order_id?: string | null
+          owner_id?: string
+          quantity?: number
+          quote_no?: string
+          rate?: number
+          site?: string | null
+          status?: string
+          unit?: string
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotations_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          business_name: string | null
+          created_at: string
+          email: string | null
+          id: string
+          notes: string | null
+          plan: string
+          requested_plan: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_name?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          notes?: string | null
+          plan?: string
+          requested_plan?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_name?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          notes?: string | null
+          plan?: string
+          requested_plan?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       vehicles: {
         Row: {
           capacity_tonnes: number
@@ -516,10 +641,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_plan: { Args: { _user_id: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -646,6 +778,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
