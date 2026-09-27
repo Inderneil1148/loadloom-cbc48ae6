@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Search } from "lucide-react";
+import { Check, Save, Search } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { usePlan } from "@/hooks/use-plan";
 import { AppPage, StatCard } from "@/components/app/PlanGate";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fmtDate } from "@/components/app/RecordManager";
 import { TIER_NAMES, TIER_ORDER, type Tier } from "@/lib/plans";
+import { PLAN_SETTINGS_QUERY_KEY, usePlanSettings, type PlanSetting } from "@/hooks/use-plan-settings";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [
@@ -62,7 +65,12 @@ function Admin() {
     (!q || `${r.email} ${r.business_name}`.toLowerCase().includes(q.toLowerCase())));
   const pending = data.filter((r) => r.status === "pending").length;
   return (
-    <div className="space-y-5">
+    <Tabs defaultValue="accounts" className="space-y-5">
+      <TabsList className="grid w-full grid-cols-2 sm:w-80">
+        <TabsTrigger value="accounts">Accounts</TabsTrigger>
+        <TabsTrigger value="plans">Plan settings</TabsTrigger>
+      </TabsList>
+      <TabsContent value="accounts" className="space-y-5">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
         <StatCard label="Accounts" value={data.length} />
         <StatCard label="Waiting approval" value={pending} tone={pending ? "bad" : undefined} />
@@ -102,6 +110,87 @@ function Admin() {
           </div>
         ))}
       </div>
+      </TabsContent>
+      <TabsContent value="plans">
+        <PlanSettings />
+      </TabsContent>
+    </Tabs>
+  );
+}
+
+type EditablePlan = Pick<PlanSetting, "plan" | "price" | "orders_limit" | "vehicles_limit" | "customers_limit" | "materials_limit">;
+
+function PlanSettings() {
+  const qc = useQueryClient();
+  const { data, isPending, error } = usePlanSettings();
+  const [drafts, setDrafts] = useState<Record<string, EditablePlan>>({});
+  const save = useMutation({
+    mutationFn: async (row: EditablePlan) => {
+      const { error } = await supabase.from("plan_settings").update({
+        price: row.price,
+        orders_limit: row.orders_limit,
+        vehicles_limit: row.vehicles_limit,
+        customers_limit: row.customers_limit,
+        materials_limit: row.materials_limit,
+      }).eq("plan", row.plan);
+      if (error) throw error;
+    },
+    onSuccess: (_, row) => {
+      toast.success(`${TIER_NAMES[row.plan as Tier]} plan updated`);
+      setDrafts((current) => {
+        const next = { ...current };
+        delete next[row.plan];
+        return next;
+      });
+      qc.invalidateQueries({ queryKey: PLAN_SETTINGS_QUERY_KEY });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Couldn't update plan"),
+  });
+
+  if (isPending) return <Skeleton className="h-72 w-full" />;
+  if (error || !data) return <p className="text-sm text-destructive">Couldn't load plan settings.</p>;
+
+  const change = (source: PlanSetting, field: keyof EditablePlan, value: string) => {
+    const current = drafts[source.plan] ?? source;
+    setDrafts((all) => ({
+      ...all,
+      [source.plan]: { ...current, [field]: value === "" ? null : Math.max(0, Number(value)) },
+    }));
+  };
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <h2 className="text-lg font-bold">Pricing and usage limits</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Leave a limit empty for unlimited. Changes update sign-up, pricing, and account limits.</p>
+      </div>
+      <div className="grid gap-4 xl:grid-cols-2">
+        {TIER_ORDER.map((tier) => {
+          const source = data.find((row) => row.plan === tier);
+          if (!source) return null;
+          const row = drafts[tier] ?? source;
+          return (
+            <div key={tier} className="rounded-md border border-border bg-card p-4 shadow-panel">
+              <div className="flex items-center justify-between gap-3">
+                <div><p className="font-bold">{TIER_NAMES[tier]}</p><p className="text-xs text-muted-foreground">Monthly pricing and limits</p></div>
+                <Button size="sm" variant="action" disabled={!drafts[tier] || save.isPending} onClick={() => save.mutate(row)}><Save /> Save</Button>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                <PlanNumber label="Price (₹ / month)" value={row.price} onChange={(v) => change(source, "price", v)} required />
+                <PlanNumber label="Orders / month" value={row.orders_limit} onChange={(v) => change(source, "orders_limit", v)} />
+                <PlanNumber label="Vehicles" value={row.vehicles_limit} onChange={(v) => change(source, "vehicles_limit", v)} />
+                <PlanNumber label="Active customers" value={row.customers_limit} onChange={(v) => change(source, "customers_limit", v)} />
+                <PlanNumber label="Materials" value={row.materials_limit} onChange={(v) => change(source, "materials_limit", v)} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
+}
+
+function PlanNumber({ label, value, onChange, required = false }: { label: string; value: number | null; onChange: (value: string) => void; required?: boolean }) {
+  const id = `plan-${label.toLowerCase().replace(/[^a-z]+/g, "-")}`;
+  return <div className="space-y-1.5"><Label htmlFor={id} className="text-xs">{label}</Label><Input id={id} type="number" min="0" required={required} value={value ?? ""} placeholder={required ? "0" : "Unlimited"} onChange={(e) => onChange(e.target.value)} /></div>;
 }

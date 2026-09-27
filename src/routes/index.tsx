@@ -11,7 +11,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteShell } from "@/components/site/SiteShell";
-import { WORKFLOW, ALL_PLANS, formatINR } from "@/lib/plans";
+import { WORKFLOW, formatINR } from "@/lib/plans";
+import { plansWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
 import heroFleet from "@/assets/hero-fleet.jpg";
 
 export const Route = createFileRoute("/")({
@@ -70,6 +71,8 @@ const PILLARS = [
 ];
 
 function Home() {
+  const { data: settings } = usePlanSettings();
+  const plans = plansWithSettings(settings);
   return (
     <SiteShell>
       <section className="relative overflow-hidden bg-navy text-navy-foreground">
@@ -184,7 +187,7 @@ function Home() {
           </Button>
         </div>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {ALL_PLANS.map((plan) => (
+          {plans.map((plan) => (
             <div key={plan.id} className="rounded-md border border-border bg-card p-6 shadow-panel">
               <p className="eyebrow text-muted-foreground">{plan.positioning}</p>
               <h3 className="mt-2 text-xl font-bold">{plan.name}</h3>
