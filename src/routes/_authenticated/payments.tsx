@@ -3,7 +3,7 @@ import { RecordManager, fmtDate, opts, today } from "@/components/app/RecordMana
 import { formatINR } from "@/lib/plans";
 
 export const Route = createFileRoute("/_authenticated/payments")({
-  head: () => ({ meta: [{ title: "Payments — LoadLoom" }, { name: "description", content: "Add, edit and delete payments." }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Payments — LoadLoom" }, { name: "description", content: "Add, edit and delete payments." }, { property: "og:title", content: "Payments — LoadLoom" }, { property: "og:description", content: "Track collections, methods and receipts." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: () => (
     <RecordManager
       table="payments"

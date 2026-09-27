@@ -13,10 +13,11 @@ instead of the spec's Firebase/React Router.
 - [ ] organizations, org_members, user_roles (separate table), subscription on org
 - [ ] Plan entitlement config + limit enforcement
 - [ ] First-time onboarding wizard (business, units, first material)
-- [ ] App shell: desktop sidebar, mobile bottom nav, quick add, global search
+- [x] App shell: desktop sidebar, mobile bottom nav, quick add
+- [ ] Global search across records
 
 ## Stage 3 — Core operations
-- [ ] Customers, sites, materials, vehicles, drivers
+- [x] Customers, sites, materials, vehicles, drivers: basic records and contact links
 - [ ] Orders + create order with calculations
 - [ ] Dispatch board and trips with controlled status transitions
 - [ ] Delivery proof (photo, signature, OTP, weighbridge slip) in storage
@@ -35,3 +36,5 @@ instead of the spec's Firebase/React Router.
 - [ ] Real company contact details, support email and legal review of privacy/terms
 
 - [x] Add/edit/delete screens for orders, trucks, deliveries, invoices, payments
+- [x] Mobile-first navigation, dispatch board, material page, record search/filter/CSV export
+- [x] Driver portal summary, customer directory, delivery sites, call and map links

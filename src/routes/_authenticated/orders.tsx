@@ -3,7 +3,7 @@ import { RecordManager, StatusBadge, fmtDate, opts, today } from "@/components/a
 import { formatINR } from "@/lib/plans";
 
 export const Route = createFileRoute("/_authenticated/orders")({
-  head: () => ({ meta: [{ title: "Orders — LoadLoom" }, { name: "description", content: "Add, edit and delete orders." }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Orders — LoadLoom" }, { name: "description", content: "Add, edit and delete orders." }, { property: "og:title", content: "Orders — LoadLoom" }, { property: "og:description", content: "Manage material loads and customer orders." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: () => (
     <RecordManager
       table="orders"

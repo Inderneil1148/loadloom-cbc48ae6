@@ -18,6 +18,10 @@ export const Route = createFileRoute("/_authenticated/settings")({
     meta: [
       { title: "Settings — LoadLoom" },
       { name: "description", content: "Enterprise profile and material catalog." },
+      { property: "og:title", content: "Settings — LoadLoom" },
+      { property: "og:description", content: "Manage your enterprise profile and material catalog." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -109,9 +113,9 @@ function EnterpriseProfile() {
 
 function SettingsPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 lg:pb-0">
       <AppHeader />
-      <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-5 sm:py-8">
+      <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-5 sm:py-8 lg:ml-60 lg:w-auto lg:px-7">
         <p className="eyebrow text-accent">Defaults</p>
         <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">Settings</h1>
         <Tabs defaultValue="profile" className="mt-6">

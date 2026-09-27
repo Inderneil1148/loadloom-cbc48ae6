@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Package, Truck, MapPin, FileText, Wallet, Database } from "lucide-react";
+import { Package, Truck, MapPin, FileText, Wallet, Database, ArrowRight, CircleAlert } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,6 +17,10 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
     meta: [
       { title: "Dashboard — LoadLoom" },
       { name: "description", content: "Your LoadLoom operations dashboard." },
+      { property: "og:title", content: "Dashboard — LoadLoom" },
+      { property: "og:description", content: "Your LoadLoom operations dashboard." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -97,12 +101,14 @@ function Dashboard() {
     data && !data.orders.length && !data.vehicles.length && !data.invoices.length && !data.payments.length;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 lg:pb-0">
       <AppHeader />
 
-      <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8">
-        <p className="eyebrow text-accent">Operations at a glance</p>
-        <h1 className="mt-2 text-2xl font-extrabold sm:text-3xl">Today's yard</h1>
+      <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8 lg:ml-60 lg:w-auto lg:px-7">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-md border border-border bg-card p-4 shadow-panel sm:p-5">
+          <div className="min-w-0"><p className="eyebrow text-success">Live yard operations</p><h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">Dispatch Command Centre</h1><p className="mt-1 text-xs text-muted-foreground">{new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</p></div>
+          <Button asChild variant="default" size="sm" className="shrink-0"><Link to="/dispatch"><Truck /> <span className="hidden sm:inline">Open Dispatch Board</span><span className="sm:hidden">Dispatch</span></Link></Button>
+        </div>
 
         {error ? (
           <p className="mt-8 rounded-md border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
@@ -153,15 +159,24 @@ function DashboardBody({ data }: { data: DashboardData }) {
   const collectedMonth = data.payments
     .filter((p) => p.paid_on.slice(0, 7) === today.slice(0, 7))
     .reduce((s, p) => s + Number(p.amount), 0);
+  const collectedToday = data.payments
+    .filter((p) => p.paid_on === today)
+    .reduce((s, p) => s + Number(p.amount), 0);
 
   return (
     <>
-      <div className="-mx-4 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:mt-8 sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-5">
+      <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-7 sm:grid-cols-3 sm:gap-3 xl:grid-cols-6">
         <Stat icon={<Package />} label="Open orders" value={openOrders.length} sub={`${todayOrders.length} placed today`} />
         <Stat icon={<Truck />} label="Trucks out" value={`${trucksOut}/${data.vehicles.length}`} sub={`${trucksFree} available`} />
         <Stat icon={<MapPin />} label="Active trips" value={activeTrips.length} sub={`${deliveredToday.length} delivered today`} />
         <Stat icon={<FileText />} label="Outstanding" value={formatINR(outstanding)} sub={`${overdue.length} overdue`} alert={overdue.length > 0} />
         <Stat icon={<Wallet />} label="Collected this month" value={formatINR(collectedMonth)} sub={`${data.payments.length} payments`} />
+        <Stat icon={<Wallet />} label="Today revenue" value={formatINR(collectedToday)} sub="Payments recorded today" />
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Link to="/orders" className="flex items-center justify-between rounded-md border border-border bg-card p-4 shadow-panel hover:border-accent"><span className="flex min-w-0 items-center gap-2 text-sm font-semibold"><CircleAlert className="size-4 shrink-0 text-warning" /> Unassigned orders <span className="tabular-nums text-muted-foreground">({data.orders.filter((o) => o.status === "confirmed").length})</span></span><ArrowRight className="size-4 shrink-0 text-muted-foreground" /></Link>
+        <Link to="/dispatch" className="flex items-center justify-between rounded-md border border-border bg-card p-4 shadow-panel hover:border-accent"><span className="flex min-w-0 items-center gap-2 text-sm font-semibold"><Truck className="size-4 shrink-0 text-accent" /> Haulage in transit <span className="tabular-nums text-muted-foreground">({data.deliveries.filter((d) => ["dispatched", "on_road", "arrived"].includes(d.status)).length})</span></span><ArrowRight className="size-4 shrink-0 text-muted-foreground" /></Link>
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
@@ -358,11 +373,11 @@ function DashboardBody({ data }: { data: DashboardData }) {
 
 function Stat({ icon, label, value, sub, alert }: { icon: ReactNode; label: string; value: ReactNode; sub: string; alert?: boolean }) {
   return (
-    <div className="w-40 shrink-0 snap-start rounded-md border border-border bg-card p-4 shadow-panel sm:w-auto sm:shrink sm:p-5">
-      <div className="flex items-center justify-between text-muted-foreground [&_svg]:size-4">
-        <span className="eyebrow">{label}</span>{icon}
+    <div className="min-w-0 rounded-md border border-border bg-card p-3 shadow-panel sm:p-5">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-1 text-muted-foreground [&_svg]:size-4">
+        <span className="eyebrow min-w-0 break-words leading-tight">{label}</span>{icon}
       </div>
-      <p className="mt-3 truncate text-xl font-extrabold tabular-nums sm:text-2xl">{value}</p>
+      <p className="mt-3 break-words text-xl font-extrabold tabular-nums sm:text-2xl">{value}</p>
       <p className={`mt-1 text-xs ${alert ? "font-semibold text-destructive" : "text-muted-foreground"}`}>{sub}</p>
     </div>
   );
