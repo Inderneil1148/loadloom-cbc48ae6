@@ -258,11 +258,11 @@ function DashboardBody({ data }: { data: DashboardData }) {
 
 function Stat({ icon, label, value, sub, alert }: { icon: ReactNode; label: string; value: ReactNode; sub: string; alert?: boolean }) {
   return (
-    <div className="rounded-md border border-border bg-card p-5 shadow-panel">
+    <div className="w-40 shrink-0 snap-start rounded-md border border-border bg-card p-4 shadow-panel sm:w-auto sm:shrink sm:p-5">
       <div className="flex items-center justify-between text-muted-foreground [&_svg]:size-4">
         <span className="eyebrow">{label}</span>{icon}
       </div>
-      <p className="mt-3 text-2xl font-extrabold tabular-nums">{value}</p>
+      <p className="mt-3 truncate text-xl font-extrabold tabular-nums sm:text-2xl">{value}</p>
       <p className={`mt-1 text-xs ${alert ? "font-semibold text-destructive" : "text-muted-foreground"}`}>{sub}</p>
     </div>
   );
