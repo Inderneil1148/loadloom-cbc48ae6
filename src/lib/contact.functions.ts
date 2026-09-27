@@ -17,6 +17,7 @@ export const sendEnquiry = createServerFn({ method: "POST" })
     const res = await sendTemplateEmail("contact-enquiry", "inderneilkanagali@gmail.com", {
       templateData: data,
       idempotencyKey: `contact-enquiry-${id}`,
+      replyTo: data.email,
     });
     return { sent: res.sent };
   });
