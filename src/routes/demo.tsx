@@ -103,7 +103,9 @@ function Demo() {
           </Button>
           <ViewDemoButton />
           <Button asChild variant="outline" size="lg">
-            <Link to="/contact">Request a guided walkthrough</Link>
+            <a href="https://youtu.be/2ZTYQlB2caY" target="_blank" rel="noopener noreferrer">
+              Request a guided walkthrough
+            </a>
           </Button>
         </div>
       </section>
