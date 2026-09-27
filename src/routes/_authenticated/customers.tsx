@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RecordManager } from "@/components/app/RecordManager";
 import { Button } from "@/components/ui/button";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, UsersRound } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/customers")({
   head: () => ({ meta: [
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/customers")({
       { label: "Phone", render: (r) => r.phone ?? "—" },
       { label: "WhatsApp", render: (r) => r.phone ? <Button asChild variant="outline" size="sm"><a href={`https://wa.me/${String(r.phone).replace(/\D/g, "")}`} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${r.name}`}><MessageCircle /> Message</a></Button> : "—" },
     ]}
+    actions={(r) => <Button asChild variant="outline" size="sm"><Link to="/customer-360" search={{ id: r.id }}><UsersRound /> 360</Link></Button>}
     mobileTitle={(r) => r.name}
     mobileMeta={(r) => <span className="flex flex-wrap items-center gap-2">{r.contact_name ?? r.phone ?? "No contact"}{r.phone && <Button asChild variant="outline" size="sm"><a href={`https://wa.me/${String(r.phone).replace(/\D/g, "")}`} target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a></Button>}</span>}
   />,

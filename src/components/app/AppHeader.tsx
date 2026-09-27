@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Building2, ChevronRight, ClipboardList, CreditCard, FileText, LayoutDashboard, Layers3, LogOut, MapPin, Menu, Package, Plus, Settings, Truck, UserRound, UsersRound, Wallet, X } from "lucide-react";
+import { BarChart3, Bot, Building2, ChevronRight, FileSignature, Gauge, Lock, PieChart, Radar, ClipboardList, CreditCard, FileText, LayoutDashboard, Layers3, LogOut, MapPin, Menu, Package, Plus, Settings, Truck, UserRound, UsersRound, Wallet, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
+import { usePlan } from "@/hooks/use-plan";
+import { FEATURE_MIN, TIER_NAMES, type Feature } from "@/lib/plans";
+
+const LOCKS: Record<string, Feature> = {
+  "/quotations": "quotations", "/reports": "reports", "/command-centre": "command_centre", "/analytics": "analytics", "/assistant": "ai_tools",
+};
 
 const GROUPS = [
   { title: "DISPATCH OPERATIONS", items: [
@@ -23,7 +29,16 @@ const GROUPS = [
   { title: "COMMERCIAL & LEDGER", items: [
     { to: "/invoices", label: "Tax Invoices", icon: FileText },
     { to: "/payments", label: "Payments", icon: CreditCard },
-    { to: "/customers", label: "Customers 360", icon: UsersRound },
+    { to: "/quotations", label: "Quotations", icon: FileSignature },
+    { to: "/customers", label: "Customers", icon: UsersRound },
+    { to: "/customer-360", label: "Customer 360", icon: UsersRound },
+  ] },
+  { title: "INSIGHTS", items: [
+    { to: "/fleet", label: "Fleet Intelligence", icon: Gauge },
+    { to: "/reports", label: "Reports", icon: BarChart3 },
+    { to: "/command-centre", label: "Command Centre", icon: Radar },
+    { to: "/analytics", label: "Analytics", icon: PieChart },
+    { to: "/assistant", label: "AI Assistant", icon: Bot },
   ] },
   { title: "ACCOUNT", items: [{ to: "/settings", label: "Enterprise Profile", icon: Settings }] },
 ] as const;
@@ -34,6 +49,7 @@ export function AppHeader() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { tier, sub, can } = usePlan();
   const page = GROUPS.map((g) => g.items.find((item) => item.to === location.pathname)?.label).find(Boolean) ?? "Dashboard";
 
   async function signOut() {
@@ -57,13 +73,13 @@ export function AppHeader() {
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-3">
         <div className="mb-4 flex items-center gap-2 border-b border-sidebar-border px-2 pb-4 text-sidebar-foreground">
           <Building2 className="size-4 shrink-0" />
-          <div className="min-w-0"><p className="truncate text-xs font-semibold text-sidebar-accent-foreground">Your operations</p><p className="truncate text-[10px]">LoadLoom workspace</p></div>
+          <div className="min-w-0"><p className="truncate text-xs font-semibold text-sidebar-accent-foreground">Your operations</p><p className="truncate text-[10px]">{TIER_NAMES[tier]} plan{sub?.status === "pending" ? ` · ${TIER_NAMES[sub.requested_plan as keyof typeof TIER_NAMES]} requested` : ""}</p></div>
         </div>
         {GROUPS.map((group) => (
           <div key={group.title} className="mb-5">
             <p className="mb-1.5 px-2 text-[10px] font-semibold text-sidebar-foreground/60">{group.title}</p>
             {group.items.map(({ to, label, icon: Icon }) => (
-              <Link key={to} to={to} onClick={() => setMenuOpen(false)} className="mb-0.5 flex min-h-10 items-center gap-3 rounded-md border-l-2 border-transparent px-2.5 text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" activeProps={{ className: "!border-accent !bg-sidebar-accent !text-sidebar-accent-foreground font-semibold" }}><Icon className="size-4 shrink-0" />{label}</Link>
+              <Link key={to} to={to} onClick={() => setMenuOpen(false)} className="mb-0.5 flex min-h-10 items-center gap-3 rounded-md border-l-2 border-transparent px-2.5 text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" activeProps={{ className: "!border-accent !bg-sidebar-accent !text-sidebar-accent-foreground font-semibold" }}><Icon className="size-4 shrink-0" /><span className="flex-1">{label}</span>{LOCKS[to] && !can(LOCKS[to]) && <Lock className="size-3 shrink-0 opacity-60" aria-label={`Needs ${TIER_NAMES[FEATURE_MIN[LOCKS[to]]]} plan`} />}</Link>
             ))}
           </div>
         ))}
@@ -95,6 +111,13 @@ export function AppHeader() {
           <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/orders" search={{ new: true }}><Plus /> <span className="hidden min-[390px]:inline">New Load</span><span className="min-[390px]:hidden">New</span></Link></Button>
         </div>
       </header>
+      {sub && sub.status !== "active" && (
+        <div className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-center text-xs text-foreground lg:ml-60">
+          {sub.status === "pending"
+            ? `Your ${TIER_NAMES[sub.requested_plan as keyof typeof TIER_NAMES]} plan request is being reviewed. You're on Free until it's activated.`
+            : "Your plan is paused. Contact us to reactivate your account features."}
+        </div>
+      )}
       <div className="pointer-events-none fixed bottom-3 left-1/2 z-30 flex -translate-x-1/2 gap-1 rounded-md border border-border bg-card p-1 shadow-lifted lg:hidden">
         {[
           { to: "/dashboard", icon: LayoutDashboard, label: "Home" },
