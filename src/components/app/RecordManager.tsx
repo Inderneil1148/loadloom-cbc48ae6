@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useDemo } from "@/lib/demo";
 import { useEffect, useState, type ReactNode } from "react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -114,6 +115,7 @@ export function RecordManager({
 }) {
   const qc = useQueryClient();
   const { can } = usePlan();
+  const demo = useDemo();
   const location = useLocation();
   const navigate = useNavigate();
   const [editing, setEditing] = useState<Row | null>(null);
@@ -190,6 +192,7 @@ export function RecordManager({
   });
 
   function openForm(row: Row | null) {
+    if (demo.block()) return;
     setEditing(row);
     const init: Record<string, string> = {};
     for (const f of fields)
@@ -232,7 +235,7 @@ export function RecordManager({
     <div className="flex justify-end gap-1">
       {actions?.(r)}
       <Button variant="ghost" size="icon" aria-label={`Edit ${singular}`} onClick={() => openForm(r)}><Pencil /></Button>
-      <Button variant="ghost" size="icon" aria-label={`Delete ${singular}`} onClick={() => setToDelete(r)}>
+      <Button variant="ghost" size="icon" aria-label={`Delete ${singular}`} onClick={() => !demo.block() && setToDelete(r)}>
         <Trash2 className="text-destructive" />
       </Button>
     </div>
