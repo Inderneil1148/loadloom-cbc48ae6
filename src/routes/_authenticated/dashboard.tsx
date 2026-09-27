@@ -336,6 +336,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {!data.payments.length && <EmptyRow cols={4} />}
             </TableBody>
           </Table>
+          </div>
         </Panel>
       </div>
     </>
@@ -361,6 +362,10 @@ function Panel({ title, children, className = "" }: { title: string; children: R
       <div className="px-2 pb-2">{children}</div>
     </section>
   );
+}
+
+function EmptyCard() {
+  return <p className="px-3 py-6 text-center text-sm text-muted-foreground">Nothing here yet</p>;
 }
 
 function EmptyRow({ cols }: { cols: number }) {
