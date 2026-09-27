@@ -190,9 +190,23 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {!data.orders.length && <EmptyRow cols={5} />}
             </TableBody>
           </Table>
+          </div>
         </Panel>
 
         <Panel title="Trucks">
+          <div className="divide-y divide-border sm:hidden">
+            {data.vehicles.map((v) => (
+              <div key={v.id} className="flex items-center justify-between gap-3 px-3 py-3">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{v.registration}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{v.vehicle_type} · {Number(v.capacity_tonnes)} t</p>
+                </div>
+                <Status value={v.status} />
+              </div>
+            ))}
+            {!data.vehicles.length && <EmptyCard />}
+          </div>
+          <div className="hidden sm:block">
           <Table>
             <TableHeader><TableRow><TableHead>Vehicle</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
             <TableBody>
