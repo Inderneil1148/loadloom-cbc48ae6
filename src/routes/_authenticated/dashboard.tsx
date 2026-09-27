@@ -261,10 +261,30 @@ function DashboardBody({ data }: { data: DashboardData }) {
             {!data.deliveries.length && <EmptyRow cols={6} />}
           </TableBody>
         </Table>
+        </div>
       </Panel>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <Panel title="Invoices">
+          <div className="divide-y divide-border sm:hidden">
+            {data.invoices.slice(0, 8).map((i) => (
+              <div key={i.id} className="px-3 py-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{i.invoice_no} · {i.customer_name}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">Due {fmtDate(i.due_date)}</p>
+                  </div>
+                  <Status value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} />
+                </div>
+                <div className="mt-2 flex items-center justify-between text-sm">
+                  <span className="text-xs text-muted-foreground">of {formatINR(Number(i.amount))}</span>
+                  <span className="font-semibold tabular-nums">{formatINR(balance(i))}</span>
+                </div>
+              </div>
+            ))}
+            {!data.invoices.length && <EmptyCard />}
+          </div>
+          <div className="hidden sm:block">
           <Table>
             <TableHeader><TableRow>
               <TableHead>Invoice</TableHead><TableHead>Due</TableHead>
