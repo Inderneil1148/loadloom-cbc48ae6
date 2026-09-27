@@ -4,10 +4,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Package, Truck, MapPin, FileText, Wallet, Database } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AppHeader } from "@/components/app/AppHeader";
+import { supabase } from "@/integrations/supabase/client";
 import { formatINR } from "@/lib/plans";
 import { fetchDashboard, loadSampleData, type DashboardData } from "@/lib/dashboard-data";
 
