@@ -27,7 +27,7 @@ function Centre() {
   const overdue = data.invoices.filter((i) => i.status !== "paid" && i.due_date < today);
   const live = data.deliveries.filter((d) => ["loading", "dispatched", "on_road", "arrived"].includes(d.status));
   const Section = ({ title, items, empty, icon }: { title: string; items: React.ReactNode[]; empty: string; icon?: React.ReactNode }) => (
-    <section className="rounded-md border border-border bg-card p-4 shadow-panel">
+    <section className="min-w-0 overflow-hidden rounded-md border border-border bg-card p-4 shadow-panel">
       <h2 className="flex items-center gap-2 font-bold">{icon}{title} <span className="text-xs text-muted-foreground">({items.length})</span></h2>
       {items.length ? <ul className="mt-3 divide-y divide-border">{items}</ul> : <p className="py-4 text-sm text-muted-foreground">{empty}</p>}
     </section>
@@ -43,7 +43,7 @@ function Centre() {
       </div>
       <div className="grid gap-5 lg:grid-cols-2">
         <Section title="Delay alerts" icon={<AlertTriangle className="size-4 text-destructive" />} empty="No delayed trips."
-          items={delayed.map((d) => <li key={d.id} className="flex justify-between gap-2 py-2 text-sm"><span>{d.orders?.order_no} · {d.vehicles?.registration ?? "No truck"}</span><span className="text-destructive">{Math.round((Date.now() - new Date(d.dispatched_at).getTime()) / 3600000)}h on road</span></li>)} />
+          items={delayed.map((d) => <li key={d.id} className="flex justify-between gap-2 py-2 text-sm"><span className="min-w-0 truncate">{d.orders?.order_no} · {d.vehicles?.registration ?? "No truck"}</span><span className="text-destructive">{Math.round((Date.now() - new Date(d.dispatched_at).getTime()) / 3600000)}h on road</span></li>)} />
         <Section title="Priority: due today or late" icon={<Clock className="size-4 text-accent" />} empty="Nothing due today."
           items={dueToday.map((o) => <li key={o.id} className="flex items-center justify-between gap-2 py-2 text-sm"><span className="min-w-0 truncate">{o.order_no} · {o.customer_name}</span><span className="flex shrink-0 items-center gap-2">{fmtDate(o.delivery_date)} <StatusBadge value={o.status} /></span></li>)} />
         <Section title="Needs a truck" empty="All confirmed orders have trucks."
