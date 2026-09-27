@@ -1,0 +1,35 @@
+# LoadLoom roadmap
+
+Stack note: TanStack Start + Lovable Cloud (auth, database, storage, server functions)
+instead of the spec's Firebase/React Router.
+
+## Stage 1 — Marketing site + auth (done)
+- [x] Design system: Midnight Navy / Construction Orange, Manrope + Inter
+- [x] Public routes: /, /features, /pricing, /demo, /contact, /privacy, /terms
+- [x] Sign in / sign up with email + Google, /login redirect
+- [x] Protected shell with placeholder /dashboard
+
+## Stage 2 — Organization foundation
+- [ ] organizations, org_members, user_roles (separate table), subscription on org
+- [ ] Plan entitlement config + limit enforcement
+- [ ] First-time onboarding wizard (business, units, first material)
+- [ ] App shell: desktop sidebar, mobile bottom nav, quick add, global search
+
+## Stage 3 — Core operations
+- [ ] Customers, sites, materials, vehicles, drivers
+- [ ] Orders + create order with calculations
+- [ ] Dispatch board and trips with controlled status transitions
+- [ ] Delivery proof (photo, signature, OTP, weighbridge slip) in storage
+
+## Stage 4 — Money
+- [ ] Quotations + Convert to Order
+- [ ] Invoices, payments, outstanding ledger
+
+## Stage 5 — Insight & extras
+- [ ] Reports, analytics, activity timeline, audit log
+- [ ] Settings (business, users, roles, subscription, notifications, import/export)
+- [ ] CSV import/export, PWA, driver experience, WhatsApp share, AI (Fleet)
+
+## Open items needing the user
+- [ ] Contact form currently only confirms on screen; needs a destination (inbox or stored enquiries)
+- [ ] Real company contact details, support email and legal review of privacy/terms
