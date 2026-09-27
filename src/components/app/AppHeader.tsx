@@ -112,7 +112,7 @@ export function AppHeader() {
              </Button>
            )}
           {isDemo ? (
-            <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/auth" search={{ mode: "signup" }}>Create account</Link></Button>
+            <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/pricing">Get LoadLoom</Link></Button>
           ) : (
             <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/orders" search={{ new: true }}><Plus /> <span className="hidden min-[390px]:inline">New Load</span><span className="min-[390px]:hidden">New</span></Link></Button>
           )}

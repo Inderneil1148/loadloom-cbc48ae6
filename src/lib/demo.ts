@@ -11,8 +11,8 @@ export function useDemo() {
   /** Returns true (and sends the visitor to sign-up) when a change is attempted in demo mode. */
   const block = () => {
     if (!isDemo) return false;
-    toast.info("This is a read-only demo. Create your free account to add your own data.");
-    navigate({ to: "/auth", search: { mode: "signup" } as never });
+    toast.info("This is a read-only demo. Pick a plan and create your account to add your own data.");
+    navigate({ to: "/pricing" });
     return true;
   };
   return { isDemo, block };
