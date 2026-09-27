@@ -203,6 +203,21 @@ export type Database = {
         }
         Relationships: []
       }
+      demo_users: {
+        Row: {
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       drivers: {
         Row: {
           created_at: string
@@ -682,6 +697,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_demo_user: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
