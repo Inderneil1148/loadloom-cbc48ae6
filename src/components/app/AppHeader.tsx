@@ -30,7 +30,7 @@ export function AppHeader() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
-  const page = GROUPS.flatMap((g) => g.items).find((item) => item.to === location.pathname)?.label ?? "Dashboard";
+  const page = GROUPS.map((g) => g.items.find((item) => item.to === location.pathname)?.label).find(Boolean) ?? "Dashboard";
 
   async function signOut() {
     await queryClient.cancelQueries();
