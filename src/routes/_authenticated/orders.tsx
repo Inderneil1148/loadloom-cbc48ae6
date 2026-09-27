@@ -74,7 +74,7 @@ function makeOrderNumber() {
 }
 
 async function syncDelivery(saved: Record<string, unknown>, form: Record<string, string>) {
-  const orderId = String(saved.id ?? "");
+  const orderId = String(saved["id"] ?? "");
   if (!orderId || (!form["vehicle_id"] && !form["driver_id"])) return;
   const driver = form["driver_id"]
     ? await supabase.from("drivers").select("name").eq("id", form["driver_id"]).maybeSingle()
