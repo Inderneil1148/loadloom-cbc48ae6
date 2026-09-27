@@ -10,9 +10,9 @@ import { Logo } from "@/components/site/Logo";
 import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    mode: search.mode === "signup" ? ("signup" as const) : ("signin" as const),
-  }),
+  validateSearch: (search: Record<string, unknown>): { mode?: "signup" } =>
+    search["mode"] === "signup" ? { mode: "signup" } : {},
+
   head: () => ({
     meta: [
       { title: "Sign in — LoadLoom" },
