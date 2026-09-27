@@ -17,7 +17,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AppHeader } from "./AppHeader";
 
-type Row = Record<string, any>;
+type Row = any;
 type Option = { value: string; label: string };
 
 export type Field = {
@@ -168,7 +168,7 @@ export function RecordManager({
     setEditing(row);
     const init: Record<string, string> = {};
     for (const f of fields)
-      init[f.name] = row ? toInput(f, row[f.name]) : f.default?.() ?? (f.type === "select" ? f.options![0].value : "");
+      init[f.name] = row ? toInput(f, row[f.name]) : f.default?.() ?? (f.type === "select" ? f.options![0]?.value ?? "" : "");
     setForm(init);
     setOpen(true);
   }
