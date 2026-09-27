@@ -181,7 +181,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                     <p className="truncate font-medium">{o.order_no} · {o.customer_name}</p>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">{o.site} · {o.material} · {Number(o.quantity)} {o.unit}</p>
                   </div>
-                  <Status value={o.status} />
+                  <StatusSelect table="orders" id={o.id} value={o.status} />
                 </div>
                 <div className="mt-2 flex items-center justify-between text-sm">
                   <span className="text-xs text-muted-foreground">{fmtDate(o.order_date)}</span>
@@ -204,7 +204,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                   <TableCell>{o.customer_name}<div className="text-xs text-muted-foreground">{o.site}</div></TableCell>
                   <TableCell>{o.material}<div className="text-xs text-muted-foreground">{Number(o.quantity)} {o.unit}</div></TableCell>
                   <TableCell className="text-right tabular-nums">{formatINR(Number(o.amount))}</TableCell>
-                  <TableCell><Status value={o.status} /></TableCell>
+                  <TableCell><StatusSelect table="orders" id={o.id} value={o.status} /></TableCell>
                 </TableRow>
               ))}
               {!data.orders.length && <EmptyRow cols={5} />}
@@ -221,7 +221,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                   <p className="truncate font-medium">{v.registration}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">{v.vehicle_type} · {Number(v.capacity_tonnes)} t</p>
                 </div>
-                <Status value={v.status} />
+                <StatusSelect table="vehicles" id={v.id} value={v.status} />
               </div>
             ))}
             {!data.vehicles.length && <EmptyCard />}
@@ -233,7 +233,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {data.vehicles.map((v) => (
                 <TableRow key={v.id}>
                   <TableCell className="font-medium">{v.registration}<div className="text-xs text-muted-foreground">{v.vehicle_type} · {Number(v.capacity_tonnes)} t</div></TableCell>
-                  <TableCell><Status value={v.status} /></TableCell>
+                  <TableCell><StatusSelect table="vehicles" id={v.id} value={v.status} /></TableCell>
                 </TableRow>
               ))}
               {!data.vehicles.length && <EmptyRow cols={2} />}
@@ -252,7 +252,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                   <p className="truncate font-medium">{d.orders?.order_no ?? "—"} · {d.orders?.customer_name}</p>
                   <p className="mt-0.5 truncate text-xs text-muted-foreground">{d.orders?.site} · {d.vehicles?.registration ?? "—"} · {d.driver_name}</p>
                 </div>
-                <Status value={d.status} />
+                <StatusSelect table="deliveries" id={d.id} value={d.status} />
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
                 Dispatched {fmtDate(d.dispatched_at)} · Delivered {fmtDate(d.delivered_at)}
@@ -275,7 +275,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                 <TableCell>{d.vehicles?.registration ?? "—"}<div className="text-xs text-muted-foreground">{d.driver_name}</div></TableCell>
                 <TableCell>{fmtDate(d.dispatched_at)}</TableCell>
                 <TableCell>{fmtDate(d.delivered_at)}</TableCell>
-                <TableCell><Status value={d.status} /></TableCell>
+                <TableCell><StatusSelect table="deliveries" id={d.id} value={d.status} /></TableCell>
               </TableRow>
             ))}
             {!data.deliveries.length && <EmptyRow cols={6} />}
@@ -294,7 +294,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                     <p className="truncate font-medium">{i.invoice_no} · {i.customer_name}</p>
                     <p className="mt-0.5 text-xs text-muted-foreground">Due {fmtDate(i.due_date)}</p>
                   </div>
-                  <Status value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} />
+                  <StatusSelect table="invoices" id={i.id} value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} />
                 </div>
                 <div className="mt-2 flex items-center justify-between text-sm">
                   <span className="text-xs text-muted-foreground">of {formatINR(Number(i.amount))}</span>
@@ -316,7 +316,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
                   <TableCell className="font-medium">{i.invoice_no}<div className="text-xs text-muted-foreground">{i.customer_name}</div></TableCell>
                   <TableCell>{fmtDate(i.due_date)}</TableCell>
                   <TableCell className="text-right tabular-nums">{formatINR(balance(i))}<div className="text-xs text-muted-foreground">of {formatINR(Number(i.amount))}</div></TableCell>
-                  <TableCell><Status value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} /></TableCell>
+                  <TableCell><StatusSelect table="invoices" id={i.id} value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} /></TableCell>
                 </TableRow>
               ))}
               {!data.invoices.length && <EmptyRow cols={4} />}
