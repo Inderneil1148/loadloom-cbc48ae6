@@ -13,6 +13,7 @@ const NAV = [
   { to: "/deliveries", label: "Deliveries" },
   { to: "/invoices", label: "Invoices" },
   { to: "/payments", label: "Payments" },
+  { to: "/settings", label: "Settings" },
 ] as const;
 
 export function AppHeader() {
