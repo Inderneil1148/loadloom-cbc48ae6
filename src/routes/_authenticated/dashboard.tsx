@@ -76,20 +76,20 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-5">
+        <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-5">
           <Logo />
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-muted-foreground sm:inline">{session?.user.email}</span>
-            <Button variant="outline" size="sm" onClick={signOut}>
-              <LogOut /> Sign out
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+            <span className="hidden truncate text-sm text-muted-foreground sm:inline">{session?.user.email}</span>
+            <Button variant="outline" size="sm" onClick={signOut} className="shrink-0">
+              <LogOut /> <span className="hidden xs:inline sm:inline">Sign out</span>
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-7xl px-5 py-8">
+      <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8">
         <p className="eyebrow text-accent">Operations at a glance</p>
-        <h1 className="mt-2 text-3xl font-extrabold">Today's yard</h1>
+        <h1 className="mt-2 text-2xl font-extrabold sm:text-3xl">Today's yard</h1>
 
         {error ? (
           <p className="mt-8 rounded-md border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
@@ -143,7 +143,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
 
   return (
     <>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="-mx-4 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:mt-8 sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-5">
         <Stat icon={<Package />} label="Open orders" value={openOrders.length} sub={`${todayOrders.length} placed today`} />
         <Stat icon={<Truck />} label="Trucks out" value={`${trucksOut}/${data.vehicles.length}`} sub={`${trucksFree} available`} />
         <Stat icon={<MapPin />} label="Active trips" value={activeTrips.length} sub={`${deliveredToday.length} delivered today`} />
@@ -153,6 +153,25 @@ function DashboardBody({ data }: { data: DashboardData }) {
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         <Panel title="Recent orders" className="lg:col-span-2">
+          <div className="divide-y divide-border sm:hidden">
+            {data.orders.slice(0, 8).map((o) => (
+              <div key={o.id} className="px-3 py-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{o.order_no} · {o.customer_name}</p>
+                    <p className="mt-0.5 truncate text-xs text-muted-foreground">{o.site} · {o.material} · {Number(o.quantity)} {o.unit}</p>
+                  </div>
+                  <Status value={o.status} />
+                </div>
+                <div className="mt-2 flex items-center justify-between text-sm">
+                  <span className="text-xs text-muted-foreground">{fmtDate(o.order_date)}</span>
+                  <span className="font-semibold tabular-nums">{formatINR(Number(o.amount))}</span>
+                </div>
+              </div>
+            ))}
+            {!data.orders.length && <EmptyCard />}
+          </div>
+          <div className="hidden sm:block">
           <Table>
             <TableHeader><TableRow>
               <TableHead>Order</TableHead><TableHead>Customer</TableHead><TableHead>Material</TableHead>
@@ -171,9 +190,23 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {!data.orders.length && <EmptyRow cols={5} />}
             </TableBody>
           </Table>
+          </div>
         </Panel>
 
         <Panel title="Trucks">
+          <div className="divide-y divide-border sm:hidden">
+            {data.vehicles.map((v) => (
+              <div key={v.id} className="flex items-center justify-between gap-3 px-3 py-3">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{v.registration}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{v.vehicle_type} · {Number(v.capacity_tonnes)} t</p>
+                </div>
+                <Status value={v.status} />
+              </div>
+            ))}
+            {!data.vehicles.length && <EmptyCard />}
+          </div>
+          <div className="hidden sm:block">
           <Table>
             <TableHeader><TableRow><TableHead>Vehicle</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
             <TableBody>
@@ -186,10 +219,29 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {!data.vehicles.length && <EmptyRow cols={2} />}
             </TableBody>
           </Table>
+          </div>
         </Panel>
       </div>
 
       <Panel title="Deliveries" className="mt-6">
+        <div className="divide-y divide-border sm:hidden">
+          {data.deliveries.slice(0, 8).map((d) => (
+            <div key={d.id} className="px-3 py-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{d.orders?.order_no ?? "—"} · {d.orders?.customer_name}</p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">{d.orders?.site} · {d.vehicles?.registration ?? "—"} · {d.driver_name}</p>
+                </div>
+                <Status value={d.status} />
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Dispatched {fmtDate(d.dispatched_at)} · Delivered {fmtDate(d.delivered_at)}
+              </p>
+            </div>
+          ))}
+          {!data.deliveries.length && <EmptyCard />}
+        </div>
+        <div className="hidden sm:block">
         <Table>
           <TableHeader><TableRow>
             <TableHead>Order</TableHead><TableHead>Site</TableHead><TableHead>Truck / driver</TableHead>
@@ -209,10 +261,30 @@ function DashboardBody({ data }: { data: DashboardData }) {
             {!data.deliveries.length && <EmptyRow cols={6} />}
           </TableBody>
         </Table>
+        </div>
       </Panel>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <Panel title="Invoices">
+          <div className="divide-y divide-border sm:hidden">
+            {data.invoices.slice(0, 8).map((i) => (
+              <div key={i.id} className="px-3 py-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{i.invoice_no} · {i.customer_name}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">Due {fmtDate(i.due_date)}</p>
+                  </div>
+                  <Status value={balance(i) > 0 && i.due_date < today ? "overdue" : i.status} />
+                </div>
+                <div className="mt-2 flex items-center justify-between text-sm">
+                  <span className="text-xs text-muted-foreground">of {formatINR(Number(i.amount))}</span>
+                  <span className="font-semibold tabular-nums">{formatINR(balance(i))}</span>
+                </div>
+              </div>
+            ))}
+            {!data.invoices.length && <EmptyCard />}
+          </div>
+          <div className="hidden sm:block">
           <Table>
             <TableHeader><TableRow>
               <TableHead>Invoice</TableHead><TableHead>Due</TableHead>
@@ -230,9 +302,23 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {!data.invoices.length && <EmptyRow cols={4} />}
             </TableBody>
           </Table>
+          </div>
         </Panel>
 
         <Panel title="Recent payments">
+          <div className="divide-y divide-border sm:hidden">
+            {data.payments.slice(0, 8).map((p) => (
+              <div key={p.id} className="flex items-center justify-between gap-3 px-3 py-3">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{p.customer_name}</p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">{fmtDate(p.paid_on)} · {p.method}{p.reference ? ` · ${p.reference}` : ""}</p>
+                </div>
+                <span className="shrink-0 font-semibold tabular-nums text-success">{formatINR(Number(p.amount))}</span>
+              </div>
+            ))}
+            {!data.payments.length && <EmptyCard />}
+          </div>
+          <div className="hidden sm:block">
           <Table>
             <TableHeader><TableRow>
               <TableHead>Customer</TableHead><TableHead>Date</TableHead><TableHead>Method</TableHead>
@@ -250,6 +336,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
               {!data.payments.length && <EmptyRow cols={4} />}
             </TableBody>
           </Table>
+          </div>
         </Panel>
       </div>
     </>
@@ -258,11 +345,11 @@ function DashboardBody({ data }: { data: DashboardData }) {
 
 function Stat({ icon, label, value, sub, alert }: { icon: ReactNode; label: string; value: ReactNode; sub: string; alert?: boolean }) {
   return (
-    <div className="rounded-md border border-border bg-card p-5 shadow-panel">
+    <div className="w-40 shrink-0 snap-start rounded-md border border-border bg-card p-4 shadow-panel sm:w-auto sm:shrink sm:p-5">
       <div className="flex items-center justify-between text-muted-foreground [&_svg]:size-4">
         <span className="eyebrow">{label}</span>{icon}
       </div>
-      <p className="mt-3 text-2xl font-extrabold tabular-nums">{value}</p>
+      <p className="mt-3 truncate text-xl font-extrabold tabular-nums sm:text-2xl">{value}</p>
       <p className={`mt-1 text-xs ${alert ? "font-semibold text-destructive" : "text-muted-foreground"}`}>{sub}</p>
     </div>
   );
@@ -275,6 +362,10 @@ function Panel({ title, children, className = "" }: { title: string; children: R
       <div className="px-2 pb-2">{children}</div>
     </section>
   );
+}
+
+function EmptyCard() {
+  return <p className="px-3 py-6 text-center text-sm text-muted-foreground">Nothing here yet</p>;
 }
 
 function EmptyRow({ cols }: { cols: number }) {
