@@ -85,7 +85,7 @@ async function syncDelivery(saved: Record<string, unknown>, form: Record<string,
   const assignment = {
     vehicle_id: form["vehicle_id"] || null,
     driver_name: driver.data?.name ?? null,
-    status: form["vehicle_id"] ? "scheduled" : "scheduled",
+    status: "scheduled",
   };
   const result = existing.data
     ? await supabase.from("deliveries").update(assignment).eq("id", existing.data.id)
