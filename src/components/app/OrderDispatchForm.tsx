@@ -42,11 +42,11 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
   });
 
   const set = (name: string, value: string) => onChange({ ...values, [name]: value });
-  const quantity = numberValue(values.quantity);
-  const rate = numberValue(values.rate);
-  const freight = numberValue(values.haulage_freight);
-  const gstPercent = numberValue(values.gst_percent);
-  const advance = numberValue(values.advance_amount);
+  const quantity = numberValue(values["quantity"]);
+  const rate = numberValue(values["rate"]);
+  const freight = numberValue(values["haulage_freight"]);
+  const gstPercent = numberValue(values["gst_percent"]);
+  const advance = numberValue(values["advance_amount"]);
   const materialSubtotal = quantity * rate;
   const gstAmount = (materialSubtotal + freight) * (gstPercent / 100);
   const total = materialSubtotal + freight + gstAmount;
@@ -54,26 +54,26 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
 
   function selectCustomer(id: string) {
     const selected = data?.customers.find((row) => row.id === id);
-    onChange({ ...values, customer_id: id, customer_name: String(selected?.name ?? "") });
+    onChange({ ...values, customer_id: id, customer_name: String(selected?.["name"] ?? "") });
   }
 
   function selectSite(id: string) {
     const selected = data?.sites.find((row) => row.id === id);
-    onChange({ ...values, site_id: id, site: String(selected?.name ?? "") });
+    onChange({ ...values, site_id: id, site: String(selected?.["name"] ?? "") });
   }
 
   function selectMaterial(name: string) {
-    const selected = data?.materials.find((row) => row.name === name);
+    const selected = data?.materials.find((row) => row["name"] === name);
     onChange({
       ...values,
       material: name,
-      unit: String(selected?.unit ?? values.unit ?? "tonnes"),
-      rate: String(selected?.rate ?? values.rate ?? "0"),
+      unit: String(selected?.["unit"] ?? values["unit"] ?? "tonnes"),
+      rate: String(selected?.["rate"] ?? values["rate"] ?? "0"),
     });
   }
 
   function selectTruck(id: string) {
-    const nextStatus = id && values.status === "confirmed" ? "assigned" : values.status;
+    const nextStatus = id && values["status"] === "confirmed" ? "assigned" : values["status"] ?? "confirmed";
     onChange({ ...values, vehicle_id: id, status: nextStatus });
   }
 
@@ -81,15 +81,15 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Contractor / Buyer" required>
-          <select className={selectClass} value={values.customer_id ?? ""} onChange={(event) => selectCustomer(event.target.value)} disabled={isPending}>
+          <select className={selectClass} value={values["customer_id"] ?? ""} onChange={(event) => selectCustomer(event.target.value)} disabled={isPending}>
             <option value="">Select customer</option>
-            {data?.customers.map((row) => <option key={row.id} value={row.id}>{String(row.name)}</option>)}
+            {data?.customers.map((row) => <option key={row.id} value={row.id}>{String(row["name"])}</option>)}
           </select>
         </Field>
         <Field label="Project Delivery Destination Site" required>
-          <select className={selectClass} value={values.site_id ?? ""} onChange={(event) => selectSite(event.target.value)} disabled={isPending}>
+          <select className={selectClass} value={values["site_id"] ?? ""} onChange={(event) => selectSite(event.target.value)} disabled={isPending}>
             <option value="">Select delivery site</option>
-            {data?.sites.map((row) => <option key={row.id} value={row.id}>{String(row.name)}</option>)}
+            {data?.sites.map((row) => <option key={row.id} value={row.id}>{String(row["name"])}</option>)}
           </select>
         </Field>
       </div>
@@ -97,24 +97,24 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
       <section className="rounded-md border border-border bg-secondary/30 p-4">
         <div className="grid gap-4 sm:grid-cols-[minmax(0,2fr)_minmax(10rem,1fr)]">
           <Field label="Material Product" required>
-            <select className={selectClass} value={values.material ?? ""} onChange={(event) => selectMaterial(event.target.value)} disabled={isPending}>
+            <select className={selectClass} value={values["material"] ?? ""} onChange={(event) => selectMaterial(event.target.value)} disabled={isPending}>
               <option value="">Select material</option>
-              {values.material && !data?.materials.some((row) => row.name === values.material) && <option value={values.material}>{values.material}</option>}
-              {data?.materials.map((row) => <option key={row.id} value={String(row.name)}>{String(row.name)} — {formatINR(Number(row.rate ?? 0))}/{String(row.unit)}</option>)}
+              {values["material"] && !data?.materials.some((row) => row["name"] === values["material"]) && <option value={values["material"]}>{values["material"]}</option>}
+              {data?.materials.map((row) => <option key={row.id} value={String(row["name"])}>{String(row["name"])} — {formatINR(Number(row["rate"] ?? 0))}/{String(row["unit"])}</option>)}
             </select>
           </Field>
           <Field label="Unit of Measure">
-            <select className={selectClass} value={values.unit ?? "tonnes"} onChange={(event) => set("unit", event.target.value)}>
+            <select className={selectClass} value={values["unit"] ?? "tonnes"} onChange={(event) => set("unit", event.target.value)}>
               {units.map((unit) => <option key={unit} value={unit}>{unit.charAt(0).toUpperCase() + unit.slice(1)}</option>)}
             </select>
           </Field>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <NumberField label="Quantity" name="quantity" value={values.quantity} onChange={set} />
-          <NumberField label="Unit Rate (₹)" name="rate" value={values.rate} onChange={set} />
-          <NumberField label="Haulage Freight (₹)" name="haulage_freight" value={values.haulage_freight} onChange={set} />
+          <NumberField label="Quantity" name="quantity" value={values["quantity"]} onChange={set} />
+          <NumberField label="Unit Rate (₹)" name="rate" value={values["rate"]} onChange={set} />
+          <NumberField label="Haulage Freight (₹)" name="haulage_freight" value={values["haulage_freight"]} onChange={set} />
           <Field label="GST Tax">
-            <select className={selectClass} value={values.gst_percent ?? "0"} onChange={(event) => set("gst_percent", event.target.value)}>
+            <select className={selectClass} value={values["gst_percent"] ?? "0"} onChange={(event) => set("gst_percent", event.target.value)}>
               {gstRates.map((rateOption) => <option key={rateOption} value={rateOption}>{rateOption}%{rateOption === 0 ? " (Exempt)" : ""}</option>)}
             </select>
           </Field>
@@ -123,28 +123,28 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Assign Dispatch Truck">
-          <select className={selectClass} value={values.vehicle_id ?? ""} onChange={(event) => selectTruck(event.target.value)} disabled={isPending}>
+          <select className={selectClass} value={values["vehicle_id"] ?? ""} onChange={(event) => selectTruck(event.target.value)} disabled={isPending}>
             <option value="">Assign truck later…</option>
-            {data?.vehicles.map((row) => <option key={row.id} value={row.id}>{String(row.registration)} · {String(row.vehicle_type)} · {Number(row.capacity_tonnes)} t{row.status !== "available" ? ` · ${String(row.status).replace(/_/g, " ")}` : ""}</option>)}
+            {data?.vehicles.map((row) => <option key={row.id} value={row.id}>{String(row["registration"])} · {String(row["vehicle_type"])} · {Number(row["capacity_tonnes"])} t{row["status"] !== "available" ? ` · ${String(row["status"]).replace(/_/g, " ")}` : ""}</option>)}
           </select>
         </Field>
         <Field label="Assign Driver">
-          <select className={selectClass} value={values.driver_id ?? ""} onChange={(event) => set("driver_id", event.target.value)} disabled={isPending}>
+          <select className={selectClass} value={values["driver_id"] ?? ""} onChange={(event) => set("driver_id", event.target.value)} disabled={isPending}>
             <option value="">Assign driver later…</option>
-            {data?.drivers.map((row) => <option key={row.id} value={row.id}>{String(row.name)}{row.status !== "available" ? ` · ${String(row.status).replace(/_/g, " ")}` : ""}</option>)}
+            {data?.drivers.map((row) => <option key={row.id} value={row.id}>{String(row["name"])}{row["status"] !== "available" ? ` · ${String(row["status"]).replace(/_/g, " ")}` : ""}</option>)}
           </select>
         </Field>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <Field label="Delivery Date">
-          <Input type="date" value={values.delivery_date ?? ""} onChange={(event) => set("delivery_date", event.target.value)} />
+          <Input type="date" value={values["delivery_date"] ?? ""} onChange={(event) => set("delivery_date", event.target.value)} />
         </Field>
         <Field label="Target Window">
-          <Input type="time" value={values.target_window ?? ""} onChange={(event) => set("target_window", event.target.value)} />
+          <Input type="time" value={values["target_window"] ?? ""} onChange={(event) => set("target_window", event.target.value)} />
         </Field>
         <div className="col-span-2 sm:col-span-1">
-          <NumberField label="Advance Received (₹)" name="advance_amount" value={values.advance_amount} onChange={set} tone="success" />
+          <NumberField label="Advance Received (₹)" name="advance_amount" value={values["advance_amount"]} onChange={set} tone="success" />
         </div>
       </div>
 
@@ -171,7 +171,7 @@ function Field({ label, required, children }: { label: string; required?: boolea
   return <div className="min-w-0 space-y-1.5"><Label>{label}{required ? " *" : ""}</Label>{children}</div>;
 }
 
-function NumberField({ label, name, value, onChange, tone }: { label: string; name: string; value?: string; onChange: (name: string, value: string) => void; tone?: "success" }) {
+function NumberField({ label, name, value, onChange, tone }: { label: string; name: string; value: string | undefined; onChange: (name: string, value: string) => void; tone?: "success" }) {
   return <Field label={label}><Input type="text" inputMode="decimal" className={tone === "success" ? "text-success" : ""} value={value ?? ""} onChange={(event) => onChange(name, event.target.value)} /></Field>;
 }
 

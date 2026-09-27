@@ -39,10 +39,10 @@ export const Route = createFileRoute("/_authenticated/orders")({
       dialogClassName="h-[100dvh] max-h-[100dvh] w-full max-w-none overflow-y-auto rounded-none p-4 sm:h-auto sm:max-h-[94vh] sm:max-w-5xl sm:rounded-lg sm:p-6"
       submitLabel="Confirm & Authorize Dispatch"
       preparePayload={(payload, form) => {
-        const quantity = safeNumber(form.quantity);
-        const rate = safeNumber(form.rate);
-        const freight = safeNumber(form.haulage_freight);
-        const gst = (quantity * rate + freight) * (safeNumber(form.gst_percent) / 100);
+        const quantity = safeNumber(form["quantity"]);
+        const rate = safeNumber(form["rate"]);
+        const freight = safeNumber(form["haulage_freight"]);
+        const gst = (quantity * rate + freight) * (safeNumber(form["gst_percent"]) / 100);
         return { ...payload, amount: quantity * rate + freight + gst };
       }}
       afterSave={syncDelivery}
@@ -75,17 +75,17 @@ function makeOrderNumber() {
 
 async function syncDelivery(saved: Record<string, unknown>, form: Record<string, string>) {
   const orderId = String(saved.id ?? "");
-  if (!orderId || (!form.vehicle_id && !form.driver_id)) return;
-  const driver = form.driver_id
-    ? await supabase.from("drivers").select("name").eq("id", form.driver_id).maybeSingle()
+  if (!orderId || (!form["vehicle_id"] && !form["driver_id"])) return;
+  const driver = form["driver_id"]
+    ? await supabase.from("drivers").select("name").eq("id", form["driver_id"]).maybeSingle()
     : { data: null, error: null };
   if (driver.error) throw driver.error;
   const existing = await supabase.from("deliveries").select("id").eq("order_id", orderId).maybeSingle();
   if (existing.error) throw existing.error;
   const assignment = {
-    vehicle_id: form.vehicle_id || null,
+    vehicle_id: form["vehicle_id"] || null,
     driver_name: driver.data?.name ?? null,
-    status: form.vehicle_id ? "scheduled" : "scheduled",
+    status: form["vehicle_id"] ? "scheduled" : "scheduled",
   };
   const result = existing.data
     ? await supabase.from("deliveries").update(assignment).eq("id", existing.data.id)
