@@ -34,7 +34,7 @@ function QuotationsPage() {
       material: String(q["material"]), quantity: n(q["quantity"]), unit: String(q["unit"] ?? "tonnes"), rate: n(q["rate"]),
       haulage_freight: n(q["haulage_freight"]), gst_percent: n(q["gst_percent"]), amount: n(q["amount"]) || sub, status: "confirmed",
     }).select().single();
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await supabase.from("quotations").update({ status: "converted", order_id: order.id }).eq("id", String(q["id"]));
     toast.success(`Converted to order ${order.order_no}`);
     qc.invalidateQueries({ queryKey: ["records"] });

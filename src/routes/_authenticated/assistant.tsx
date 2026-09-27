@@ -28,7 +28,7 @@ const parseJson = (t: string) => { try { return JSON.parse(t.replace(/^```(json)
 function useAi() {
   const fn = useServerFn(runAiTool);
   const [busy, setBusy] = useState(false);
-  const run = async (data: Parameters<typeof fn>[0]["data"]) => {
+  const run = async (data: { task: "order" | "slip" | "summary" | "followup"; text?: string; image?: string }) => {
     setBusy(true);
     try {
       const r = await fn({ data });
@@ -60,7 +60,7 @@ function VoiceOrder() {
   const listen = () => {
     const W = window as unknown as Record<string, unknown>;
     const SR = (W["SpeechRecognition"] ?? W["webkitSpeechRecognition"]) as (new () => { lang: string; onresult: (e: { results: { 0: { transcript: string } }[] }) => void; start: () => void }) | undefined;
-    if (!SR) return toast.error("Voice input isn't supported in this browser. Type instead.");
+    if (!SR) { toast.error("Voice input isn't supported in this browser. Type instead."); return; }
     const r = new SR(); r.lang = "en-IN";
     r.onresult = (e) => setText((t) => `${t} ${e.results[0]![0].transcript}`.trim());
     r.start();
@@ -74,7 +74,7 @@ function VoiceOrder() {
       material: String(draft["material"] || "Material"), quantity: q, unit: String(draft["unit"] || "tonnes"), rate, amount: q * rate,
       delivery_date: (draft["delivery_date"] as string) || null, status: "confirmed",
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Order created"); setDraft(null); setText("");
     qc.invalidateQueries({ queryKey: ["records"] }); qc.invalidateQueries({ queryKey: ["dashboard"] });
   }
@@ -102,7 +102,7 @@ function SlipReader() {
   const [result, setResult] = useState<Record<string, unknown> | null>(null);
   async function onFile(f: File | undefined) {
     if (!f) return;
-    if (f.size > 5_000_000) return toast.error("Image must be under 5 MB.");
+    if (f.size > 5_000_000) { toast.error("Image must be under 5 MB."); return; }
     const url = await new Promise<string>((res) => { const r = new FileReader(); r.onload = () => res(String(r.result)); r.readAsDataURL(f); });
     const t = await run({ task: "slip", image: url });
     if (t) setResult(parseJson(t) ?? { text: t });

@@ -48,7 +48,7 @@ export function AppPage({ eyebrow, title, description, actions, feature, childre
   );
 }
 
-export function StatCard({ label, value, tone }: { label: string; value: ReactNode; tone?: "accent" | "bad" | "good" }) {
+export function StatCard({ label, value, tone }: { label: string; value: ReactNode; tone?: "accent" | "bad" | "good" | undefined }) {
   const c = tone === "accent" ? "text-accent" : tone === "bad" ? "text-destructive" : tone === "good" ? "text-success" : "";
   return (
     <div className="rounded-md border border-border bg-card p-4 shadow-panel">
