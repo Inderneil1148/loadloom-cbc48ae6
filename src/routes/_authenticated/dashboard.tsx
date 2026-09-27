@@ -153,6 +153,25 @@ function DashboardBody({ data }: { data: DashboardData }) {
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         <Panel title="Recent orders" className="lg:col-span-2">
+          <div className="divide-y divide-border sm:hidden">
+            {data.orders.slice(0, 8).map((o) => (
+              <div key={o.id} className="px-3 py-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{o.order_no} · {o.customer_name}</p>
+                    <p className="mt-0.5 truncate text-xs text-muted-foreground">{o.site} · {o.material} · {Number(o.quantity)} {o.unit}</p>
+                  </div>
+                  <Status value={o.status} />
+                </div>
+                <div className="mt-2 flex items-center justify-between text-sm">
+                  <span className="text-xs text-muted-foreground">{fmtDate(o.order_date)}</span>
+                  <span className="font-semibold tabular-nums">{formatINR(Number(o.amount))}</span>
+                </div>
+              </div>
+            ))}
+            {!data.orders.length && <EmptyCard />}
+          </div>
+          <div className="hidden sm:block">
           <Table>
             <TableHeader><TableRow>
               <TableHead>Order</TableHead><TableHead>Customer</TableHead><TableHead>Material</TableHead>
