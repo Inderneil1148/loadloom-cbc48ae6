@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteShell, PageHeader } from "@/components/site/SiteShell";
-import { ALL_PLANS, formatINR } from "@/lib/plans";
+import { formatINR } from "@/lib/plans";
 import { plansWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
 
 export const Route = createFileRoute("/pricing")({

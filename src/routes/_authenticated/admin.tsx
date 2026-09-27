@@ -176,11 +176,11 @@ function PlanSettings() {
                 <Button size="sm" variant="action" disabled={!drafts[tier] || save.isPending} onClick={() => save.mutate(row)}><Save /> Save</Button>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                <PlanNumber label="Price (₹ / month)" value={row.price} onChange={(v) => change(source, "price", v)} required />
-                <PlanNumber label="Orders / month" value={row.orders_limit} onChange={(v) => change(source, "orders_limit", v)} />
-                <PlanNumber label="Vehicles" value={row.vehicles_limit} onChange={(v) => change(source, "vehicles_limit", v)} />
-                <PlanNumber label="Active customers" value={row.customers_limit} onChange={(v) => change(source, "customers_limit", v)} />
-                <PlanNumber label="Materials" value={row.materials_limit} onChange={(v) => change(source, "materials_limit", v)} />
+                <PlanNumber id={`${tier}-price`} label="Price (₹ / month)" value={row.price} onChange={(v) => change(source, "price", v)} required />
+                <PlanNumber id={`${tier}-orders`} label="Orders / month" value={row.orders_limit} onChange={(v) => change(source, "orders_limit", v)} />
+                <PlanNumber id={`${tier}-vehicles`} label="Vehicles" value={row.vehicles_limit} onChange={(v) => change(source, "vehicles_limit", v)} />
+                <PlanNumber id={`${tier}-customers`} label="Active customers" value={row.customers_limit} onChange={(v) => change(source, "customers_limit", v)} />
+                <PlanNumber id={`${tier}-materials`} label="Materials" value={row.materials_limit} onChange={(v) => change(source, "materials_limit", v)} />
               </div>
             </div>
           );
@@ -190,7 +190,6 @@ function PlanSettings() {
   );
 }
 
-function PlanNumber({ label, value, onChange, required = false }: { label: string; value: number | null; onChange: (value: string) => void; required?: boolean }) {
-  const id = `plan-${label.toLowerCase().replace(/[^a-z]+/g, "-")}`;
+function PlanNumber({ id, label, value, onChange, required = false }: { id: string; label: string; value: number | null; onChange: (value: string) => void; required?: boolean }) {
   return <div className="space-y-1.5"><Label htmlFor={id} className="text-xs">{label}</Label><Input id={id} type="number" min="0" required={required} value={value ?? ""} placeholder={required ? "0" : "Unlimited"} onChange={(e) => onChange(e.target.value)} /></div>;
 }
