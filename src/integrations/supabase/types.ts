@@ -14,6 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
+      business_profiles: {
+        Row: {
+          address: string | null
+          bank_account: string | null
+          bank_name: string | null
+          business_name: string
+          city: string | null
+          created_at: string
+          email: string | null
+          gstin: string | null
+          id: string
+          ifsc: string | null
+          owner_id: string
+          owner_name: string | null
+          pan: string | null
+          phone: string | null
+          pincode: string | null
+          state: string | null
+          updated_at: string
+          upi_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          bank_account?: string | null
+          bank_name?: string | null
+          business_name?: string
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          gstin?: string | null
+          id?: string
+          ifsc?: string | null
+          owner_id?: string
+          owner_name?: string | null
+          pan?: string | null
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+          updated_at?: string
+          upi_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          bank_account?: string | null
+          bank_name?: string | null
+          business_name?: string
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          gstin?: string | null
+          id?: string
+          ifsc?: string | null
+          owner_id?: string
+          owner_name?: string | null
+          pan?: string | null
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+          updated_at?: string
+          upi_id?: string | null
+        }
+        Relationships: []
+      }
       deliveries: {
         Row: {
           created_at: string
@@ -114,6 +177,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      materials: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          rate: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          owner_id?: string
+          rate?: number
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          rate?: number
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       orders: {
         Row: {
