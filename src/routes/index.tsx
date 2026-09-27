@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteShell } from "@/components/site/SiteShell";
-import { WORKFLOW, PLANS, formatINR } from "@/lib/plans";
+import { WORKFLOW, ALL_PLANS, formatINR } from "@/lib/plans";
 import heroFleet from "@/assets/hero-fleet.jpg";
 
 export const Route = createFileRoute("/")({
@@ -29,6 +29,8 @@ export const Route = createFileRoute("/")({
         content:
           "From order to delivery, without the WhatsApp chaos. Built for bulk construction-material suppliers in India.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
@@ -175,19 +177,19 @@ function Home() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="eyebrow text-accent">Plans</p>
-            <h2 className="mt-3 text-2xl font-bold md:text-4xl">Three plans, one system</h2>
+            <h2 className="mt-3 text-2xl font-bold md:text-4xl">Four plans, one system</h2>
           </div>
           <Button asChild variant="outline">
             <Link to="/pricing">Compare plans</Link>
           </Button>
         </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {PLANS.map((plan) => (
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {ALL_PLANS.map((plan) => (
             <div key={plan.id} className="rounded-md border border-border bg-card p-6 shadow-panel">
               <p className="eyebrow text-muted-foreground">{plan.positioning}</p>
               <h3 className="mt-2 text-xl font-bold">{plan.name}</h3>
               <p className="mt-3 font-display text-2xl font-extrabold">
-                {formatINR(plan.price)}
+                {plan.price === 0 ? "₹0" : formatINR(plan.price)}
                 <span className="text-sm font-medium text-muted-foreground">/month</span>
               </p>
               <p className="mt-3 text-sm text-muted-foreground">{plan.promise}</p>

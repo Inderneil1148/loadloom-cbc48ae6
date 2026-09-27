@@ -2,22 +2,24 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteShell, PageHeader } from "@/components/site/SiteShell";
-import { PLANS, formatINR } from "@/lib/plans";
+import { ALL_PLANS, formatINR } from "@/lib/plans";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — LoadLoom plans from ₹999/month" },
+      { title: "Pricing — LoadLoom plans from Free to Fleet" },
       {
         name: "description",
         content:
-          "Starter ₹999, Growth ₹2,499 and Fleet ₹4,999 per month. Compare users, vehicles, drivers, storage and features.",
+          "Compare LoadLoom Free, Starter ₹999, Growth ₹2,499 and Fleet ₹4,999 plans for construction-material operations.",
       },
-      { property: "og:title", content: "Pricing — LoadLoom plans from ₹999/month" },
+      { property: "og:title", content: "Pricing — LoadLoom plans from Free to Fleet" },
       {
         property: "og:description",
-        content: "Three plans for construction-material suppliers: Starter, Growth and Fleet.",
+        content: "Four plans for construction-material suppliers: Free, Starter, Growth and Fleet.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Pricing,
@@ -29,11 +31,11 @@ function Pricing() {
       <PageHeader
         eyebrow="Pricing"
         title="Pick the plan that matches your yard"
-        lead="One LoadLoom application. Your plan decides how many users, vehicles and drivers you run, and which features unlock."
+        lead="Start free, then move to Starter, Growth or Fleet as your operation expands."
       />
       <section className="mx-auto w-full max-w-6xl px-5 py-16">
-        <div className="grid gap-5 lg:grid-cols-3">
-          {PLANS.map((plan) => {
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          {ALL_PLANS.map((plan) => {
             const featured = plan.id === "growth";
             return (
               <div
@@ -52,7 +54,7 @@ function Pricing() {
                 </div>
                 <h2 className="mt-2 text-2xl font-bold">{plan.name}</h2>
                 <p className="mt-4 font-display text-4xl font-extrabold">
-                  {formatINR(plan.price)}
+                  {plan.price === 0 ? "₹0" : formatINR(plan.price)}
                   <span className="text-base font-medium text-muted-foreground">/month</span>
                 </p>
                 <p className="mt-3 text-sm font-semibold">{plan.promise}</p>
@@ -78,7 +80,7 @@ function Pricing() {
 
                 <Button asChild variant={featured ? "action" : "outline"} size="lg" className="mt-7">
                   <Link to="/auth" search={{ mode: "signup" }}>
-                    Start with {plan.name}
+                    {plan.id === "free" ? "Start Free" : `Start with ${plan.name}`}
                   </Link>
                 </Button>
               </div>
