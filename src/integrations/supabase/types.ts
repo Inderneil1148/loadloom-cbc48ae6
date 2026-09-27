@@ -478,6 +478,39 @@ export type Database = {
           },
         ]
       }
+      plan_settings: {
+        Row: {
+          created_at: string
+          customers_limit: number | null
+          materials_limit: number | null
+          orders_limit: number | null
+          plan: string
+          price: number
+          updated_at: string
+          vehicles_limit: number | null
+        }
+        Insert: {
+          created_at?: string
+          customers_limit?: number | null
+          materials_limit?: number | null
+          orders_limit?: number | null
+          plan: string
+          price?: number
+          updated_at?: string
+          vehicles_limit?: number | null
+        }
+        Update: {
+          created_at?: string
+          customers_limit?: number | null
+          materials_limit?: number | null
+          orders_limit?: number | null
+          plan?: string
+          price?: number
+          updated_at?: string
+          vehicles_limit?: number | null
+        }
+        Relationships: []
+      }
       quotations: {
         Row: {
           amount: number
