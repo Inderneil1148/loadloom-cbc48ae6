@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, Building2, Lock, Mail } from "lucide-react";
 import { useSession } from "@/hooks/use-session";
-import { SIGNUP_TIERS, formatINR, type Tier } from "@/lib/plans";
+import { formatINR, type Tier } from "@/lib/plans";
+import { signupTiersWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>): { mode?: "signup" } =>
@@ -38,6 +39,8 @@ function AuthPage() {
   const [tier, setTier] = useState<Tier>("free");
   const [busy, setBusy] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
+  const { data: planSettings } = usePlanSettings();
+  const signupTiers = signupTiersWithSettings(planSettings);
 
   useEffect(() => {
     if (!loading && session) navigate({ to: "/dashboard", replace: true });
@@ -121,7 +124,7 @@ function AuthPage() {
                   <fieldset className="space-y-2">
                     <legend className="text-sm font-medium">Choose your plan</legend>
                     <div className="grid grid-cols-2 gap-2">
-                      {SIGNUP_TIERS.map((t) => (
+                      {signupTiers.map((t) => (
                         <button key={t.id} type="button" aria-pressed={tier === t.id} onClick={() => setTier(t.id)}
                           className={`rounded-lg border p-3 text-left transition-colors ${tier === t.id ? "border-accent bg-accent/10" : "border-navy-foreground/15 bg-navy-foreground/5 hover:border-navy-foreground/30"}`}>
                           <p className="text-sm font-bold">{t.name}</p>

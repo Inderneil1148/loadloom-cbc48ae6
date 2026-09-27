@@ -11,7 +11,7 @@ instead of the spec's Firebase/React Router.
 
 ## Stage 2 — Organization foundation
 - [ ] organizations, org_members, user_roles (separate table), subscription on org
-- [ ] Plan entitlement config + limit enforcement
+- [x] Plan entitlement config + admin-controlled pricing and limit enforcement
 - [ ] First-time onboarding wizard (business, units, first material)
 - [x] App shell: desktop sidebar, mobile bottom nav, quick add
 - [ ] Global search across records

@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteShell, PageHeader } from "@/components/site/SiteShell";
-import { ALL_PLANS, formatINR } from "@/lib/plans";
+import { formatINR } from "@/lib/plans";
+import { plansWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -26,6 +27,8 @@ export const Route = createFileRoute("/pricing")({
 });
 
 function Pricing() {
+  const { data: settings } = usePlanSettings();
+  const plans = plansWithSettings(settings);
   return (
     <SiteShell>
       <PageHeader
@@ -35,7 +38,7 @@ function Pricing() {
       />
       <section className="mx-auto w-full max-w-6xl px-5 py-16">
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {ALL_PLANS.map((plan) => {
+          {plans.map((plan) => {
             const featured = plan.id === "growth";
             return (
               <div

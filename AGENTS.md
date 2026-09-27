@@ -13,5 +13,5 @@ Use a single shared AppHeader on authenticated pages for mobile navigation and d
 Use the existing deliveries table for dispatch-board stages rather than duplicating trip state, so existing summaries and status updates stay consistent.
 Store customers, delivery sites, and drivers as owner-scoped records rather than deriving their contact details from orders, so account data remains reusable and access-controlled.
 Use the specialized dispatch order form for order creation and editing while RecordManager remains the shared list and CRUD shell, so live commercial calculations do not complicate simpler records.
-- Plan entitlements live in `src/lib/plans.ts` (FEATURE_MIN/LIMITS) read via `usePlan()`; numeric limits are enforced by the `enforce_plan_limits` DB trigger, so the UI and database stay in agreement.
+- Feature entitlements live in `src/lib/plans.ts`; editable prices and numeric limits live in `plan_settings`, and `enforce_plan_limits` reads them so admin controls, public pricing, and database enforcement stay aligned.
 - Admin access uses `user_roles` + `has_role()`; the /admin page is unlinked and RLS lets only admins read/update all subscriptions.
