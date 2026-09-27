@@ -1,7 +1,7 @@
 export type PlanId = "starter" | "growth" | "fleet";
 
 export interface Plan {
-  id: PlanId;
+  id: Tier;
   name: string;
   positioning: string;
   price: number;
@@ -28,12 +28,10 @@ export const PLANS: Plan[] = [
       "WhatsApp invoice, delivery update and payment reminder",
     ],
     limits: [
-      { label: "Users", value: "3" },
-      { label: "Vehicles", value: "5" },
-      { label: "Drivers", value: "5" },
-      { label: "Active customers", value: "100" },
+      { label: "Orders", value: "Unlimited" },
+      { label: "Vehicles", value: "10" },
+      { label: "Active customers", value: "10" },
       { label: "Materials", value: "100" },
-      { label: "Document storage", value: "2 GB" },
     ],
   },
   {
@@ -52,12 +50,10 @@ export const PLANS: Plan[] = [
       "Analytics, CSV import/export and full audit history",
     ],
     limits: [
-      { label: "Users", value: "10" },
+      { label: "Orders", value: "Unlimited" },
       { label: "Vehicles", value: "25" },
-      { label: "Drivers", value: "25" },
-      { label: "Active customers", value: "500" },
+      { label: "Active customers", value: "Unlimited" },
       { label: "Materials", value: "500" },
-      { label: "Document storage", value: "10 GB" },
     ],
   },
   {
@@ -76,12 +72,10 @@ export const PLANS: Plan[] = [
       "AI daily summary, smart search and follow-up drafts",
     ],
     limits: [
-      { label: "Users", value: "50" },
+      { label: "Orders", value: "Unlimited" },
       { label: "Vehicles", value: "100" },
-      { label: "Drivers", value: "100" },
-      { label: "Active customers", value: "2,000+" },
+      { label: "Active customers", value: "Unlimited" },
       { label: "Materials", value: "Unlimited" },
-      { label: "Document storage", value: "50 GB" },
     ],
   },
 ];
@@ -103,6 +97,7 @@ export const FREE_PLAN = {
     { label: "Orders", value: "20 / month" },
     { label: "Vehicles", value: "4" },
     { label: "Active customers", value: "5" },
+    { label: "Materials", value: "10" },
   ],
 };
 
