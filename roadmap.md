@@ -38,5 +38,5 @@ instead of the spec's Firebase/React Router.
 - [x] Add/edit/delete screens for orders, trucks, deliveries, invoices, payments
 - [x] Mobile-first navigation, dispatch board, material page, record search/filter/CSV export
 - [x] Driver portal summary, customer directory, delivery sites, call and map links
-- [ ] Branding: favicon, logo, footer "© 2026 The Social INK / INDERNEILK", contact enquiries emailed to inderneilkanagali@gmail.com
-- [ ] Final full-app review
+- [x] Branding: favicon, logo, footer "© 2026 The Social INK / INDERNEILK", contact enquiries emailed to inderneilkanagali@gmail.com
+- [x] Final full-app review
