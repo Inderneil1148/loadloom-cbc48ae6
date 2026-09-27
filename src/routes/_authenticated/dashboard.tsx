@@ -45,13 +45,6 @@ const STATUS_OPTIONS: Record<StatusTable, string[]> = {
 };
 type StatusTable = "orders" | "vehicles" | "deliveries" | "invoices";
 
-function Status({ value }: { value: string }) {
-  return (
-    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize ${TONE[STATUS_TONE[value] ?? "muted"]}`}>
-      {value.replace(/_/g, " ")}
-    </span>
-  );
-}
 
 /** Status badge that opens a menu to change the status, saved straight to the record. */
 function StatusSelect({ table, id, value }: { table: StatusTable; id: string; value: string }) {
