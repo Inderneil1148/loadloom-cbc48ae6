@@ -18,7 +18,7 @@ instead of the spec's Firebase/React Router.
 
 ## Stage 3 — Core operations
 - [x] Customers, sites, materials, vehicles, drivers: basic records and contact links
-- [ ] Orders + create order with calculations
+- [x] Orders + create order with calculations
 - [ ] Dispatch board and trips with controlled status transitions
 - [ ] Delivery proof (photo, signature, OTP, weighbridge slip) in storage
 
