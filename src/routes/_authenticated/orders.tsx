@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/orders")({
         { name: "order_no", label: "Order no.", type: "text", required: true },
         { name: "customer_name", label: "Customer", type: "text", required: true },
         { name: "site", label: "Site", type: "text" },
-        { name: "material", label: "Material", type: "text", required: true },
+        { name: "material", label: "Material", type: "ref", required: true, ref: { table: "materials", label: "name", value: "name" } },
         { name: "quantity", label: "Quantity", type: "number" },
         { name: "unit", label: "Unit", type: "select", options: opts("tonnes", "brass", "cft", "bags", "nos", "trips") },
         { name: "amount", label: "Amount (₹)", type: "number" },

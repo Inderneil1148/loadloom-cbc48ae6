@@ -27,7 +27,7 @@ export type Field = {
   required?: boolean;
   options?: Option[];
   /** for type "ref": table + label column */
-  ref?: { table: string; label: string };
+  ref?: { table: string; label: string; value?: string };
   default?: () => string;
 };
 
@@ -65,16 +65,19 @@ function RefSelect({ field, value, onChange }: { field: Field; value: string; on
   const { data } = useQuery({
     queryKey: ["ref", field.ref!.table],
     queryFn: async () => {
-      const { data, error } = await supabase.from(field.ref!.table as any).select(`id, ${field.ref!.label}`);
+      const { data, error } = await supabase.from(field.ref!.table as any).select(`id, ${field.ref!.label}`).order(field.ref!.label);
       if (error) throw error;
       return (data ?? []) as Row[];
     },
   });
   return (
     <select id={field.name} className={selectCls} value={value} onChange={(e) => onChange(e.target.value)}>
-      <option value="">— None —</option>
+      <option value="">{field.ref!.value ? "— Select —" : "— None —"}</option>
+      {value && field.ref!.value && !data?.some((r) => r[field.ref!.value!] === value) && (
+        <option value={value}>{value}</option>
+      )}
       {data?.map((r) => (
-        <option key={r.id} value={r.id}>{r[field.ref!.label]}</option>
+        <option key={r.id} value={r[field.ref!.value ?? "id"]}>{r[field.ref!.label]}</option>
       ))}
     </select>
   );
@@ -84,8 +87,10 @@ const toInput = (f: Field, v: any) =>
   v == null ? "" : f.type === "datetime" ? new Date(v).toISOString().slice(0, 16) : String(v);
 
 export function RecordManager({
-  table, title, singular, select = "*", orderBy, fields, columns, mobileTitle, mobileMeta,
+  table, title, singular, select = "*", orderBy, fields, columns, mobileTitle, mobileMeta, embedded, hint,
 }: {
+  embedded?: boolean;
+  hint?: ReactNode;
   table: string;
   title: string;
   singular: string;
@@ -182,14 +187,16 @@ export function RecordManager({
     </div>
   );
 
+  const Wrap = embedded ? "div" : "main";
   return (
-    <div className="min-h-screen bg-background">
-      <AppHeader />
-      <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8">
+    <div className={embedded ? "" : "min-h-screen bg-background"}>
+      {!embedded && <AppHeader />}
+      <Wrap className={embedded ? "" : "mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8"}>
         <div className="flex items-end justify-between gap-3">
           <div>
             <p className="eyebrow text-accent">Manage</p>
-            <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">{title}</h1>
+            {embedded ? <h2 className="mt-1 text-xl font-extrabold">{title}</h2> : <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">{title}</h1>}
+            {hint && <p className="mt-1 text-sm text-muted-foreground">{hint}</p>}
           </div>
           <Button variant="action" onClick={() => openForm(null)}><Plus /> Add {singular.toLowerCase()}</Button>
         </div>
@@ -238,7 +245,7 @@ export function RecordManager({
             </>
           )}
         </section>
-      </main>
+      </Wrap>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-h-[90vh] overflow-y-auto">
