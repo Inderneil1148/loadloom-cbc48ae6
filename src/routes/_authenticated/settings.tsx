@@ -113,9 +113,9 @@ function EnterpriseProfile() {
 
 function SettingsPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 lg:pb-0">
       <AppHeader />
-      <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-5 sm:py-8">
+      <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-5 sm:py-8 lg:ml-60 lg:w-auto lg:px-7">
         <p className="eyebrow text-accent">Defaults</p>
         <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">Settings</h1>
         <Tabs defaultValue="profile" className="mt-6">

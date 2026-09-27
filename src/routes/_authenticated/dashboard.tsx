@@ -159,15 +159,19 @@ function DashboardBody({ data }: { data: DashboardData }) {
   const collectedMonth = data.payments
     .filter((p) => p.paid_on.slice(0, 7) === today.slice(0, 7))
     .reduce((s, p) => s + Number(p.amount), 0);
+  const collectedToday = data.payments
+    .filter((p) => p.paid_on === today)
+    .reduce((s, p) => s + Number(p.amount), 0);
 
   return (
     <>
-      <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-7 sm:grid-cols-2 sm:gap-3 xl:grid-cols-5">
+      <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-7 sm:grid-cols-3 sm:gap-3 xl:grid-cols-6">
         <Stat icon={<Package />} label="Open orders" value={openOrders.length} sub={`${todayOrders.length} placed today`} />
         <Stat icon={<Truck />} label="Trucks out" value={`${trucksOut}/${data.vehicles.length}`} sub={`${trucksFree} available`} />
         <Stat icon={<MapPin />} label="Active trips" value={activeTrips.length} sub={`${deliveredToday.length} delivered today`} />
         <Stat icon={<FileText />} label="Outstanding" value={formatINR(outstanding)} sub={`${overdue.length} overdue`} alert={overdue.length > 0} />
         <Stat icon={<Wallet />} label="Collected this month" value={formatINR(collectedMonth)} sub={`${data.payments.length} payments`} />
+        <Stat icon={<Wallet />} label="Today revenue" value={formatINR(collectedToday)} sub="Payments recorded today" />
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
