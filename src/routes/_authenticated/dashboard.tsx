@@ -1,15 +1,13 @@
 import type { ReactNode } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { LogOut, Package, Truck, MapPin, FileText, Wallet, Database } from "lucide-react";
+import { Package, Truck, MapPin, FileText, Wallet, Database } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Logo } from "@/components/site/Logo";
-import { useSession } from "@/hooks/use-session";
+import { AppHeader } from "@/components/app/AppHeader";
 import { formatINR } from "@/lib/plans";
 import { fetchDashboard, loadSampleData, type DashboardData } from "@/lib/dashboard-data";
 
@@ -50,8 +48,6 @@ const fmtDate = (d: string | null) =>
   d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "—";
 
 function Dashboard() {
-  const { session } = useSession();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data, isPending, error } = useQuery({ queryKey: ["dashboard"], queryFn: fetchDashboard });
   const sample = useMutation({
@@ -63,29 +59,13 @@ function Dashboard() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Couldn't add sample records"),
   });
 
-  async function signOut() {
-    await queryClient.cancelQueries();
-    queryClient.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
-  }
 
   const empty =
     data && !data.orders.length && !data.vehicles.length && !data.invoices.length && !data.payments.length;
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-5">
-          <Logo />
-          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-            <span className="hidden truncate text-sm text-muted-foreground sm:inline">{session?.user.email}</span>
-            <Button variant="outline" size="sm" onClick={signOut} className="shrink-0">
-              <LogOut /> <span className="hidden xs:inline sm:inline">Sign out</span>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <AppHeader />
 
       <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8">
         <p className="eyebrow text-accent">Operations at a glance</p>

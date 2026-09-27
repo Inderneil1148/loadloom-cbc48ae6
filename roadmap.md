@@ -33,3 +33,5 @@ instead of the spec's Firebase/React Router.
 ## Open items needing the user
 - [ ] Contact form currently only confirms on screen; needs a destination (inbox or stored enquiries)
 - [ ] Real company contact details, support email and legal review of privacy/terms
+
+- [x] Add/edit/delete screens for orders, trucks, deliveries, invoices, payments
