@@ -312,7 +312,7 @@ export function RecordManager({
             className="grid gap-4 sm:grid-cols-2"
             onSubmit={(e) => { e.preventDefault(); save.mutate(); }}
           >
-            {customForm ? customForm({ form, setForm, editing }) : fields.map((f) => {
+            {customForm ? <div className="sm:col-span-2">{customForm({ form, setForm, editing })}</div> : fields.map((f) => {
               const set = (v: string) => setForm((s) => ({ ...s, [f.name]: v }));
               return (
                 <div key={f.name} className="space-y-1.5">

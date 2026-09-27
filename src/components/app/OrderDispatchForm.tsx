@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Calculator, Truck } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -166,7 +167,7 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
   );
 }
 
-function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+function Field({ label, required, children }: { label: string; required?: boolean; children: ReactNode }) {
   return <div className="min-w-0 space-y-1.5"><Label>{label}{required ? " *" : ""}</Label>{children}</div>;
 }
 
