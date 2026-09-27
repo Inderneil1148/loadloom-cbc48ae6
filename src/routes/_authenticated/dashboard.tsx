@@ -143,7 +143,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
 
   return (
     <>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="-mx-4 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:mt-8 sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-5">
         <Stat icon={<Package />} label="Open orders" value={openOrders.length} sub={`${todayOrders.length} placed today`} />
         <Stat icon={<Truck />} label="Trucks out" value={`${trucksOut}/${data.vehicles.length}`} sub={`${trucksFree} available`} />
         <Stat icon={<MapPin />} label="Active trips" value={activeTrips.length} sub={`${deliveredToday.length} delivered today`} />
