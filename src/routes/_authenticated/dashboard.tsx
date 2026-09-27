@@ -37,11 +37,50 @@ const STATUS_TONE: Record<string, keyof typeof TONE> = {
   overdue: "bad", maintenance: "bad", cancelled: "bad",
 };
 
+const STATUS_OPTIONS: Record<StatusTable, string[]> = {
+  orders: ["enquiry", "quoted", "confirmed", "assigned", "dispatched", "delivered", "invoiced", "closed", "cancelled"],
+  vehicles: ["available", "on_trip", "maintenance"],
+  deliveries: ["scheduled", "loading", "dispatched", "on_road", "arrived", "delivered"],
+  invoices: ["draft", "sent", "partially_paid", "paid", "overdue"],
+};
+type StatusTable = "orders" | "vehicles" | "deliveries" | "invoices";
+
 function Status({ value }: { value: string }) {
   return (
-    <Badge variant="outline" className={`capitalize ${TONE[STATUS_TONE[value] ?? "muted"]}`}>
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize ${TONE[STATUS_TONE[value] ?? "muted"]}`}>
       {value.replace(/_/g, " ")}
-    </Badge>
+    </span>
+  );
+}
+
+/** Status badge that opens a menu to change the status, saved straight to the record. */
+function StatusSelect({ table, id, value }: { table: StatusTable; id: string; value: string }) {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async (status: string) => {
+      const { error } = await (supabase.from(table) as any).update({ status }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Couldn't update status"),
+  });
+  const options = STATUS_OPTIONS[table].includes(value) ? STATUS_OPTIONS[table] : [value, ...STATUS_OPTIONS[table]];
+  return (
+    <Select value={value} onValueChange={(v) => mutation.mutate(v)} disabled={mutation.isPending}>
+      <SelectTrigger
+        aria-label="Change status"
+        className={`h-auto w-auto gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize shadow-none focus:ring-1 ${TONE[STATUS_TONE[value] ?? "muted"]}`}
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((o) => (
+          <SelectItem key={o} value={o} className="capitalize">
+            {o.replace(/_/g, " ")}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 
