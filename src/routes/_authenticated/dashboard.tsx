@@ -166,12 +166,12 @@ function DashboardBody({ data }: { data: DashboardData }) {
   return (
     <>
       <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-7 sm:grid-cols-3 sm:gap-3 xl:grid-cols-6">
-        <Stat icon={<Package />} label="Open orders" value={openOrders.length} sub={`${todayOrders.length} placed today`} />
-        <Stat icon={<Truck />} label="Trucks out" value={`${trucksOut}/${data.vehicles.length}`} sub={`${trucksFree} available`} />
-        <Stat icon={<MapPin />} label="Active trips" value={activeTrips.length} sub={`${deliveredToday.length} delivered today`} />
-        <Stat icon={<FileText />} label="Outstanding" value={formatINR(outstanding)} sub={`${overdue.length} overdue`} alert={overdue.length > 0} />
-        <Stat icon={<Wallet />} label="Collected this month" value={formatINR(collectedMonth)} sub={`${data.payments.length} payments`} />
-        <Stat icon={<Wallet />} label="Today revenue" value={formatINR(collectedToday)} sub="Payments recorded today" />
+        <Stat to="/orders" icon={<Package />} label="Open orders" value={openOrders.length} sub={`${todayOrders.length} placed today`} />
+        <Stat to="/trucks" icon={<Truck />} label="Trucks out" value={`${trucksOut}/${data.vehicles.length}`} sub={`${trucksFree} available`} />
+        <Stat to="/dispatch" icon={<MapPin />} label="Active trips" value={activeTrips.length} sub={`${deliveredToday.length} delivered today`} />
+        <Stat to="/invoices" icon={<FileText />} label="Outstanding" value={formatINR(outstanding)} sub={`${overdue.length} overdue`} alert={overdue.length > 0} />
+        <Stat to="/payments" icon={<Wallet />} label="Collected this month" value={formatINR(collectedMonth)} sub={`${data.payments.length} payments`} />
+        <Stat to="/payments" icon={<Wallet />} label="Today revenue" value={formatINR(collectedToday)} sub="Payments recorded today" />
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -371,15 +371,17 @@ function DashboardBody({ data }: { data: DashboardData }) {
   );
 }
 
-function Stat({ icon, label, value, sub, alert }: { icon: ReactNode; label: string; value: ReactNode; sub: string; alert?: boolean }) {
+type StatDestination = "/orders" | "/trucks" | "/dispatch" | "/invoices" | "/payments";
+
+function Stat({ to, icon, label, value, sub, alert }: { to: StatDestination; icon: ReactNode; label: string; value: ReactNode; sub: string; alert?: boolean }) {
   return (
-    <div className="min-w-0 rounded-md border border-border bg-card p-3 shadow-panel sm:p-5">
+    <Link to={to} aria-label={`Open ${label}`} className="group min-w-0 rounded-md border border-border bg-card p-3 shadow-panel transition-colors hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:p-5">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-1 text-muted-foreground [&_svg]:size-4">
-        <span className="eyebrow min-w-0 break-words leading-tight">{label}</span>{icon}
+        <span className="eyebrow min-w-0 break-words leading-tight">{label}</span><span className="transition-colors group-hover:text-accent">{icon}</span>
       </div>
       <p className="mt-3 break-words text-xl font-extrabold tabular-nums sm:text-2xl">{value}</p>
       <p className={`mt-1 text-xs ${alert ? "font-semibold text-destructive" : "text-muted-foreground"}`}>{sub}</p>
-    </div>
+    </Link>
   );
 }
 
