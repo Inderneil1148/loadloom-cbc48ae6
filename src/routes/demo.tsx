@@ -94,6 +94,7 @@ function Demo() {
               Create your account
             </Link>
           </Button>
+          <ViewDemoButton />
           <Button asChild variant="outline" size="lg">
             <Link to="/contact">Request a guided walkthrough</Link>
           </Button>
