@@ -82,8 +82,16 @@ export function AppHeader() {
       <header className="sticky top-0 z-30 border-b border-border bg-card lg:ml-60">
          <div className="mx-auto grid h-14 max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:px-5 lg:flex lg:justify-between">
           <Button variant="ghost" size="icon" aria-label="Open menu" className="lg:hidden" onClick={() => setMenuOpen(true)}><Menu /></Button>
-          <div className="hidden min-w-0 items-center gap-2 text-sm sm:flex"><span className="text-muted-foreground">LoadLoom</span><ChevronRight className="size-3 text-muted-foreground" /><span className="truncate font-semibold">{page}</span></div>
-          <span className="truncate font-display text-sm font-bold sm:hidden">{page}</span>
+           {location.pathname === "/dashboard" ? (
+             <>
+               <div className="hidden min-w-0 items-center gap-2 text-sm sm:flex"><span className="text-muted-foreground">LoadLoom</span><ChevronRight className="size-3 text-muted-foreground" /><span className="truncate font-semibold">{page}</span></div>
+               <span className="truncate font-display text-sm font-bold sm:hidden">{page}</span>
+             </>
+           ) : (
+             <Button asChild variant="outline" size="sm" className="w-fit min-w-0 justify-self-start px-2.5 sm:px-3">
+               <Link to="/dashboard" aria-label="Return to dashboard"><LayoutDashboard className="size-4" /><span>Dashboard</span></Link>
+             </Button>
+           )}
           <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/orders" search={{ new: true }}><Plus /> <span className="hidden min-[390px]:inline">New Load</span><span className="min-[390px]:hidden">New</span></Link></Button>
         </div>
       </header>
