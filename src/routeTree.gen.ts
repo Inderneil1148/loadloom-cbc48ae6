@@ -19,17 +19,22 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
+import { Route as AuthenticatedCommandCentreRouteImport } from './routes/_authenticated/command-centre'
+import { Route as AuthenticatedCustomer360RouteImport } from './routes/_authenticated/customer-360'
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as AuthenticatedDispatchRouteImport } from './routes/_authenticated/dispatch'
 import { Route as AuthenticatedDriverPortalRouteImport } from './routes/_authenticated/driver-portal'
 import { Route as AuthenticatedDriversRouteImport } from './routes/_authenticated/drivers'
+import { Route as AuthenticatedFleetRouteImport } from './routes/_authenticated/fleet'
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
 import { Route as AuthenticatedMaterialsRouteImport } from './routes/_authenticated/materials'
 import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
 import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
 import { Route as AuthenticatedQuotationsRouteImport } from './routes/_authenticated/quotations'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSitesRouteImport } from './routes/_authenticated/sites'
 import { Route as AuthenticatedTrucksRouteImport } from './routes/_authenticated/trucks'
@@ -83,6 +88,23 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCommandCentreRoute =
+  AuthenticatedCommandCentreRouteImport.update({
+    id: '/command-centre',
+    path: '/command-centre',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCustomer360Route =
+  AuthenticatedCustomer360RouteImport.update({
+    id: '/customer-360',
+    path: '/customer-360',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedCustomersRoute = AuthenticatedCustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
@@ -114,6 +136,11 @@ const AuthenticatedDriversRoute = AuthenticatedDriversRouteImport.update({
   path: '/drivers',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFleetRoute = AuthenticatedFleetRouteImport.update({
+  id: '/fleet',
+  path: '/fleet',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedInvoicesRoute = AuthenticatedInvoicesRouteImport.update({
   id: '/invoices',
   path: '/invoices',
@@ -137,6 +164,11 @@ const AuthenticatedPaymentsRoute = AuthenticatedPaymentsRouteImport.update({
 const AuthenticatedQuotationsRoute = AuthenticatedQuotationsRouteImport.update({
   id: '/quotations',
   path: '/quotations',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
@@ -165,17 +197,22 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/command-centre': typeof AuthenticatedCommandCentreRoute
+  '/customer-360': typeof AuthenticatedCustomer360Route
   '/customers': typeof AuthenticatedCustomersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
   '/driver-portal': typeof AuthenticatedDriverPortalRoute
   '/drivers': typeof AuthenticatedDriversRoute
+  '/fleet': typeof AuthenticatedFleetRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/materials': typeof AuthenticatedMaterialsRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/quotations': typeof AuthenticatedQuotationsRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
   '/trucks': typeof AuthenticatedTrucksRoute
@@ -190,17 +227,22 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/command-centre': typeof AuthenticatedCommandCentreRoute
+  '/customer-360': typeof AuthenticatedCustomer360Route
   '/customers': typeof AuthenticatedCustomersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
   '/driver-portal': typeof AuthenticatedDriverPortalRoute
   '/drivers': typeof AuthenticatedDriversRoute
+  '/fleet': typeof AuthenticatedFleetRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/materials': typeof AuthenticatedMaterialsRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/quotations': typeof AuthenticatedQuotationsRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
   '/trucks': typeof AuthenticatedTrucksRoute
@@ -217,17 +259,22 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
+  '/_authenticated/command-centre': typeof AuthenticatedCommandCentreRoute
+  '/_authenticated/customer-360': typeof AuthenticatedCustomer360Route
   '/_authenticated/customers': typeof AuthenticatedCustomersRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
   '/_authenticated/dispatch': typeof AuthenticatedDispatchRoute
   '/_authenticated/driver-portal': typeof AuthenticatedDriverPortalRoute
   '/_authenticated/drivers': typeof AuthenticatedDriversRoute
+  '/_authenticated/fleet': typeof AuthenticatedFleetRoute
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
   '/_authenticated/materials': typeof AuthenticatedMaterialsRoute
   '/_authenticated/orders': typeof AuthenticatedOrdersRoute
   '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
   '/_authenticated/quotations': typeof AuthenticatedQuotationsRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/sites': typeof AuthenticatedSitesRoute
   '/_authenticated/trucks': typeof AuthenticatedTrucksRoute
@@ -244,17 +291,22 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/terms'
+    | '/analytics'
+    | '/command-centre'
+    | '/customer-360'
     | '/customers'
     | '/dashboard'
     | '/deliveries'
     | '/dispatch'
     | '/driver-portal'
     | '/drivers'
+    | '/fleet'
     | '/invoices'
     | '/materials'
     | '/orders'
     | '/payments'
     | '/quotations'
+    | '/reports'
     | '/settings'
     | '/sites'
     | '/trucks'
@@ -269,17 +321,22 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/terms'
+    | '/analytics'
+    | '/command-centre'
+    | '/customer-360'
     | '/customers'
     | '/dashboard'
     | '/deliveries'
     | '/dispatch'
     | '/driver-portal'
     | '/drivers'
+    | '/fleet'
     | '/invoices'
     | '/materials'
     | '/orders'
     | '/payments'
     | '/quotations'
+    | '/reports'
     | '/settings'
     | '/sites'
     | '/trucks'
@@ -295,17 +352,22 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/terms'
+    | '/_authenticated/analytics'
+    | '/_authenticated/command-centre'
+    | '/_authenticated/customer-360'
     | '/_authenticated/customers'
     | '/_authenticated/dashboard'
     | '/_authenticated/deliveries'
     | '/_authenticated/dispatch'
     | '/_authenticated/driver-portal'
     | '/_authenticated/drivers'
+    | '/_authenticated/fleet'
     | '/_authenticated/invoices'
     | '/_authenticated/materials'
     | '/_authenticated/orders'
     | '/_authenticated/payments'
     | '/_authenticated/quotations'
+    | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/sites'
     | '/_authenticated/trucks'
@@ -396,6 +458,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/analytics': {
+      id: '/_authenticated/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/command-centre': {
+      id: '/_authenticated/command-centre'
+      path: '/command-centre'
+      fullPath: '/command-centre'
+      preLoaderRoute: typeof AuthenticatedCommandCentreRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/customer-360': {
+      id: '/_authenticated/customer-360'
+      path: '/customer-360'
+      fullPath: '/customer-360'
+      preLoaderRoute: typeof AuthenticatedCustomer360RouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/customers': {
       id: '/_authenticated/customers'
       path: '/customers'
@@ -438,6 +521,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDriversRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/fleet': {
+      id: '/_authenticated/fleet'
+      path: '/fleet'
+      fullPath: '/fleet'
+      preLoaderRoute: typeof AuthenticatedFleetRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/invoices': {
       id: '/_authenticated/invoices'
       path: '/invoices'
@@ -473,6 +563,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQuotationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -498,34 +595,44 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
+  AuthenticatedCommandCentreRoute: typeof AuthenticatedCommandCentreRoute
+  AuthenticatedCustomer360Route: typeof AuthenticatedCustomer360Route
   AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
   AuthenticatedDispatchRoute: typeof AuthenticatedDispatchRoute
   AuthenticatedDriverPortalRoute: typeof AuthenticatedDriverPortalRoute
   AuthenticatedDriversRoute: typeof AuthenticatedDriversRoute
+  AuthenticatedFleetRoute: typeof AuthenticatedFleetRoute
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
   AuthenticatedMaterialsRoute: typeof AuthenticatedMaterialsRoute
   AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
   AuthenticatedPaymentsRoute: typeof AuthenticatedPaymentsRoute
   AuthenticatedQuotationsRoute: typeof AuthenticatedQuotationsRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSitesRoute: typeof AuthenticatedSitesRoute
   AuthenticatedTrucksRoute: typeof AuthenticatedTrucksRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
+  AuthenticatedCommandCentreRoute: AuthenticatedCommandCentreRoute,
+  AuthenticatedCustomer360Route: AuthenticatedCustomer360Route,
   AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
   AuthenticatedDispatchRoute: AuthenticatedDispatchRoute,
   AuthenticatedDriverPortalRoute: AuthenticatedDriverPortalRoute,
   AuthenticatedDriversRoute: AuthenticatedDriversRoute,
+  AuthenticatedFleetRoute: AuthenticatedFleetRoute,
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
   AuthenticatedMaterialsRoute: AuthenticatedMaterialsRoute,
   AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
   AuthenticatedPaymentsRoute: AuthenticatedPaymentsRoute,
   AuthenticatedQuotationsRoute: AuthenticatedQuotationsRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSitesRoute: AuthenticatedSitesRoute,
   AuthenticatedTrucksRoute: AuthenticatedTrucksRoute,
