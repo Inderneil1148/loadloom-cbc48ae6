@@ -1,4 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { PlayCircle } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { startDemo } from "@/lib/demo.functions";
 import { Button } from "@/components/ui/button";
 import { SiteShell, PageHeader } from "@/components/site/SiteShell";
 import { WORKFLOW } from "@/lib/plans";
@@ -101,5 +108,29 @@ function Demo() {
         </div>
       </section>
     </SiteShell>
+  );
+}
+
+function ViewDemoButton() {
+  const navigate = useNavigate();
+  const start = useServerFn(startDemo);
+  const [busy, setBusy] = useState(false);
+  async function go() {
+    setBusy(true);
+    try {
+      const { token } = await start();
+      await supabase.auth.signOut();
+      const { error } = await supabase.auth.verifyOtp({ token_hash: token, type: "magiclink" });
+      if (error) throw error;
+      navigate({ to: "/dashboard" });
+    } catch {
+      toast.error("The demo couldn't open right now. Please try again.");
+      setBusy(false);
+    }
+  }
+  return (
+    <Button variant="secondary" size="lg" className="bg-navy text-navy-foreground hover:bg-navy/90" onClick={go} disabled={busy}>
+      <PlayCircle /> {busy ? "Opening demo…" : "View demo"}
+    </Button>
   );
 }

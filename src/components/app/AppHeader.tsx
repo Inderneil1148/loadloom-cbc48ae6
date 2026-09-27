@@ -1,4 +1,5 @@
 import logoIcon from "@/assets/loadloom-icon.png.asset.json";
+import { DEMO_EMAIL } from "@/lib/demo";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
