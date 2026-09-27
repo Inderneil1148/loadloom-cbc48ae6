@@ -23,6 +23,7 @@ import { Route as AuthenticatedCustomersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as AuthenticatedDispatchRouteImport } from './routes/_authenticated/dispatch'
+import { Route as AuthenticatedDriverPortalRouteImport } from './routes/_authenticated/driver-portal'
 import { Route as AuthenticatedDriversRouteImport } from './routes/_authenticated/drivers'
 import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
 import { Route as AuthenticatedMaterialsRouteImport } from './routes/_authenticated/materials'
@@ -101,6 +102,12 @@ const AuthenticatedDispatchRoute = AuthenticatedDispatchRouteImport.update({
   path: '/dispatch',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDriverPortalRoute =
+  AuthenticatedDriverPortalRouteImport.update({
+    id: '/driver-portal',
+    path: '/driver-portal',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDriversRoute = AuthenticatedDriversRouteImport.update({
   id: '/drivers',
   path: '/drivers',
@@ -156,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
+  '/driver-portal': typeof AuthenticatedDriverPortalRoute
   '/drivers': typeof AuthenticatedDriversRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/materials': typeof AuthenticatedMaterialsRoute
@@ -179,6 +187,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
+  '/driver-portal': typeof AuthenticatedDriverPortalRoute
   '/drivers': typeof AuthenticatedDriversRoute
   '/invoices': typeof AuthenticatedInvoicesRoute
   '/materials': typeof AuthenticatedMaterialsRoute
@@ -204,6 +213,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
   '/_authenticated/dispatch': typeof AuthenticatedDispatchRoute
+  '/_authenticated/driver-portal': typeof AuthenticatedDriverPortalRoute
   '/_authenticated/drivers': typeof AuthenticatedDriversRoute
   '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
   '/_authenticated/materials': typeof AuthenticatedMaterialsRoute
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/deliveries'
     | '/dispatch'
+    | '/driver-portal'
     | '/drivers'
     | '/invoices'
     | '/materials'
@@ -252,6 +263,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/deliveries'
     | '/dispatch'
+    | '/driver-portal'
     | '/drivers'
     | '/invoices'
     | '/materials'
@@ -276,6 +288,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/deliveries'
     | '/_authenticated/dispatch'
+    | '/_authenticated/driver-portal'
     | '/_authenticated/drivers'
     | '/_authenticated/invoices'
     | '/_authenticated/materials'
@@ -399,6 +412,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDispatchRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/driver-portal': {
+      id: '/_authenticated/driver-portal'
+      path: '/driver-portal'
+      fullPath: '/driver-portal'
+      preLoaderRoute: typeof AuthenticatedDriverPortalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/drivers': {
       id: '/_authenticated/drivers'
       path: '/drivers'
@@ -463,6 +483,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
   AuthenticatedDispatchRoute: typeof AuthenticatedDispatchRoute
+  AuthenticatedDriverPortalRoute: typeof AuthenticatedDriverPortalRoute
   AuthenticatedDriversRoute: typeof AuthenticatedDriversRoute
   AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
   AuthenticatedMaterialsRoute: typeof AuthenticatedMaterialsRoute
@@ -478,6 +499,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
   AuthenticatedDispatchRoute: AuthenticatedDispatchRoute,
+  AuthenticatedDriverPortalRoute: AuthenticatedDriverPortalRoute,
   AuthenticatedDriversRoute: AuthenticatedDriversRoute,
   AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
   AuthenticatedMaterialsRoute: AuthenticatedMaterialsRoute,

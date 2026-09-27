@@ -112,6 +112,8 @@ export function RecordManager({
   const [toDelete, setToDelete] = useState<Row | null>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [customerFilter, setCustomerFilter] = useState("");
+  const [materialFilter, setMaterialFilter] = useState("");
 
   const { data, isPending, error } = useQuery({
     queryKey: ["records", table],
@@ -192,8 +194,12 @@ export function RecordManager({
   }, [location.searchStr]);
 
   const statuses = [...new Set((data ?? []).map((r) => r.status).filter(Boolean))] as string[];
+  const customers = [...new Set((data ?? []).map((r) => r.customer_name).filter(Boolean))] as string[];
+  const materials = [...new Set((data ?? []).map((r) => r.material).filter(Boolean))] as string[];
   const filtered = (data ?? []).filter((r) =>
     (!statusFilter || r.status === statusFilter) &&
+    (!customerFilter || r.customer_name === customerFilter) &&
+    (!materialFilter || r.material === materialFilter) &&
     (!search || Object.values(r).some((v) => typeof v === "string" && v.toLowerCase().includes(search.toLowerCase()))),
   );
 
@@ -235,6 +241,8 @@ export function RecordManager({
         <div className="mt-5 flex flex-wrap gap-2">
           <div className="relative min-w-0 flex-1 basis-48 sm:max-w-sm"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input aria-label={`Search ${title}`} placeholder={`Search ${title.toLowerCase()}…`} className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} /></div>
           {statuses.length > 0 && <select aria-label="Filter by status" className={selectCls + " w-auto max-w-full flex-1 basis-32 sm:flex-none"} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}><option value="">All statuses</option>{statuses.map((s) => <option key={s} value={s}>{s.replace(/_/g, " ")}</option>)}</select>}
+          {table === "orders" && <select aria-label="Filter by customer" className={selectCls + " w-auto max-w-full flex-1 basis-32 sm:flex-none"} value={customerFilter} onChange={(e) => setCustomerFilter(e.target.value)}><option value="">All customers</option>{customers.map((s) => <option key={s} value={s}>{s}</option>)}</select>}
+          {table === "orders" && <select aria-label="Filter by material" className={selectCls + " w-auto max-w-full flex-1 basis-32 sm:flex-none"} value={materialFilter} onChange={(e) => setMaterialFilter(e.target.value)}><option value="">All materials</option>{materials.map((s) => <option key={s} value={s}>{s}</option>)}</select>}
           {(table === "orders" || table === "payments" || table === "invoices") && <Button variant="outline" size="icon" aria-label="Export CSV" title="Export CSV" disabled={!filtered.length} onClick={exportCsv}><Download /></Button>}
         </div>
 

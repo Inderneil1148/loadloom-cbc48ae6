@@ -36,7 +36,12 @@ function DriverPortal() {
       <div className="rounded-md bg-navy p-5 text-navy-foreground sm:p-7"><p className="eyebrow text-accent">Driver shift console</p><h1 className="mt-2 text-2xl font-extrabold">Driver Portal</h1><p className="mt-1 text-sm text-sidebar-foreground">Assigned dispatches and active hauls in one place.</p></div>
       {error && <p className="mt-5 text-sm text-destructive">Couldn't load driver assignments.</p>}
       <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
-        {[["Assigned loads", assigned.length, ClipboardList], ["Active hauls", onRoad.length, Truck], ["Delivered", delivered.length, PackageCheck], ["Vehicles allocated", data?.vehicles.filter((v) => v.status === "on_trip").length ?? 0, Truck]].map(([label, value, Icon]) => <div key={String(label)} className="rounded-md border border-border bg-card p-4 shadow-panel"><div className="flex items-start justify-between gap-1 text-xs text-muted-foreground"><span>{String(label)}</span><Icon className="size-4 shrink-0" /></div><p className="mt-3 text-2xl font-extrabold tabular-nums">{isPending ? "—" : String(value)}</p></div>)}
+        {[
+          { label: "Assigned loads", value: assigned.length, icon: ClipboardList },
+          { label: "Active hauls", value: onRoad.length, icon: Truck },
+          { label: "Delivered", value: delivered.length, icon: PackageCheck },
+          { label: "Vehicles allocated", value: data?.vehicles.filter((v) => v.status === "on_trip").length ?? 0, icon: Truck },
+        ].map(({ label, value, icon: Icon }) => <div key={label} className="rounded-md border border-border bg-card p-4 shadow-panel"><div className="flex items-start justify-between gap-1 text-xs text-muted-foreground"><span>{label}</span><Icon className="size-4 shrink-0" /></div><p className="mt-3 text-2xl font-extrabold tabular-nums">{isPending ? "—" : value}</p></div>)}
       </div>
       <section className="mt-6"><div className="flex items-center justify-between gap-2"><h2 className="text-base font-bold">Assigned dispatch schedule</h2><Button asChild variant="ghost" size="sm"><Link to="/dispatch">Board <ArrowRight /></Link></Button></div>
         <div className="mt-3 divide-y divide-border rounded-md border border-border bg-card shadow-panel">
