@@ -85,10 +85,9 @@ async function syncDelivery(saved: Record<string, unknown>, form: Record<string,
   const assignment = {
     vehicle_id: form["vehicle_id"] || null,
     driver_name: driver.data?.name ?? null,
-    status: "scheduled",
   };
   const result = existing.data
     ? await supabase.from("deliveries").update(assignment).eq("id", existing.data.id)
-    : await supabase.from("deliveries").insert({ order_id: orderId, ...assignment });
+    : await supabase.from("deliveries").insert({ order_id: orderId, ...assignment, status: "scheduled" });
   if (result.error) throw result.error;
 }

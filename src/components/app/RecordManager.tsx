@@ -335,9 +335,10 @@ export function RecordManager({
                 </div>
               );
             })}
-            <DialogFooter className="sm:col-span-2">
+            <DialogFooter className={customForm ? "sticky bottom-0 z-10 -mx-4 -mb-4 border-t border-border bg-background px-4 py-3 sm:-mx-6 sm:-mb-6 sm:px-6" : "sm:col-span-2"}>
               <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
               <Button type="submit" variant="action" disabled={save.isPending}>
+                {!save.isPending && !editing && customForm && <Plus />}
                 {save.isPending ? "Saving…" : editing ? "Save changes" : submitLabel ?? "Save"}
               </Button>
             </DialogFooter>
