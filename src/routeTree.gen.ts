@@ -29,6 +29,7 @@ import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedMaterialsRouteImport } from './routes/_authenticated/materials'
 import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
 import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
+import { Route as AuthenticatedQuotationsRouteImport } from './routes/_authenticated/quotations'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSitesRouteImport } from './routes/_authenticated/sites'
 import { Route as AuthenticatedTrucksRouteImport } from './routes/_authenticated/trucks'
@@ -133,6 +134,11 @@ const AuthenticatedPaymentsRoute = AuthenticatedPaymentsRouteImport.update({
   path: '/payments',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedQuotationsRoute = AuthenticatedQuotationsRouteImport.update({
+  id: '/quotations',
+  path: '/quotations',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -169,6 +175,7 @@ export interface FileRoutesByFullPath {
   '/materials': typeof AuthenticatedMaterialsRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/payments': typeof AuthenticatedPaymentsRoute
+  '/quotations': typeof AuthenticatedQuotationsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
   '/trucks': typeof AuthenticatedTrucksRoute
@@ -193,6 +200,7 @@ export interface FileRoutesByTo {
   '/materials': typeof AuthenticatedMaterialsRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/payments': typeof AuthenticatedPaymentsRoute
+  '/quotations': typeof AuthenticatedQuotationsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
   '/trucks': typeof AuthenticatedTrucksRoute
@@ -219,6 +227,7 @@ export interface FileRoutesById {
   '/_authenticated/materials': typeof AuthenticatedMaterialsRoute
   '/_authenticated/orders': typeof AuthenticatedOrdersRoute
   '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
+  '/_authenticated/quotations': typeof AuthenticatedQuotationsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/sites': typeof AuthenticatedSitesRoute
   '/_authenticated/trucks': typeof AuthenticatedTrucksRoute
@@ -245,6 +254,7 @@ export interface FileRouteTypes {
     | '/materials'
     | '/orders'
     | '/payments'
+    | '/quotations'
     | '/settings'
     | '/sites'
     | '/trucks'
@@ -269,6 +279,7 @@ export interface FileRouteTypes {
     | '/materials'
     | '/orders'
     | '/payments'
+    | '/quotations'
     | '/settings'
     | '/sites'
     | '/trucks'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/_authenticated/materials'
     | '/_authenticated/orders'
     | '/_authenticated/payments'
+    | '/_authenticated/quotations'
     | '/_authenticated/settings'
     | '/_authenticated/sites'
     | '/_authenticated/trucks'
@@ -454,6 +466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPaymentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/quotations': {
+      id: '/_authenticated/quotations'
+      path: '/quotations'
+      fullPath: '/quotations'
+      preLoaderRoute: typeof AuthenticatedQuotationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -489,6 +508,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMaterialsRoute: typeof AuthenticatedMaterialsRoute
   AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
   AuthenticatedPaymentsRoute: typeof AuthenticatedPaymentsRoute
+  AuthenticatedQuotationsRoute: typeof AuthenticatedQuotationsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSitesRoute: typeof AuthenticatedSitesRoute
   AuthenticatedTrucksRoute: typeof AuthenticatedTrucksRoute
@@ -505,6 +525,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMaterialsRoute: AuthenticatedMaterialsRoute,
   AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
   AuthenticatedPaymentsRoute: AuthenticatedPaymentsRoute,
+  AuthenticatedQuotationsRoute: AuthenticatedQuotationsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSitesRoute: AuthenticatedSitesRoute,
   AuthenticatedTrucksRoute: AuthenticatedTrucksRoute,
