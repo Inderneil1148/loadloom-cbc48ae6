@@ -209,7 +209,7 @@ export function RecordManager({
     URL.revokeObjectURL(url);
   }
 
-  const actions = (r: Row) => (
+  const rowActions = (r: Row) => (
     <div className="flex justify-end gap-1">
       {actions?.(r)}
       <Button variant="ghost" size="icon" aria-label={`Edit ${singular}`} onClick={() => openForm(r)}><Pencil /></Button>
@@ -257,7 +257,7 @@ export function RecordManager({
                       <div className="font-semibold">{mobileTitle(r)}</div>
                       <div className="text-sm text-muted-foreground">{mobileMeta(r)}</div>
                     </div>
-                    {actions(r)}
+                     {rowActions(r)}
                   </li>
                 ))}
               </ul>
@@ -273,7 +273,7 @@ export function RecordManager({
                      {filtered.map((r) => (
                       <TableRow key={r.id}>
                         {columns.map((c) => <TableCell key={c.label} className={c.className}>{c.render(r)}</TableCell>)}
-                        <TableCell>{actions(r)}</TableCell>
+                         <TableCell>{rowActions(r)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
