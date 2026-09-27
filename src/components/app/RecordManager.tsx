@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Download, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -102,10 +103,14 @@ export function RecordManager({
   mobileMeta: (r: Row) => ReactNode;
 }) {
   const qc = useQueryClient();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [editing, setEditing] = useState<Row | null>(null);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Record<string, string>>({});
   const [toDelete, setToDelete] = useState<Row | null>(null);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   const { data, isPending, error } = useQuery({
     queryKey: ["records", table],
@@ -178,6 +183,31 @@ export function RecordManager({
     setOpen(true);
   }
 
+  useEffect(() => {
+    if (new URLSearchParams(location.searchStr).get("new") === "true") {
+      openForm(null);
+      navigate({ to: location.pathname, search: {}, replace: true });
+    }
+  }, [location.searchStr]);
+
+  const statuses = [...new Set((data ?? []).map((r) => r.status).filter(Boolean))] as string[];
+  const filtered = (data ?? []).filter((r) =>
+    (!statusFilter || r.status === statusFilter) &&
+    (!search || Object.values(r).some((v) => typeof v === "string" && v.toLowerCase().includes(search.toLowerCase()))),
+  );
+
+  function exportCsv() {
+    if (!filtered.length) return;
+    const keys = fields.map((f) => f.name);
+    const csv = [keys.join(","), ...filtered.map((r) => keys.map((key) => `"${String(r[key] ?? "").replace(/"/g, '""')}"`).join(","))].join("\r\n");
+    const url = URL.createObjectURL(new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${table}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   const actions = (r: Row) => (
     <div className="flex justify-end gap-1">
       <Button variant="ghost" size="icon" aria-label={`Edit ${singular}`} onClick={() => openForm(r)}><Pencil /></Button>
@@ -189,32 +219,37 @@ export function RecordManager({
 
   const Wrap = embedded ? "div" : "main";
   return (
-    <div className={embedded ? "" : "min-h-screen bg-background"}>
+    <div className={embedded ? "" : "min-h-screen bg-background pb-20 lg:pb-0"}>
       {!embedded && <AppHeader />}
-      <Wrap className={embedded ? "" : "mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8"}>
-        <div className="flex items-end justify-between gap-3">
-          <div>
-            <p className="eyebrow text-accent">Manage</p>
+      <Wrap className={embedded ? "" : "mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8 lg:ml-60 lg:w-auto lg:px-7"}>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+          <div className="min-w-0">
             {embedded ? <h2 className="mt-1 text-xl font-extrabold">{title}</h2> : <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">{title}</h1>}
             {hint && <p className="mt-1 text-sm text-muted-foreground">{hint}</p>}
           </div>
-          <Button variant="action" onClick={() => openForm(null)}><Plus /> Add {singular.toLowerCase()}</Button>
+          <Button variant="action" size="sm" className="shrink-0" onClick={() => openForm(null)}><Plus /> <span className="hidden min-[380px]:inline">Add </span>{singular}</Button>
         </div>
 
-        <section className="mt-6 overflow-hidden rounded-md border border-border bg-card shadow-panel">
+        <div className="mt-5 flex flex-wrap gap-2">
+          <div className="relative min-w-0 flex-1 basis-48 sm:max-w-sm"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input aria-label={`Search ${title}`} placeholder={`Search ${title.toLowerCase()}…`} className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} /></div>
+          {statuses.length > 0 && <select aria-label="Filter by status" className={selectCls + " w-auto max-w-full flex-1 basis-32 sm:flex-none"} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}><option value="">All statuses</option>{statuses.map((s) => <option key={s} value={s}>{s.replace(/_/g, " ")}</option>)}</select>}
+          {(table === "orders" || table === "payments" || table === "invoices") && <Button variant="outline" size="icon" aria-label="Export CSV" title="Export CSV" disabled={!filtered.length} onClick={exportCsv}><Download /></Button>}
+        </div>
+
+        <section className="mt-4 overflow-hidden rounded-md border border-border bg-card shadow-panel">
           {isPending ? (
             <div className="space-y-2 p-4">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-10 w-full" />)}</div>
           ) : error ? (
             <p className="p-6 text-sm text-destructive">Couldn't load {title.toLowerCase()}. Please refresh.</p>
-          ) : !data!.length ? (
+          ) : !filtered.length ? (
             <div className="p-10 text-center">
-              <p className="text-sm text-muted-foreground">No {title.toLowerCase()} yet.</p>
-              <Button variant="outline" className="mt-4" onClick={() => openForm(null)}><Plus /> Add the first one</Button>
+              <p className="text-sm text-muted-foreground">{data?.length ? "No matching records." : `No ${title.toLowerCase()} yet.`}</p>
+              {!data?.length && <Button variant="outline" className="mt-4" onClick={() => openForm(null)}><Plus /> Add the first one</Button>}
             </div>
           ) : (
             <>
               <ul className="divide-y divide-border sm:hidden">
-                {data!.map((r) => (
+                {filtered.map((r) => (
                   <li key={r.id} className="flex items-start justify-between gap-2 p-3">
                     <div className="min-w-0 space-y-1">
                       <div className="font-semibold">{mobileTitle(r)}</div>
@@ -233,7 +268,7 @@ export function RecordManager({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {data!.map((r) => (
+                     {filtered.map((r) => (
                       <TableRow key={r.id}>
                         {columns.map((c) => <TableCell key={c.label} className={c.className}>{c.render(r)}</TableCell>)}
                         <TableCell>{actions(r)}</TableCell>
