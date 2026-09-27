@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -49,6 +50,11 @@ const FeaturesRoute = FeaturesRouteImport.update({
   path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/features': typeof FeaturesRoute
+  '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/features': typeof FeaturesRoute
+  '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/features': typeof FeaturesRoute
+  '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/demo'
     | '/features'
+    | '/login'
     | '/pricing'
     | '/privacy'
     | '/terms'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/demo'
     | '/features'
+    | '/login'
     | '/pricing'
     | '/privacy'
     | '/terms'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/demo'
     | '/features'
+    | '/login'
     | '/pricing'
     | '/privacy'
     | '/terms'
@@ -149,6 +161,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DemoRoute: typeof DemoRoute
   FeaturesRoute: typeof FeaturesRoute
+  LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
@@ -196,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/features'
       fullPath: '/features'
       preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -247,6 +267,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DemoRoute: DemoRoute,
   FeaturesRoute: FeaturesRoute,
+  LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
