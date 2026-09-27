@@ -14,7 +14,235 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      deliveries: {
+        Row: {
+          created_at: string
+          delivered_at: string | null
+          dispatched_at: string | null
+          driver_name: string | null
+          id: string
+          order_id: string | null
+          owner_id: string
+          status: string
+          updated_at: string
+          vehicle_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          delivered_at?: string | null
+          dispatched_at?: string | null
+          driver_name?: string | null
+          id?: string
+          order_id?: string | null
+          owner_id?: string
+          status?: string
+          updated_at?: string
+          vehicle_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          delivered_at?: string | null
+          dispatched_at?: string | null
+          driver_name?: string | null
+          id?: string
+          order_id?: string | null
+          owner_id?: string
+          status?: string
+          updated_at?: string
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deliveries_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliveries_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_name: string
+          due_date: string
+          id: string
+          invoice_no: string
+          order_id: string | null
+          owner_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          customer_name: string
+          due_date?: string
+          id?: string
+          invoice_no: string
+          order_id?: string | null
+          owner_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_name?: string
+          due_date?: string
+          id?: string
+          invoice_no?: string
+          order_id?: string | null
+          owner_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_name: string
+          id: string
+          material: string
+          order_date: string
+          order_no: string
+          owner_id: string
+          quantity: number
+          site: string | null
+          status: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          customer_name: string
+          id?: string
+          material: string
+          order_date?: string
+          order_no: string
+          owner_id?: string
+          quantity?: number
+          site?: string | null
+          status?: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_name?: string
+          id?: string
+          material?: string
+          order_date?: string
+          order_no?: string
+          owner_id?: string
+          quantity?: number
+          site?: string | null
+          status?: string
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_name: string
+          id: string
+          invoice_id: string | null
+          method: string
+          owner_id: string
+          paid_on: string
+          reference: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          customer_name: string
+          id?: string
+          invoice_id?: string | null
+          method?: string
+          owner_id?: string
+          paid_on?: string
+          reference?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_name?: string
+          id?: string
+          invoice_id?: string | null
+          method?: string
+          owner_id?: string
+          paid_on?: string
+          reference?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicles: {
+        Row: {
+          capacity_tonnes: number
+          created_at: string
+          id: string
+          owner_id: string
+          registration: string
+          status: string
+          updated_at: string
+          vehicle_type: string
+        }
+        Insert: {
+          capacity_tonnes?: number
+          created_at?: string
+          id?: string
+          owner_id?: string
+          registration: string
+          status?: string
+          updated_at?: string
+          vehicle_type?: string
+        }
+        Update: {
+          capacity_tonnes?: number
+          created_at?: string
+          id?: string
+          owner_id?: string
+          registration?: string
+          status?: string
+          updated_at?: string
+          vehicle_type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
