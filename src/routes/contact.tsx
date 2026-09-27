@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SiteShell, PageHeader } from "@/components/site/SiteShell";
+import { sendEnquiry } from "@/lib/contact.functions";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -39,14 +40,26 @@ function Contact() {
       <section className="mx-auto w-full max-w-2xl px-5 py-16">
         <form
           className="space-y-5"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
+            const f = e.currentTarget;
+            const fd = new FormData(f);
             setSending(true);
-            setTimeout(() => {
+            try {
+              await sendEnquiry({ data: {
+                name: String(fd.get("name") ?? ""),
+                business: String(fd.get("business") ?? ""),
+                phone: String(fd.get("phone") ?? ""),
+                email: String(fd.get("email") ?? ""),
+                message: String(fd.get("message") ?? ""),
+              } });
+              f.reset();
+              toast.success("Thanks — your enquiry has been sent. We'll get back to you soon.");
+            } catch {
+              toast.error("Couldn't send your enquiry. Please check the details and try again.");
+            } finally {
               setSending(false);
-              (e.target as HTMLFormElement).reset();
-              toast.success("Thanks — we'll get back to you on this number.");
-            }, 400);
+            }
           }}
         >
           <div className="grid gap-5 sm:grid-cols-2">

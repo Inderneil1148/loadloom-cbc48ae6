@@ -179,17 +179,17 @@ function DashboardBody({ data }: { data: DashboardData }) {
         <Link to="/dispatch" className="flex items-center justify-between rounded-md border border-border bg-card p-4 shadow-panel hover:border-accent"><span className="flex min-w-0 items-center gap-2 text-sm font-semibold"><Truck className="size-4 shrink-0 text-accent" /> Haulage in transit <span className="tabular-nums text-muted-foreground">({data.deliveries.filter((d) => ["dispatched", "on_road", "arrived"].includes(d.status)).length})</span></span><ArrowRight className="size-4 shrink-0 text-muted-foreground" /></Link>
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-3">
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <Panel title="Recent orders" className="lg:col-span-2">
           <div className="divide-y divide-border sm:hidden">
             {data.orders.slice(0, 8).map((o) => (
               <div key={o.id} className="px-3 py-3">
                 <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p className="truncate font-medium">{o.order_no} · {o.customer_name}</p>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">{o.site} · {o.material} · {Number(o.quantity)} {o.unit}</p>
                   </div>
-                  <StatusSelect table="orders" id={o.id} value={o.status} />
+                  <div className="shrink-0"><StatusSelect table="orders" id={o.id} value={o.status} /></div>
                 </div>
                 <div className="mt-2 flex items-center justify-between text-sm">
                   <span className="text-xs text-muted-foreground">{fmtDate(o.order_date)}</span>
@@ -292,7 +292,7 @@ function DashboardBody({ data }: { data: DashboardData }) {
         </div>
       </Panel>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Panel title="Invoices">
           <div className="divide-y divide-border sm:hidden">
             {data.invoices.slice(0, 8).map((i) => (
