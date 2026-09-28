@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, Building2, Lock, Mail } from "lucide-react";
+import { lovable } from "@/integrations/lovable";
 import { useSession } from "@/hooks/use-session";
 import { formatINR, type Tier } from "@/lib/plans";
 import { signupTiersWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
@@ -45,6 +46,20 @@ function AuthPage() {
   useEffect(() => {
     if (!loading && session) navigate({ to: "/dashboard", replace: true });
   }, [loading, session, navigate]);
+
+  async function handleOAuth(provider: "google" | "apple") {
+    setBusy(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth(provider, {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) throw result.error;
+      // redirected: browser is leaving for the provider — nothing to do
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Something went wrong. Try again.");
+      setBusy(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
