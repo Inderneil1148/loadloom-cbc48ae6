@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, Building2, Lock, Mail } from "lucide-react";
 import { lovable } from "@/integrations/lovable";
+import logoIcon from "@/assets/loadloom-icon.png.asset.json";
 import { useSession } from "@/hooks/use-session";
 import { formatINR, type Tier } from "@/lib/plans";
 import { signupTiersWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
@@ -100,9 +101,7 @@ function AuthPage() {
       <div className="w-full max-w-lg">
         <div className="flex flex-col items-center text-center">
           <div className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-lg bg-accent text-lg font-extrabold text-accent-foreground shadow-lg shadow-accent/30">
-              LL
-            </span>
+            <img src={logoIcon.url} alt="LoadLoom" className="h-11 w-11 rounded-lg shadow-lg shadow-accent/30" />
             <div className="text-left leading-none">
               <p className="text-2xl font-extrabold">LoadLoom</p>
               <p className="mt-1 text-[10px] font-bold tracking-[0.2em] text-accent">DISPATCH OS</p>
