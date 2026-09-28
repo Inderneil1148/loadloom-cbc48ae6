@@ -165,6 +165,11 @@ function AuthPage() {
                   Continue with Apple
                 </Button>
               </div>
+              {isSignUp && (
+                <p className="mt-3 text-center text-xs text-navy-foreground/50">
+                  Google and Apple sign-ups start on the Free plan — you can request an upgrade after signing in.
+                </p>
+              )}
               <div className="my-5 flex items-center gap-3 text-xs text-navy-foreground/45">
                 <span className="h-px flex-1 bg-navy-foreground/10" />
                 or continue with email
