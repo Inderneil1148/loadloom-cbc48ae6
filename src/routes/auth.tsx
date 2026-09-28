@@ -13,6 +13,7 @@ import { formatINR, type Tier } from "@/lib/plans";
 import { signupTiersWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
 
 export const Route = createFileRoute("/auth")({
+  staticData: { sitemap: false },
   validateSearch: (search: Record<string, unknown>): { mode?: "signup" } =>
     search["mode"] === "signup" ? { mode: "signup" } : {},
 

@@ -6,6 +6,7 @@ import { formatINR } from "@/lib/plans";
 import { num, useOps } from "@/lib/ops-data";
 
 export const Route = createFileRoute("/_authenticated/fleet")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Fleet Intelligence — LoadLoom" }, { name: "description", content: "Trips, revenue and utilisation for every truck and driver." },
     { property: "og:title", content: "Fleet Intelligence — LoadLoom" }, { property: "og:description", content: "Trips, revenue and utilisation per truck." },

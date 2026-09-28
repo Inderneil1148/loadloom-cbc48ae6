@@ -13,6 +13,7 @@ import { formatINR } from "@/lib/plans";
 import { fetchDashboard, loadSampleData, type DashboardData } from "@/lib/dashboard-data";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Dashboard — LoadLoom" },

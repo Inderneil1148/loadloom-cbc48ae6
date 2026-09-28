@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/sites")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Delivery Sites — LoadLoom" }, { name: "description", content: "Manage delivery addresses and site contacts." },
     { property: "og:title", content: "Delivery Sites — LoadLoom" }, { property: "og:description", content: "Manage delivery addresses and site contacts." },

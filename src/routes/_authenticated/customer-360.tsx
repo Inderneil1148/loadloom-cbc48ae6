@@ -8,6 +8,7 @@ import { formatINR } from "@/lib/plans";
 import { num, useOps } from "@/lib/ops-data";
 
 export const Route = createFileRoute("/_authenticated/customer-360")({
+  staticData: { sitemap: false },
   validateSearch: (s: Record<string, unknown>): { id?: string } => (typeof s["id"] === "string" ? { id: s["id"] } : {}),
   head: () => ({ meta: [
     { title: "Customer 360 — LoadLoom" }, { name: "description", content: "Orders, invoices and payments for one customer." },

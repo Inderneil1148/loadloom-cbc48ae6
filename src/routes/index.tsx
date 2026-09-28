@@ -16,6 +16,7 @@ import { plansWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
 import heroFleet from "@/assets/hero-fleet.jpg";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "LoadLoom — Every Load. Accounted For." },

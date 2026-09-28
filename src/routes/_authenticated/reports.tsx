@@ -9,6 +9,7 @@ import { formatINR } from "@/lib/plans";
 import { agingBuckets, downloadCsv, monthKey, monthLabel, num, outstandingByCustomer, sumBy, useOps, type OpsData } from "@/lib/ops-data";
 
 export const Route = createFileRoute("/_authenticated/reports")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Reports — LoadLoom" }, { name: "description", content: "Twelve operational and financial reports." },
     { property: "og:title", content: "Reports — LoadLoom" }, { property: "og:description", content: "Twelve operational and financial reports." },

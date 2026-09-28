@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/trucks")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [{ title: "Trucks — LoadLoom" }, { name: "description", content: "Add, edit and delete trucks." }, { property: "og:title", content: "Trucks — LoadLoom" }, { property: "og:description", content: "Manage your fleet and vehicle availability." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: TrucksPage,
 });

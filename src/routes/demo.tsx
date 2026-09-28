@@ -11,6 +11,7 @@ import { SiteShell, PageHeader } from "@/components/site/SiteShell";
 import { WORKFLOW } from "@/lib/plans";
 
 export const Route = createFileRoute("/demo")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Demo — See LoadLoom running a dispatch day" },

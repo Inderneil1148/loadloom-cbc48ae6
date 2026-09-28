@@ -9,6 +9,7 @@ import { SiteShell, PageHeader } from "@/components/site/SiteShell";
 import { sendEnquiry } from "@/lib/contact.functions";
 
 export const Route = createFileRoute("/contact")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Contact — LoadLoom" },
