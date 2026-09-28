@@ -1,45 +1,30 @@
-# Final check, then branding
+# Add Google & Apple sign-in to LoadLoom
 
-## Part 1 — Full review (to-do list)
+## Goal
+Let users sign in or create an account with email/password (as now), **Google**, or **Apple**. Plan picker stays for email sign-ups; social sign-ups start on the Free plan and can request an upgrade later (admin activates paid plans manually, as today).
 
-### Public pages
-- [ ] Home, Features, Pricing, Demo, Contact, Privacy, Terms: load on phone and desktop, no overlapping text, no sideways scrolling, every button and link goes to the right place
-- [ ] Pricing and sign-up plan cards show the admin-set prices and limits
+## Changes
 
-### Sign-up and sign-in
-- [ ] Sign up with email and password, pick each of the 4 plans
-- [ ] Paid pick shows "waiting for approval" and runs on Free until approved
-- [ ] Sign in, forgot password, sign out
+### 1. Enable the providers (backend)
+- Call the Configure Social Login tool with `providers: ["google", "apple"]` — this turns on both providers with Lovable-managed credentials (no Google/Apple developer accounts or keys needed from you) and regenerates the `src/integrations/lovable` module.
 
-### Calculations
-- [ ] New Load: material subtotal (qty x rate), freight, GST on (subtotal + freight), total, balance after advance, all update live and save correctly
-- [ ] Quotations: same totals; "Convert to Order" carries the numbers over
-- [ ] Dashboard tiles: open orders, trucks out, active trips, outstanding, collected this month, today's revenue
-- [ ] Invoices: overdue status; Payments: outstanding per customer
-- [ ] Reports, Analytics, Customer 360, Command Centre numbers match the source records
+### 2. Sign-in page (`src/routes/auth.tsx`)
+- Add two buttons above the email form, shown in both sign-in and sign-up modes:
+  - **Continue with Google** (Google "G" mark, outlined button)
+  - **Continue with Apple** (Apple logo, dark button)
+- Divider "or continue with email" between social buttons and the email/password form.
+- Both call `lovable.auth.signInWithOAuth("google" | "apple", { redirect_uri: window.location.origin })`; on error show a toast, on redirect do nothing (browser leaves).
+- Social sign-ups land on `/dashboard` via the existing session redirect; the `handle_new_user_subscription` trigger already creates their subscription row (Free, active) with their email — no code change needed there.
+- Plan picker stays visible only for email sign-up; a small note under the social buttons says social sign-ups start on Free and can request a plan upgrade after signing in.
 
-### Every app page
-- [ ] Dashboard, Dispatch Board, Orders, Deliveries, Trucks, Drivers, Driver Portal, Materials, Sites, Customers, Customer 360, Invoices, Payments, Quotations, Reports, Fleet, Command Centre, Analytics, AI Assistant, Settings
-- [ ] Add / edit / delete, search, filters, status buttons, CSV export, WhatsApp, Call, Maps buttons
-- [ ] Dashboard button, New Load button, phone menu and bottom bar
+### 3. Memory update
+- Replace the old "no Google sign-in" rule with: email + Google + Apple sign-in enabled.
 
-### Plans and admin
-- [ ] Free limits stop at 20 orders/month, 4 trucks, 5 customers, 10 materials, with a clear message
-- [ ] Locked pages show the lock and upgrade message; unlock after the plan changes in Admin
-- [ ] Admin page only opens for your email; price and limit edits show up on Pricing right away
+## Technical details
+- Provider enablement: `supabase--configure_social_auth` with `["google", "apple"]` (managed credentials; safe, no user setup).
+- Client: `lovable.auth.signInWithOAuth` from `@/integrations/lovable` (auto-generated, not hand-edited); `redirect_uri: window.location.origin` (public same-origin URL, per OAuth rules — not a protected route).
+- No changes to admin panel, plan enforcement, or RLS.
 
-### Error sweep
-- [ ] Check error logs and the browser for errors on every page; fix anything found
-- [ ] Short report to you: what passed, what was fixed
-
-## Part 2 — Branding (after the review)
-1. Favicon: you send the file, I put it on every browser tab
-2. Logo: you send the file, I replace the "LL" mark in the site header, app sidebar, sign-in page and emails
-3. Contact form: "Send enquiry" emails the form to your address (you give me the email). Sent from notify.inderneil.xyz once its DNS check passes
-4. Footer: change "© 2026 LoadLoom" to "© 2026 The Social INK / INDERNEILK" (please confirm the exact spelling)
-
-## Needed from you
-- Favicon file
-- Logo file
-- Email address that should receive enquiries
-- Exact footer text
+## Verification
+- Playwright check on phone (393×852) and desktop: both buttons render on /auth in sign-in and sign-up modes, email form unchanged, no page errors, build OK.
+- Confirm providers report enabled after the configure call.
