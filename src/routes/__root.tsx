@@ -87,6 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "LoadLoom helps construction-material suppliers manage orders, vehicles, dispatches, deliveries, invoices and payments from one system.",
       },
       { name: "author", content: "LoadLoom" },
+      { name: "google-site-verification", content: "lRw3m5r04pSTV1MHfpBdXCGF462jhaFolNl6zqugv-E" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
