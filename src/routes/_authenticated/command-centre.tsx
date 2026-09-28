@@ -7,6 +7,7 @@ import { formatINR } from "@/lib/plans";
 import { num, useOps } from "@/lib/ops-data";
 
 export const Route = createFileRoute("/_authenticated/command-centre")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Command Centre — LoadLoom" }, { name: "description", content: "Live priorities, delays and alerts for dispatch." },
     { property: "og:title", content: "Command Centre — LoadLoom" }, { property: "og:description", content: "Live priorities, delays and alerts." },

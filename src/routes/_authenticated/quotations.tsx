@@ -10,6 +10,7 @@ import { usePlan } from "@/hooks/use-plan";
 import { formatINR } from "@/lib/plans";
 
 export const Route = createFileRoute("/_authenticated/quotations")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Quotations — LoadLoom" }, { name: "description", content: "Create quotes and convert them into orders." },
     { property: "og:title", content: "Quotations — LoadLoom" }, { property: "og:description", content: "Create quotes and convert them into orders." },

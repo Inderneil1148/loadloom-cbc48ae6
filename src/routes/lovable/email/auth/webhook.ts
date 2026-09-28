@@ -18,6 +18,7 @@ const SITE_URL = `https://${ROOT_DOMAIN}`
 // The SDK handler owns verification, dispatch, and retry semantics; this file
 // owns only the email decisions: subjects, templates, and per-type props.
 export const Route = createFileRoute("/lovable/email/auth/webhook")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: ({ request }) => {

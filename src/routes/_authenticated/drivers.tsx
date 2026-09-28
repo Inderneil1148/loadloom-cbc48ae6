@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/drivers")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Drivers — LoadLoom" }, { name: "description", content: "Manage drivers and their vehicle assignments." },
     { property: "og:title", content: "Drivers — LoadLoom" }, { property: "og:description", content: "Manage drivers and their vehicle assignments." },

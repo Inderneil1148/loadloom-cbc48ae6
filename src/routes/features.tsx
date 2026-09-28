@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { SiteShell, PageHeader } from "@/components/site/SiteShell";
 
 export const Route = createFileRoute("/features")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Features — LoadLoom dispatch and operations" },

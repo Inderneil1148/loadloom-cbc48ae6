@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { RecordManager, StatusBadge, fmtDate, opts } from "@/components/app/RecordManager";
 
 export const Route = createFileRoute("/_authenticated/deliveries")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [{ title: "Deliveries — LoadLoom" }, { name: "description", content: "Add, edit and delete deliveries." }, { property: "og:title", content: "Deliveries — LoadLoom" }, { property: "og:description", content: "Track loads from assignment to delivery." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: () => (
     <RecordManager

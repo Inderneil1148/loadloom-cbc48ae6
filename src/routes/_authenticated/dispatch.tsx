@@ -16,6 +16,7 @@ const STAGES = [
 ] as const;
 
 export const Route = createFileRoute("/_authenticated/dispatch")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Dispatch Board — LoadLoom" },
     { name: "description", content: "Track assigned trucks, loading, transit and completed deliveries." },

@@ -14,6 +14,7 @@ import { formatINR } from "@/lib/plans";
 import { num, outstandingByCustomer, useOps } from "@/lib/ops-data";
 
 export const Route = createFileRoute("/_authenticated/assistant")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "AI Assistant — LoadLoom" }, { name: "description", content: "Voice to order, weighbridge slip reading, daily summary and follow-ups." },
     { property: "og:title", content: "AI Assistant — LoadLoom" }, { property: "og:description", content: "AI tools for dispatch operations." },

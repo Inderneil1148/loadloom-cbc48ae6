@@ -6,6 +6,7 @@ import { formatINR } from "@/lib/plans";
 import { plansWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
 
 export const Route = createFileRoute("/pricing")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Pricing — LoadLoom plans from Free to Fleet" },

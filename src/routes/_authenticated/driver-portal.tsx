@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/driver-portal")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Driver Portal — LoadLoom" }, { name: "description", content: "See driver assignments and active hauls." },
     { property: "og:title", content: "Driver Portal — LoadLoom" }, { property: "og:description", content: "See driver assignments and active hauls." },

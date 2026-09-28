@@ -61,6 +61,7 @@ const SAMPLE_DATA: Record<string, object> = {
 }
 
 export const Route = createFileRoute("/lovable/email/auth/preview")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {

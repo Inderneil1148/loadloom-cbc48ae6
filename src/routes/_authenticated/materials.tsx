@@ -3,6 +3,7 @@ import { RecordManager, opts } from "@/components/app/RecordManager";
 import { formatINR } from "@/lib/plans";
 
 export const Route = createFileRoute("/_authenticated/materials")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Materials — LoadLoom" },
     { name: "description", content: "Manage materials, units and standard rates." },

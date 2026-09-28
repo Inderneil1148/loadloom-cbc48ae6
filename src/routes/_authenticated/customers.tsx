@@ -5,6 +5,7 @@ import { MessageCircle, UsersRound } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/customers")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Customers 360 — LoadLoom" }, { name: "description", content: "Manage customer contacts and addresses." },
     { property: "og:title", content: "Customers 360 — LoadLoom" }, { property: "og:description", content: "Manage customer contacts and addresses." },

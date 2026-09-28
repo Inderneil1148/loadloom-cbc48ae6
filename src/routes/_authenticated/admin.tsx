@@ -16,6 +16,7 @@ import { TIER_NAMES, TIER_ORDER, type Tier } from "@/lib/plans";
 import { PLAN_SETTINGS_QUERY_KEY, usePlanSettings, type PlanSetting } from "@/hooks/use-plan-settings";
 
 export const Route = createFileRoute("/_authenticated/admin")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Admin — LoadLoom" }, { name: "description", content: "Private administration." },
     { property: "og:title", content: "Admin — LoadLoom" }, { property: "og:description", content: "Private administration." },

@@ -5,6 +5,7 @@ import { formatINR } from "@/lib/plans";
 import { agingBuckets, lastMonths, monthKey, monthLabel, num, sumBy, useOps } from "@/lib/ops-data";
 
 export const Route = createFileRoute("/_authenticated/analytics")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Analytics — LoadLoom" }, { name: "description", content: "Sales and collection trends, top customers and aging." },
     { property: "og:title", content: "Analytics — LoadLoom" }, { property: "og:description", content: "Sales and collection trends." },

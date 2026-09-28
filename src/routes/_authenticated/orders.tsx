@@ -5,6 +5,7 @@ import { OrderDispatchForm } from "@/components/app/OrderDispatchForm";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/orders")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [{ title: "Orders — LoadLoom" }, { name: "description", content: "Add, edit and delete orders." }, { property: "og:title", content: "Orders — LoadLoom" }, { property: "og:description", content: "Manage material loads and customer orders." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: () => (
     <RecordManager
