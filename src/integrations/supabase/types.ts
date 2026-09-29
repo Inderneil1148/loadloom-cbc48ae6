@@ -446,6 +446,33 @@ export type Database = {
           },
         ]
       }
+      payment_settings: {
+        Row: {
+          created_at: string
+          id: boolean
+          payee_name: string | null
+          qr_path: string | null
+          updated_at: string
+          upi_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: boolean
+          payee_name?: string | null
+          qr_path?: string | null
+          updated_at?: string
+          upi_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: boolean
+          payee_name?: string | null
+          qr_path?: string | null
+          updated_at?: string
+          upi_id?: string | null
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
@@ -492,6 +519,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      plan_payments: {
+        Row: {
+          admin_note: string | null
+          amount: number
+          created_at: string
+          email: string | null
+          id: string
+          plan: string
+          reference: string | null
+          screenshot_path: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          amount?: number
+          created_at?: string
+          email?: string | null
+          id?: string
+          plan: string
+          reference?: string | null
+          screenshot_path: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          amount?: number
+          created_at?: string
+          email?: string | null
+          id?: string
+          plan?: string
+          reference?: string | null
+          screenshot_path?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       plan_settings: {
         Row: {
@@ -698,6 +767,7 @@ export type Database = {
         Returns: boolean
       }
       is_demo_user: { Args: { _user_id: string }; Returns: boolean }
+      request_plan: { Args: { _plan: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "user"
