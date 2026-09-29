@@ -180,3 +180,66 @@
     linear-gradient(to bottom, color-mix(in oklab, var(--color-navy) 8%, transparent) 1px, transparent 1px);
   background-size: 56px 56px;
 }
+
+/* Dashboard splash sequence */
+@keyframes splash-icon {
+  0% {
+    opacity: 0;
+    transform: scale(0.55) rotate(-8deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes splash-word {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes splash-bar {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.splash-icon {
+  animation: splash-icon 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+.splash-word {
+  animation: splash-word 0.45s ease-out 0.5s both;
+}
+.splash-bar {
+  animation: splash-bar 0.5s ease-out 0.75s both;
+}
+.splash-tagline {
+  animation: splash-word 0.45s ease-out 0.9s both;
+}
+.splash-out {
+  transition: opacity 0.55s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-icon,
+  .splash-word,
+  .splash-bar,
+  .splash-tagline {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
