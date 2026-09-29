@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import logoIcon from "@/assets/loadloom-icon.png.asset.json";
 
 const SPLASH_KEY = "ll-splash-done";
@@ -10,14 +10,24 @@ const SPLASH_KEY = "ll-splash-done";
  */
 export function DashboardSplash() {
   const [phase, setPhase] = useState<"hidden" | "show" | "leaving">("hidden");
+  // Decided once; React StrictMode's double effect run re-arms the timers
+  // instead of being skipped by the storage check.
+  const decided = useRef<boolean | null>(null);
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem(SPLASH_KEY)) return;
-      sessionStorage.setItem(SPLASH_KEY, "1");
-    } catch {
-      return;
+    if (decided.current === null) {
+      try {
+        if (sessionStorage.getItem(SPLASH_KEY)) {
+          decided.current = false;
+        } else {
+          sessionStorage.setItem(SPLASH_KEY, "1");
+          decided.current = true;
+        }
+      } catch {
+        decided.current = false;
+      }
     }
+    if (!decided.current) return;
     setPhase("show");
     const t1 = setTimeout(() => setPhase("leaving"), 1750);
     const t2 = setTimeout(() => setPhase("hidden"), 2350);
