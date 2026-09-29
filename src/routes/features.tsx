@@ -13,6 +13,8 @@ export const Route = createFileRoute("/features")({
           "Orders, dispatch board, driver app, delivery proof, weighbridge slips, quotations, invoices, payments, outstanding, reports and analytics.",
       },
       { property: "og:title", content: "Features — LoadLoom dispatch and operations" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content:

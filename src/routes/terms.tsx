@@ -11,6 +11,8 @@ export const Route = createFileRoute("/terms")({
         content: "The terms that apply when your business uses LoadLoom for dispatch and operations.",
       },
       { property: "og:title", content: "Terms of Service — LoadLoom" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "LoadLoom terms of service for supplier accounts." },
     ],
   }),

@@ -21,6 +21,8 @@ export const Route = createFileRoute("/demo")({
           "Walk through a LoadLoom operating day: order entry, truck assignment, delivery proof, invoice and payment.",
       },
       { property: "og:title", content: "Demo — See LoadLoom running a dispatch day" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "A guided look at how a supplier moves a load from order to payment in LoadLoom.",
