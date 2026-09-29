@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { AppHeader } from "@/components/app/AppHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { formatINR } from "@/lib/plans";
-import { fetchDashboard, loadSampleData, type DashboardData } from "@/lib/dashboard-data";
+import { fetchDashboard, type DashboardData } from "@/lib/dashboard-data";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   staticData: { sitemap: false },
@@ -86,17 +86,7 @@ const fmtDate = (d: string | null) =>
   d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "—";
 
 function Dashboard() {
-  const queryClient = useQueryClient();
   const { data, isPending, error } = useQuery({ queryKey: ["dashboard"], queryFn: fetchDashboard });
-  const sample = useMutation({
-    mutationFn: loadSampleData,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
-      toast.success("Sample records added");
-    },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "Couldn't add sample records"),
-  });
-
 
   const empty =
     data && !data.orders.length && !data.vehicles.length && !data.invoices.length && !data.payments.length;
@@ -126,11 +116,11 @@ function Dashboard() {
             <Database className="mx-auto size-8 text-muted-foreground" />
             <h2 className="mt-4 text-xl font-bold">No records yet</h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-              Your orders, trucks, deliveries, invoices and payments will appear here. Load a few sample
-              records to see how the dashboard looks.
+              Your orders, trucks, deliveries, invoices and payments will appear here. Add your first
+              order to get started.
             </p>
-            <Button variant="action" className="mt-6" onClick={() => sample.mutate()} disabled={sample.isPending}>
-              {sample.isPending ? "Adding…" : "Load sample data"}
+            <Button asChild variant="action" className="mt-6">
+              <Link to="/orders" search={{ new: true }}>Add new data</Link>
             </Button>
           </div>
         ) : (
