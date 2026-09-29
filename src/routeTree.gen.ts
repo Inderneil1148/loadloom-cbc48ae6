@@ -23,6 +23,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
+import { Route as AuthenticatedChoosePlanRouteImport } from './routes/_authenticated/choose-plan'
 import { Route as AuthenticatedCommandCentreRouteImport } from './routes/_authenticated/command-centre'
 import { Route as AuthenticatedCustomer360RouteImport } from './routes/_authenticated/customer-360'
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
@@ -41,6 +42,7 @@ import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSitesRouteImport } from './routes/_authenticated/sites'
 import { Route as AuthenticatedTrucksRouteImport } from './routes/_authenticated/trucks'
+import { Route as AuthenticatedCheckoutPlanRouteImport } from './routes/_authenticated/checkout.$plan'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -112,6 +114,11 @@ const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
 const AuthenticatedAssistantRoute = AuthenticatedAssistantRouteImport.update({
   id: '/assistant',
   path: '/assistant',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedChoosePlanRoute = AuthenticatedChoosePlanRouteImport.update({
+  id: '/choose-plan',
+  path: '/choose-plan',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCommandCentreRoute =
@@ -207,6 +214,12 @@ const AuthenticatedTrucksRoute = AuthenticatedTrucksRouteImport.update({
   path: '/trucks',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCheckoutPlanRoute =
+  AuthenticatedCheckoutPlanRouteImport.update({
+    id: '/checkout/$plan',
+    path: '/checkout/$plan',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/lovable/email/auth/preview',
   path: '/lovable/email/auth/preview',
@@ -238,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/choose-plan': typeof AuthenticatedChoosePlanRoute
   '/command-centre': typeof AuthenticatedCommandCentreRoute
   '/customer-360': typeof AuthenticatedCustomer360Route
   '/customers': typeof AuthenticatedCustomersRoute
@@ -256,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
   '/trucks': typeof AuthenticatedTrucksRoute
+  '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -274,6 +289,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/choose-plan': typeof AuthenticatedChoosePlanRoute
   '/command-centre': typeof AuthenticatedCommandCentreRoute
   '/customer-360': typeof AuthenticatedCustomer360Route
   '/customers': typeof AuthenticatedCustomersRoute
@@ -292,6 +308,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
   '/trucks': typeof AuthenticatedTrucksRoute
+  '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -312,6 +329,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
+  '/_authenticated/choose-plan': typeof AuthenticatedChoosePlanRoute
   '/_authenticated/command-centre': typeof AuthenticatedCommandCentreRoute
   '/_authenticated/customer-360': typeof AuthenticatedCustomer360Route
   '/_authenticated/customers': typeof AuthenticatedCustomersRoute
@@ -330,6 +348,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/sites': typeof AuthenticatedSitesRoute
   '/_authenticated/trucks': typeof AuthenticatedTrucksRoute
+  '/_authenticated/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -350,6 +369,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/analytics'
     | '/assistant'
+    | '/choose-plan'
     | '/command-centre'
     | '/customer-360'
     | '/customers'
@@ -368,6 +388,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/sites'
     | '/trucks'
+    | '/checkout/$plan'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -386,6 +407,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/analytics'
     | '/assistant'
+    | '/choose-plan'
     | '/command-centre'
     | '/customer-360'
     | '/customers'
@@ -404,6 +426,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/sites'
     | '/trucks'
+    | '/checkout/$plan'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -423,6 +446,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/analytics'
     | '/_authenticated/assistant'
+    | '/_authenticated/choose-plan'
     | '/_authenticated/command-centre'
     | '/_authenticated/customer-360'
     | '/_authenticated/customers'
@@ -441,6 +465,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/sites'
     | '/_authenticated/trucks'
+    | '/_authenticated/checkout/$plan'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -561,6 +586,13 @@ declare module '@tanstack/react-router' {
       path: '/assistant'
       fullPath: '/assistant'
       preLoaderRoute: typeof AuthenticatedAssistantRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/choose-plan': {
+      id: '/_authenticated/choose-plan'
+      path: '/choose-plan'
+      fullPath: '/choose-plan'
+      preLoaderRoute: typeof AuthenticatedChoosePlanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/command-centre': {
@@ -689,6 +721,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTrucksRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/checkout/$plan': {
+      id: '/_authenticated/checkout/$plan'
+      path: '/checkout/$plan'
+      fullPath: '/checkout/$plan'
+      preLoaderRoute: typeof AuthenticatedCheckoutPlanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/lovable/email/auth/preview': {
       id: '/lovable/email/auth/preview'
       path: '/lovable/email/auth/preview'
@@ -717,6 +756,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
+  AuthenticatedChoosePlanRoute: typeof AuthenticatedChoosePlanRoute
   AuthenticatedCommandCentreRoute: typeof AuthenticatedCommandCentreRoute
   AuthenticatedCustomer360Route: typeof AuthenticatedCustomer360Route
   AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
@@ -735,12 +775,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSitesRoute: typeof AuthenticatedSitesRoute
   AuthenticatedTrucksRoute: typeof AuthenticatedTrucksRoute
+  AuthenticatedCheckoutPlanRoute: typeof AuthenticatedCheckoutPlanRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
+  AuthenticatedChoosePlanRoute: AuthenticatedChoosePlanRoute,
   AuthenticatedCommandCentreRoute: AuthenticatedCommandCentreRoute,
   AuthenticatedCustomer360Route: AuthenticatedCustomer360Route,
   AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
@@ -759,6 +801,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSitesRoute: AuthenticatedSitesRoute,
   AuthenticatedTrucksRoute: AuthenticatedTrucksRoute,
+  AuthenticatedCheckoutPlanRoute: AuthenticatedCheckoutPlanRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

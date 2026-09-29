@@ -9,8 +9,8 @@ import { ArrowRight, Building2, Lock, Mail } from "lucide-react";
 import { lovable } from "@/integrations/lovable";
 import logoIcon from "@/assets/loadloom-icon.png.asset.json";
 import { useSession } from "@/hooks/use-session";
-import { formatINR, type Tier } from "@/lib/plans";
-import { signupTiersWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
+import { planPickedKey } from "@/hooks/use-plan-payment";
+import { DEMO_EMAIL } from "@/lib/demo";
 
 export const Route = createFileRoute("/auth")({
   staticData: { sitemap: false },
@@ -39,14 +39,15 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [businessName, setBusinessName] = useState("");
-  const [tier, setTier] = useState<Tier>("free");
   const [busy, setBusy] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
-  const { data: planSettings } = usePlanSettings();
-  const signupTiers = signupTiersWithSettings(planSettings);
 
   useEffect(() => {
-    if (!loading && session) navigate({ to: "/dashboard", replace: true });
+    if (loading || !session) return;
+    const u = session.user;
+    const isNew = Date.now() - new Date(u.created_at).getTime() < 7 * 86400_000;
+    const picked = localStorage.getItem(planPickedKey(u.id));
+    navigate({ to: isNew && !picked && u.email !== DEMO_EMAIL ? "/choose-plan" : "/dashboard", replace: true });
   }, [loading, session, navigate]);
 
   async function handleOAuth(provider: "google" | "apple") {
@@ -73,7 +74,7 @@ function AuthPage() {
           password,
           options: {
             emailRedirectTo: window.location.origin,
-            data: { business_name: businessName, requested_plan: tier },
+            data: { business_name: businessName, requested_plan: "free" },
           },
         });
         if (error) throw error;
@@ -81,7 +82,7 @@ function AuthPage() {
           setCheckEmail(true);
           return;
         }
-        navigate({ to: "/dashboard", replace: true });
+        navigate({ to: "/choose-plan", replace: true });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -167,7 +168,7 @@ function AuthPage() {
               </div>
               {isSignUp && (
                 <p className="mt-3 text-center text-xs text-navy-foreground/50">
-                  Google and Apple sign-ups start on the Free plan — you can request an upgrade after signing in.
+                  You'll choose your plan on the next step.
                 </p>
               )}
               <div className="my-5 flex items-center gap-3 text-xs text-navy-foreground/45">
@@ -176,22 +177,6 @@ function AuthPage() {
                 <span className="h-px flex-1 bg-navy-foreground/10" />
               </div>
               <form className="space-y-4" onSubmit={handleSubmit}>
-                {isSignUp && (
-                  <fieldset className="space-y-2">
-                    <legend className="text-sm font-medium">Choose your plan</legend>
-                    <div className="grid grid-cols-2 gap-2">
-                      {signupTiers.map((t) => (
-                        <button key={t.id} type="button" aria-pressed={tier === t.id} onClick={() => setTier(t.id)}
-                          className={`rounded-lg border p-3 text-left transition-colors ${tier === t.id ? "border-accent bg-accent/10" : "border-navy-foreground/15 bg-navy-foreground/5 hover:border-navy-foreground/30"}`}>
-                          <p className="text-sm font-bold">{t.name}</p>
-                          <p className="text-xs font-semibold text-accent">{t.price ? `${formatINR(t.price)}/mo` : "Free"}</p>
-                          <p className="mt-1 text-[11px] leading-snug text-navy-foreground/60">{t.points.join(" · ")}</p>
-                        </button>
-                      ))}
-                    </div>
-                    {tier !== "free" && <p className="text-xs text-navy-foreground/60">Paid plans are activated by our team after a quick call. You can use Free meanwhile.</p>}
-                  </fieldset>
-                )}
                 {isSignUp && (
                   <div className="space-y-2">
                     <Label htmlFor="business">Business name</Label>
