@@ -44,7 +44,7 @@ const GROUPS = [
     { to: "/analytics", label: "Analytics", icon: PieChart },
     { to: "/assistant", label: "AI Assistant", icon: Bot },
   ] },
-  { title: "ACCOUNT", items: [{ to: "/settings", label: "Enterprise Profile", icon: Settings }, { to: "/help", label: "Fix a problem", icon: LifeBuoy }] },
+  { title: "ACCOUNT", items: [{ to: "/settings", label: "Enterprise Profile", icon: Settings }, { to: "/billing", label: "Plan & Billing", icon: Wallet }, { to: "/help", label: "Fix a problem", icon: LifeBuoy }] },
 ] as const;
 
 export function AppHeader() {
