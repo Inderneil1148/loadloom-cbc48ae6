@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
 import { usePlan } from "@/hooks/use-plan";
 import { NotificationBell } from "@/components/app/NotificationBell";
-import { FEATURE_MIN, TIER_NAMES, type Feature } from "@/lib/plans";
+import { FEATURE_MIN, TIER_NAMES, tierAtLeast, type Feature, type Tier } from "@/lib/plans";
 
 const LOCKS: Record<string, Feature> = {
   "/quotations": "quotations", "/reports": "reports", "/command-centre": "command_centre", "/analytics": "analytics", "/assistant": "ai_tools",
@@ -142,7 +142,7 @@ export function AppHeader() {
           <button type="button" onClick={signOut} className="font-semibold underline">Exit demo</button>
         </div>
       )}
-      {!isDemo && payment?.status === "pending" && (
+      {!isDemo && payment?.status === "pending" && !tierAtLeast(tier, payment.plan as Tier) && (
         <div className="border-b border-accent/30 bg-accent/10 px-4 py-2 text-center text-xs font-medium text-foreground lg:ml-60">
           Your {TIER_NAMES[payment.plan as keyof typeof TIER_NAMES]} plan will be activated within 24 hours.
         </div>
