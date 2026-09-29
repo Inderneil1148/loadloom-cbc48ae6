@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { AppHeader } from "@/components/app/AppHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { formatINR } from "@/lib/plans";
-import { fetchDashboard, loadSampleData, type DashboardData } from "@/lib/dashboard-data";
+import { fetchDashboard, type DashboardData } from "@/lib/dashboard-data";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   staticData: { sitemap: false },
