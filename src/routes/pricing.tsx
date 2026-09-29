@@ -2,8 +2,24 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteShell, PageHeader } from "@/components/site/SiteShell";
-import { formatINR } from "@/lib/plans";
+import { formatINR, ALL_PLANS } from "@/lib/plans";
 import { plansWithSettings, usePlanSettings } from "@/hooks/use-plan-settings";
+
+const pricingJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "LoadLoom",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description:
+    "LoadLoom helps construction-material suppliers manage orders, vehicles, dispatches, deliveries, invoices and payments from one system.",
+  offers: ALL_PLANS.map((plan) => ({
+    "@type": "Offer",
+    name: `${plan.name} plan`,
+    price: String(plan.price),
+    priceCurrency: "INR",
+  })),
+};
 
 export const Route = createFileRoute("/pricing")({
   staticData: { sitemap: true },
@@ -22,6 +38,9 @@ export const Route = createFileRoute("/pricing")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(pricingJsonLd) },
     ],
   }),
   component: Pricing,
