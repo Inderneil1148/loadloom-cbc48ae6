@@ -72,8 +72,8 @@ function Checkout() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!file || !session || !plan) return toast.error("Please add your payment screenshot.");
-    if (!file.type.startsWith("image/")) return toast.error("Please upload an image.");
+    if (!file || !session || !plan) { toast.error("Please add your payment screenshot."); return; }
+    if (!file.type.startsWith("image/")) { toast.error("Please upload an image."); return; }
     setBusy(true);
     try {
       const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
