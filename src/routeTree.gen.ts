@@ -23,6 +23,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
+import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedChoosePlanRouteImport } from './routes/_authenticated/choose-plan'
 import { Route as AuthenticatedCommandCentreRouteImport } from './routes/_authenticated/command-centre'
 import { Route as AuthenticatedCustomer360RouteImport } from './routes/_authenticated/customer-360'
@@ -115,6 +116,11 @@ const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
 const AuthenticatedAssistantRoute = AuthenticatedAssistantRouteImport.update({
   id: '/assistant',
   path: '/assistant',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBillingRoute = AuthenticatedBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedChoosePlanRoute = AuthenticatedChoosePlanRouteImport.update({
@@ -257,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/billing': typeof AuthenticatedBillingRoute
   '/choose-plan': typeof AuthenticatedChoosePlanRoute
   '/command-centre': typeof AuthenticatedCommandCentreRoute
   '/customer-360': typeof AuthenticatedCustomer360Route
@@ -296,6 +303,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/billing': typeof AuthenticatedBillingRoute
   '/choose-plan': typeof AuthenticatedChoosePlanRoute
   '/command-centre': typeof AuthenticatedCommandCentreRoute
   '/customer-360': typeof AuthenticatedCustomer360Route
@@ -337,6 +345,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
+  '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/choose-plan': typeof AuthenticatedChoosePlanRoute
   '/_authenticated/command-centre': typeof AuthenticatedCommandCentreRoute
   '/_authenticated/customer-360': typeof AuthenticatedCustomer360Route
@@ -378,6 +387,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/analytics'
     | '/assistant'
+    | '/billing'
     | '/choose-plan'
     | '/command-centre'
     | '/customer-360'
@@ -417,6 +427,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/analytics'
     | '/assistant'
+    | '/billing'
     | '/choose-plan'
     | '/command-centre'
     | '/customer-360'
@@ -457,6 +468,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/analytics'
     | '/_authenticated/assistant'
+    | '/_authenticated/billing'
     | '/_authenticated/choose-plan'
     | '/_authenticated/command-centre'
     | '/_authenticated/customer-360'
@@ -598,6 +610,13 @@ declare module '@tanstack/react-router' {
       path: '/assistant'
       fullPath: '/assistant'
       preLoaderRoute: typeof AuthenticatedAssistantRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/billing': {
+      id: '/_authenticated/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof AuthenticatedBillingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/choose-plan': {
@@ -775,6 +794,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
+  AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedChoosePlanRoute: typeof AuthenticatedChoosePlanRoute
   AuthenticatedCommandCentreRoute: typeof AuthenticatedCommandCentreRoute
   AuthenticatedCustomer360Route: typeof AuthenticatedCustomer360Route
@@ -802,6 +822,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
+  AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedChoosePlanRoute: AuthenticatedChoosePlanRoute,
   AuthenticatedCommandCentreRoute: AuthenticatedCommandCentreRoute,
   AuthenticatedCustomer360Route: AuthenticatedCustomer360Route,
