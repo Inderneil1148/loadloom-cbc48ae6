@@ -12,6 +12,8 @@ export const Route = createFileRoute("/privacy")({
           "How LoadLoom collects, stores and protects your business, customer, delivery and payment data.",
       },
       { property: "og:title", content: "Privacy Policy — LoadLoom" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "LoadLoom privacy policy for supplier accounts." },
     ],
   }),

@@ -19,6 +19,8 @@ export const Route = createFileRoute("/contact")({
           "Tell us about your yard, your materials and your fleet size, and we will show you how LoadLoom fits.",
       },
       { property: "og:title", content: "Contact — LoadLoom" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "Get in touch about LoadLoom for your construction-material supply business.",
