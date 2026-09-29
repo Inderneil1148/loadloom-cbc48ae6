@@ -36,7 +36,7 @@ export function useNotifications() {
   useEffect(() => {
     if (!uid) return;
     const channel = supabase
-      .channel(`notifications-${uid}`)
+      .channel(`notifications-${uid}-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${uid}` }, (payload) => {
         const n = payload.new as AppNotification;
         toast.success(n.title, { description: n.body ?? undefined });

@@ -25,7 +25,7 @@ export function usePlan() {
   useEffect(() => {
     if (!uid) return;
     const channel = supabase
-      .channel(`plan-${uid}`)
+      .channel(`plan-${uid}-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${uid}` }, () => {
         qc.invalidateQueries({ queryKey: ["plan", uid] });
         qc.invalidateQueries({ queryKey: ["plan-payment", uid] });
