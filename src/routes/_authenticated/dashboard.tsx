@@ -126,11 +126,11 @@ function Dashboard() {
             <Database className="mx-auto size-8 text-muted-foreground" />
             <h2 className="mt-4 text-xl font-bold">No records yet</h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-              Your orders, trucks, deliveries, invoices and payments will appear here. Load a few sample
-              records to see how the dashboard looks.
+              Your orders, trucks, deliveries, invoices and payments will appear here. Add your first
+              order to get started.
             </p>
-            <Button variant="action" className="mt-6" onClick={() => sample.mutate()} disabled={sample.isPending}>
-              {sample.isPending ? "Adding…" : "Load sample data"}
+            <Button asChild variant="action" className="mt-6">
+              <Link to="/orders" search={{ new: true }}>Add new data</Link>
             </Button>
           </div>
         ) : (
