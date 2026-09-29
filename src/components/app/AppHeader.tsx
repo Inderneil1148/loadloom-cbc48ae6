@@ -1,6 +1,7 @@
 import logoIcon from "@/assets/loadloom-icon.png.asset.json";
 import { DEMO_EMAIL } from "@/lib/demo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { planPickedKey, useLatestPlanPayment } from "@/hooks/use-plan-payment";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { BarChart3, Bot, Building2, ChevronRight, FileSignature, Gauge, Lock, PieChart, Radar, ClipboardList, CreditCard, FileText, LayoutDashboard, Layers3, LogOut, MapPin, Menu, Package, Plus, Settings, Truck, UserRound, UsersRound, Wallet, X } from "lucide-react";
@@ -51,8 +52,19 @@ export function AppHeader() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { tier, sub, can } = usePlan();
+  const { tier, sub, can, loading: planLoading } = usePlan();
+  const { data: payment, isPending: paymentLoading } = useLatestPlanPayment();
   const isDemo = session?.user.email === DEMO_EMAIL;
+
+  // First visit after sign-up (including Google/Apple): send to the plan picker once.
+  useEffect(() => {
+    const u = session?.user;
+    if (!u || isDemo || planLoading || paymentLoading || !sub) return;
+    const isNew = Date.now() - new Date(u.created_at).getTime() < 7 * 86400_000;
+    if (isNew && sub.plan === "free" && sub.requested_plan === "free" && !payment && !localStorage.getItem(planPickedKey(u.id))) {
+      navigate({ to: "/choose-plan", replace: true });
+    }
+  }, [session, isDemo, planLoading, paymentLoading, sub, payment, navigate]);
   const page = GROUPS.map((g) => g.items.find((item) => item.to === location.pathname)?.label).find(Boolean) ?? "Dashboard";
 
   async function signOut() {
@@ -76,7 +88,8 @@ export function AppHeader() {
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-3">
         <div className="mb-4 flex items-center gap-2 border-b border-sidebar-border px-2 pb-4 text-sidebar-foreground">
           <Building2 className="size-4 shrink-0" />
-          <div className="min-w-0"><p className="truncate text-xs font-semibold text-sidebar-accent-foreground">Your operations</p><p className="truncate text-[10px]">{TIER_NAMES[tier]} plan{sub?.status === "pending" ? ` · ${TIER_NAMES[sub.requested_plan as keyof typeof TIER_NAMES]} requested` : ""}</p></div>
+          <div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold text-sidebar-accent-foreground">Your operations</p><p className="truncate text-[10px]">{TIER_NAMES[tier]} plan{sub?.status === "pending" ? ` · ${TIER_NAMES[sub.requested_plan as keyof typeof TIER_NAMES]} requested` : ""}</p></div>
+          {!isDemo && tier !== "fleet" && <Link to="/choose-plan" onClick={() => setMenuOpen(false)} className="shrink-0 rounded bg-accent px-2 py-1 text-[10px] font-semibold text-accent-foreground">Upgrade</Link>}
         </div>
         {GROUPS.map((group) => (
           <div key={group.title} className="mb-5">
@@ -125,11 +138,21 @@ export function AppHeader() {
           <button type="button" onClick={signOut} className="font-semibold underline">Exit demo</button>
         </div>
       )}
-      {!isDemo && sub && sub.status !== "active" && (
+      {!isDemo && payment?.status === "pending" && (
+        <div className="border-b border-accent/30 bg-accent/10 px-4 py-2 text-center text-xs font-medium text-foreground lg:ml-60">
+          Your {TIER_NAMES[payment.plan as keyof typeof TIER_NAMES]} plan will be activated within 24 hours.
+        </div>
+      )}
+      {!isDemo && payment?.status !== "pending" && sub?.status === "pending" && sub.requested_plan !== "free" && (
         <div className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-center text-xs text-foreground lg:ml-60">
-          {sub.status === "pending"
-            ? `Your ${TIER_NAMES[sub.requested_plan as keyof typeof TIER_NAMES]} plan request is being reviewed. You're on Free until it's activated.`
-            : "Your plan is paused. Contact us to reactivate your account features."}
+          {payment?.status === "rejected" ? "We couldn't verify your last payment. " : ""}
+          You chose the {TIER_NAMES[sub.requested_plan as keyof typeof TIER_NAMES]} plan.{" "}
+          <Link to="/checkout/$plan" params={{ plan: sub.requested_plan }} className="font-semibold text-accent underline">Complete payment</Link>
+        </div>
+      )}
+      {!isDemo && sub?.status === "suspended" && (
+        <div className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-center text-xs text-foreground lg:ml-60">
+          Your plan is paused. Contact us to reactivate your account features.
         </div>
       )}
       <div className="pointer-events-none fixed bottom-3 left-1/2 z-30 flex -translate-x-1/2 gap-1 rounded-md border border-border bg-card p-1 shadow-lifted lg:hidden">
