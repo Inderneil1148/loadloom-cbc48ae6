@@ -53,11 +53,18 @@ function Admin() {
     },
   });
   const update = useMutation({
-    mutationFn: async ({ id, patch }: { id: string; patch: { plan?: string; status?: string; requested_plan?: string } }) => {
+    mutationFn: async ({ id, userId, patch }: { id: string; userId: string; patch: { plan?: string; status?: string; requested_plan?: string } }) => {
       const { error } = await supabase.from("subscriptions").update(patch).eq("id", id);
       if (error) throw error;
+      // Keep the Payments tab in sync: activating a plan clears any waiting payment.
+      if (patch.status === "active" && patch.plan && patch.plan !== "free") {
+        const { error: e2 } = await supabase.from("plan_payments")
+          .update({ status: "approved" })
+          .eq("user_id", userId).eq("status", "pending");
+        if (e2) throw e2;
+      }
     },
-    onSuccess: () => { toast.success("Saved"); qc.invalidateQueries({ queryKey: ["admin-subs"] }); qc.invalidateQueries({ queryKey: ["plan"] }); },
+    onSuccess: () => { toast.success("Saved"); qc.invalidateQueries({ queryKey: ["admin-subs"] }); qc.invalidateQueries({ queryKey: ["admin-plan-payments"] }); qc.invalidateQueries({ queryKey: ["plan"] }); },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Couldn't save"),
   });
   if (isPending) return <Skeleton className="h-64 w-full" />;
