@@ -40,3 +40,6 @@ instead of the spec's Firebase/React Router.
 - [x] Driver portal summary, customer directory, delivery sites, call and map links
 - [x] Branding: favicon, logo, footer "© 2026 The Social INK / INDERNEILK", contact enquiries emailed to inderneilkanagali@gmail.com
 - [x] Final full-app review
+
+- [x] UPI QR payment flow: choose plan, pay + screenshot, 24h bar, emails, admin verify
+- [ ] Owner to add UPI ID / QR in Admin > Payments

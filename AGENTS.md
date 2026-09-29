@@ -16,3 +16,4 @@ Use the specialized dispatch order form for order creation and editing while Rec
 - Feature entitlements live in `src/lib/plans.ts`; editable prices and numeric limits live in `plan_settings`, and `enforce_plan_limits` reads them so admin controls, public pricing, and database enforcement stay aligned.
 - Admin access uses `user_roles` + `has_role()`; the /admin page is unlinked and RLS lets only admins read/update all subscriptions.
 - Demo mode is a shared demo@loadloom.app account (Fleet plan, listed in `demo_users`) seeded server-side by `startDemo`; restrictive RLS blocks all its writes and the UI redirects change attempts to /pricing, so the demo stays identical for every visitor.
+- Paid plans are bought by UPI QR + screenshot: `plan_payments` rows (private `payment-proofs` bucket) are approved by the admin, which activates the subscription; this keeps billing manual with no payment provider.
