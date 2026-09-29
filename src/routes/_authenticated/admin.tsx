@@ -103,17 +103,17 @@ function Admin() {
                 <p className="mt-1 text-xs">Requested: <b>{TIER_NAMES[r.requested_plan as Tier]}</b></p>
               </div>
               {r.status === "pending" && (
-                <Button size="sm" variant="action" onClick={() => update.mutate({ id: r.id, patch: { plan: r.requested_plan, status: "active" } })}><Check /> Approve {TIER_NAMES[r.requested_plan as Tier]}</Button>
+                <Button size="sm" variant="action" onClick={() => update.mutate({ id: r.id, userId: r.user_id, patch: { plan: r.requested_plan, status: "active" } })}><Check /> Approve {TIER_NAMES[r.requested_plan as Tier]}</Button>
               )}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <label className="text-xs text-muted-foreground">Plan{" "}
-                <select aria-label={`Plan for ${r.email}`} className={sel} value={r.plan} onChange={(e) => update.mutate({ id: r.id, patch: { plan: e.target.value, requested_plan: e.target.value, status: "active" } })}>
+                <select aria-label={`Plan for ${r.email}`} className={sel} value={r.plan} onChange={(e) => update.mutate({ id: r.id, userId: r.user_id, patch: { plan: e.target.value, requested_plan: e.target.value, status: "active" } })}>
                   {TIER_ORDER.map((t) => <option key={t} value={t}>{TIER_NAMES[t]}</option>)}
                 </select>
               </label>
               <label className="text-xs text-muted-foreground">Status{" "}
-                <select aria-label={`Status for ${r.email}`} className={sel} value={r.status} onChange={(e) => update.mutate({ id: r.id, patch: { status: e.target.value } })}>
+                <select aria-label={`Status for ${r.email}`} className={sel} value={r.status} onChange={(e) => update.mutate({ id: r.id, userId: r.user_id, patch: { status: e.target.value } })}>
                   <option value="active">Active</option><option value="pending">Pending</option><option value="suspended">Suspended</option>
                 </select>
               </label>
