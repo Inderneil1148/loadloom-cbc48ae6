@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { planPickedKey, useLatestPlanPayment } from "@/hooks/use-plan-payment";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { BarChart3, Bot, Building2, ChevronRight, FileSignature, Gauge, Lock, PieChart, Radar, ClipboardList, CreditCard, FileText, LayoutDashboard, Layers3, LogOut, MapPin, Menu, Package, Plus, Settings, Truck, UserRound, UsersRound, Wallet, X } from "lucide-react";
+import { LifeBuoy, BarChart3, Bot, Building2, ChevronRight, FileSignature, Gauge, Lock, PieChart, Radar, ClipboardList, CreditCard, FileText, LayoutDashboard, Layers3, LogOut, MapPin, Menu, Package, Plus, Settings, Truck, UserRound, UsersRound, Wallet, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
@@ -44,7 +44,7 @@ const GROUPS = [
     { to: "/analytics", label: "Analytics", icon: PieChart },
     { to: "/assistant", label: "AI Assistant", icon: Bot },
   ] },
-  { title: "ACCOUNT", items: [{ to: "/settings", label: "Enterprise Profile", icon: Settings }] },
+  { title: "ACCOUNT", items: [{ to: "/settings", label: "Enterprise Profile", icon: Settings }, { to: "/help", label: "Fix a problem", icon: LifeBuoy }] },
 ] as const;
 
 export function AppHeader() {
