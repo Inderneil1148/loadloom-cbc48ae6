@@ -53,11 +53,18 @@ function Admin() {
     },
   });
   const update = useMutation({
-    mutationFn: async ({ id, patch }: { id: string; patch: { plan?: string; status?: string; requested_plan?: string } }) => {
+    mutationFn: async ({ id, userId, patch }: { id: string; userId: string; patch: { plan?: string; status?: string; requested_plan?: string } }) => {
       const { error } = await supabase.from("subscriptions").update(patch).eq("id", id);
       if (error) throw error;
+      // Keep the Payments tab in sync: activating a plan clears any waiting payment.
+      if (patch.status === "active" && patch.plan && patch.plan !== "free") {
+        const { error: e2 } = await supabase.from("plan_payments")
+          .update({ status: "approved" })
+          .eq("user_id", userId).eq("status", "pending");
+        if (e2) throw e2;
+      }
     },
-    onSuccess: () => { toast.success("Saved"); qc.invalidateQueries({ queryKey: ["admin-subs"] }); qc.invalidateQueries({ queryKey: ["plan"] }); },
+    onSuccess: () => { toast.success("Saved"); qc.invalidateQueries({ queryKey: ["admin-subs"] }); qc.invalidateQueries({ queryKey: ["admin-plan-payments"] }); qc.invalidateQueries({ queryKey: ["plan"] }); },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Couldn't save"),
   });
   if (isPending) return <Skeleton className="h-64 w-full" />;
@@ -96,17 +103,17 @@ function Admin() {
                 <p className="mt-1 text-xs">Requested: <b>{TIER_NAMES[r.requested_plan as Tier]}</b></p>
               </div>
               {r.status === "pending" && (
-                <Button size="sm" variant="action" onClick={() => update.mutate({ id: r.id, patch: { plan: r.requested_plan, status: "active" } })}><Check /> Approve {TIER_NAMES[r.requested_plan as Tier]}</Button>
+                <Button size="sm" variant="action" onClick={() => update.mutate({ id: r.id, userId: r.user_id, patch: { plan: r.requested_plan, status: "active" } })}><Check /> Approve {TIER_NAMES[r.requested_plan as Tier]}</Button>
               )}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <label className="text-xs text-muted-foreground">Plan{" "}
-                <select aria-label={`Plan for ${r.email}`} className={sel} value={r.plan} onChange={(e) => update.mutate({ id: r.id, patch: { plan: e.target.value, requested_plan: e.target.value, status: "active" } })}>
+                <select aria-label={`Plan for ${r.email}`} className={sel} value={r.plan} onChange={(e) => update.mutate({ id: r.id, userId: r.user_id, patch: { plan: e.target.value, requested_plan: e.target.value, status: "active" } })}>
                   {TIER_ORDER.map((t) => <option key={t} value={t}>{TIER_NAMES[t]}</option>)}
                 </select>
               </label>
               <label className="text-xs text-muted-foreground">Status{" "}
-                <select aria-label={`Status for ${r.email}`} className={sel} value={r.status} onChange={(e) => update.mutate({ id: r.id, patch: { status: e.target.value } })}>
+                <select aria-label={`Status for ${r.email}`} className={sel} value={r.status} onChange={(e) => update.mutate({ id: r.id, userId: r.user_id, patch: { status: e.target.value } })}>
                   <option value="active">Active</option><option value="pending">Pending</option><option value="suspended">Suspended</option>
                 </select>
               </label>
