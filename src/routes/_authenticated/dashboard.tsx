@@ -94,6 +94,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background pb-20 lg:pb-0">
+      <DashboardSplash />
       <AppHeader />
 
       <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-5 sm:py-8 lg:ml-60 lg:w-auto lg:px-7">

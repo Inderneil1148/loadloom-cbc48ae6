@@ -45,7 +45,7 @@ export function DashboardSplash() {
         LoadLoom
       </span>
       <span className="splash-bar mt-3 h-1 w-24 origin-left rounded-full bg-accent" />
-      <span className="splash-tagline eyebrow mt-4 text-navy-muted [color:var(--sidebar-foreground)]">
+      <span className="splash-tagline eyebrow mt-4 text-navy-foreground/70">
         Dispatch Command Centre
       </span>
     </div>
