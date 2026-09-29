@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AppHeader } from "@/components/app/AppHeader";
+import { DashboardSplash } from "@/components/app/DashboardSplash";
 import { supabase } from "@/integrations/supabase/client";
 import { formatINR } from "@/lib/plans";
 import { fetchDashboard, type DashboardData } from "@/lib/dashboard-data";
