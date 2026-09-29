@@ -89,7 +89,7 @@ export function AppHeader() {
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-3">
         <div className="mb-4 flex items-center gap-2 border-b border-sidebar-border px-2 pb-4 text-sidebar-foreground">
           <Building2 className="size-4 shrink-0" />
-          <div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold text-sidebar-accent-foreground">Your operations</p><p className="truncate text-[10px]">{TIER_NAMES[tier]} plan{sub?.status === "pending" ? ` · ${TIER_NAMES[sub.requested_plan as keyof typeof TIER_NAMES]} requested` : ""}</p></div>
+          <Link to="/billing" onClick={() => setMenuOpen(false)} className="min-w-0 flex-1"><p className="truncate text-xs font-semibold text-sidebar-accent-foreground">Your operations</p><p className="truncate text-[10px]">{TIER_NAMES[tier]} plan{sub?.status === "pending" ? ` · ${TIER_NAMES[sub.requested_plan as keyof typeof TIER_NAMES]} requested` : ""}</p></Link>
           {!isDemo && tier !== "fleet" && <Link to="/choose-plan" onClick={() => setMenuOpen(false)} className="shrink-0 rounded bg-accent px-2 py-1 text-[10px] font-semibold text-accent-foreground">Upgrade</Link>}
         </div>
         {GROUPS.map((group) => (
