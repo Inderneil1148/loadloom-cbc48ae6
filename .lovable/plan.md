@@ -26,7 +26,8 @@ Until you approve, the user uses the app on the Free plan (same as now).
 4. **Confirmation email**: in LoadLoom navy and orange: "We received your payment for the Starter plan (₹999). Your plan will start working within 24 hours." Also a short alert email to you (inderneilkanagali@gmail.com) so you know to check.
 5. **Admin panel, new "Payments to verify" tab**: each submission shows the user, plan, amount, reference, screenshot preview, and date. Buttons: **Approve** (turns the plan on) or **Reject** (with a note). The existing plan controls stay as they are.
 6. **Admin, Plan settings**: a place to upload your UPI QR image and type your UPI ID, so you can change them any time.
-7. **Dashboard banner** for pending users: "Payment under review. Your plan starts within 24 hours."
+7. **Mini bar at the top of every app page, only for users who chose a paid plan and submitted a payment**: "Your Growth plan will be activated within 24 hours." Free-plan users never see it, and it disappears once you approve. Anyone who picked a paid plan but hasn't paid yet gets a small "Complete payment" link instead.
+8. **Free access while waiting**: after submitting the screenshot, the user goes straight to the dashboard and uses everything in the Free plan until you approve.
 
 ## What I need from you
 
