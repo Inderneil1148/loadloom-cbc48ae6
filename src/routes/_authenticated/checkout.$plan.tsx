@@ -61,7 +61,7 @@ function Checkout() {
   });
 
   useEffect(() => {
-    if (pay?.qrUrl) return setQr(pay.qrUrl);
+    if (pay?.qrUrl) { setQr(pay.qrUrl); return; }
     if (pay?.upi_id && plan) {
       const uri = `upi://pay?pa=${encodeURIComponent(pay.upi_id)}&pn=${encodeURIComponent(pay.payee_name || "LoadLoom")}&am=${price}&cu=INR&tn=${encodeURIComponent(`LoadLoom ${TIER_NAMES[plan]} plan`)}`;
       QRCode.toDataURL(uri, { width: 480, margin: 1 }).then(setQr).catch(() => setQr(null));

@@ -24,7 +24,7 @@ export function AdminPayments() {
     },
   });
   const act = useMutation({
-    mutationFn: async ({ row, approve, note }: { row: { id: string; user_id: string; plan: string }; approve: boolean; note?: string }) => {
+    mutationFn: async ({ row, approve, note }: { row: { id: string; user_id: string; plan: string }; approve: boolean; note?: string | undefined }) => {
       const { error } = await supabase.from("plan_payments").update({ status: approve ? "approved" : "rejected", admin_note: note ?? null }).eq("id", row.id);
       if (error) throw error;
       const patch = approve ? { plan: row.plan, requested_plan: row.plan, status: "active" } : { status: "pending" };
