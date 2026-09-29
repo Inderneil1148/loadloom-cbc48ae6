@@ -86,17 +86,7 @@ const fmtDate = (d: string | null) =>
   d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "—";
 
 function Dashboard() {
-  const queryClient = useQueryClient();
   const { data, isPending, error } = useQuery({ queryKey: ["dashboard"], queryFn: fetchDashboard });
-  const sample = useMutation({
-    mutationFn: loadSampleData,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
-      toast.success("Sample records added");
-    },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "Couldn't add sample records"),
-  });
-
 
   const empty =
     data && !data.orders.length && !data.vehicles.length && !data.invoices.length && !data.payments.length;
