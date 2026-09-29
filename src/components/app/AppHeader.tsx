@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
 import { usePlan } from "@/hooks/use-plan";
+import { NotificationBell } from "@/components/app/NotificationBell";
 import { FEATURE_MIN, TIER_NAMES, type Feature } from "@/lib/plans";
 
 const LOCKS: Record<string, Feature> = {
@@ -124,11 +125,14 @@ export function AppHeader() {
                <Link to="/dashboard" aria-label="Return to dashboard"><LayoutDashboard className="size-4" /><span>Dashboard</span></Link>
              </Button>
            )}
-          {isDemo ? (
-            <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/pricing">Get LoadLoom</Link></Button>
-          ) : (
-            <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/orders" search={{ new: true }}><Plus /> <span className="hidden min-[390px]:inline">New Load</span><span className="min-[390px]:hidden">New</span></Link></Button>
-          )}
+          <div className="flex shrink-0 items-center gap-1">
+            {!isDemo && <NotificationBell />}
+            {isDemo ? (
+              <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/pricing">Get LoadLoom</Link></Button>
+            ) : (
+              <Button asChild variant="action" size="sm" className="shrink-0"><Link to="/orders" search={{ new: true }}><Plus /> <span className="hidden min-[390px]:inline">New Load</span><span className="min-[390px]:hidden">New</span></Link></Button>
+            )}
+          </div>
         </div>
       </header>
       {isDemo && (
