@@ -51,7 +51,7 @@ function Checkout() {
     queryKey: ["payment-settings", plan],
     queryFn: async () => {
       // Record the chosen paid plan first — payment details are only readable once a paid plan is requested.
-      await supabase.rpc("request_plan", { _plan: plan });
+      if (plan) await supabase.rpc("request_plan", { _plan: plan });
       const { data } = await supabase.from("payment_settings").select("upi_id, payee_name, qr_path").maybeSingle();
       let qrUrl: string | null = null;
       if (data?.qr_path) {
