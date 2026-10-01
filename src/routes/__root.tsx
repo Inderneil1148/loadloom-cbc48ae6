@@ -89,6 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "LoadLoom" },
       { name: "google-site-verification", content: "lRw3m5r04pSTV1MHfpBdXCGF462jhaFolNl6zqugv-E" },
+      { name: "google-adsense-account", content: "ca-pub-2111917614213434" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
