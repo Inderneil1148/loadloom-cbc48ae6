@@ -14,8 +14,11 @@ import { DEMO_EMAIL } from "@/lib/demo";
 
 export const Route = createFileRoute("/auth")({
   staticData: { sitemap: false },
-  validateSearch: (search: Record<string, unknown>): { mode?: "signup" } =>
-    search["mode"] === "signup" ? { mode: "signup" } : {},
+  validateSearch: (search: Record<string, unknown>): { mode?: "signup"; next?: string } => {
+    const n = search["next"];
+    const next = typeof n === "string" && n.startsWith("/") && !n.startsWith("//") ? n : undefined;
+    return { ...(search["mode"] === "signup" ? { mode: "signup" as const } : {}), ...(next ? { next } : {}) };
+  },
 
   head: () => ({
     meta: [
@@ -32,7 +35,7 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
-  const { mode } = Route.useSearch();
+  const { mode, next } = Route.useSearch();
   const navigate = useNavigate();
   const { session, loading } = useSession();
   const [isSignUp, setIsSignUp] = useState(mode === "signup");
@@ -41,14 +44,16 @@ function AuthPage() {
   const [businessName, setBusinessName] = useState("");
   const [busy, setBusy] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
+  const returnUrl = () => (next ? `${window.location.origin}/auth?next=${encodeURIComponent(next)}` : window.location.origin);
 
   useEffect(() => {
     if (loading || !session) return;
+    if (next) { window.location.href = next; return; }
     const u = session.user;
     const isNew = Date.now() - new Date(u.created_at).getTime() < 7 * 86400_000;
     const picked = localStorage.getItem(planPickedKey(u.id));
     navigate({ to: isNew && !picked && u.email !== DEMO_EMAIL ? "/choose-plan" : "/dashboard", replace: true });
-  }, [loading, session, navigate]);
+  }, [loading, session, navigate, next]);
 
   async function handleOAuth(provider: "google" | "apple") {
     setBusy(true);
