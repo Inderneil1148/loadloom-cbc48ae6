@@ -59,7 +59,7 @@ function AuthPage() {
     setBusy(true);
     try {
       const result = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: window.location.origin,
+        redirect_uri: returnUrl(),
       });
       if (result.error) throw result.error;
       // redirected: browser is leaving for the provider — nothing to do
@@ -78,7 +78,7 @@ function AuthPage() {
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: returnUrl(),
             data: { business_name: businessName, requested_plan: "free" },
           },
         });
@@ -87,10 +87,12 @@ function AuthPage() {
           setCheckEmail(true);
           return;
         }
+        if (next) { window.location.href = next; return; }
         navigate({ to: "/choose-plan", replace: true });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        if (next) { window.location.href = next; return; }
         navigate({ to: "/dashboard", replace: true });
       }
     } catch (error) {
