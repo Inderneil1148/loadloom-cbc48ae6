@@ -1,7 +1,7 @@
 import logoIcon from "@/assets/loadloom-icon.png.asset.json";
 import { DEMO_EMAIL } from "@/lib/demo";
-import { useEffect, useState } from "react";
-import { planPickedKey, useLatestPlanPayment } from "@/hooks/use-plan-payment";
+import { useState } from "react";
+import { useLatestPlanPayment } from "@/hooks/use-plan-payment";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { LifeBuoy, BarChart3, Bot, Building2, ChevronRight, FileSignature, Gauge, Lock, PieChart, Radar, ClipboardList, CreditCard, FileText, LayoutDashboard, Layers3, LogOut, MapPin, Menu, Package, Plus, Settings, Truck, UserRound, UsersRound, Wallet, X } from "lucide-react";
@@ -53,19 +53,10 @@ export function AppHeader() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { tier, sub, can, loading: planLoading } = usePlan();
-  const { data: payment, isPending: paymentLoading } = useLatestPlanPayment();
+  const { tier, sub, can } = usePlan();
+  const { data: payment } = useLatestPlanPayment();
   const isDemo = session?.user.email === DEMO_EMAIL;
 
-  // First visit after sign-up (including Google/Apple): send to the plan picker once.
-  useEffect(() => {
-    const u = session?.user;
-    if (!u || isDemo || planLoading || paymentLoading || !sub) return;
-    const isNew = Date.now() - new Date(u.created_at).getTime() < 7 * 86400_000;
-    if (isNew && sub.plan === "free" && sub.requested_plan === "free" && !payment && !localStorage.getItem(planPickedKey(u.id))) {
-      navigate({ to: "/choose-plan", replace: true });
-    }
-  }, [session, isDemo, planLoading, paymentLoading, sub, payment, navigate]);
   const page = GROUPS.map((g) => g.items.find((item) => item.to === location.pathname)?.label).find(Boolean) ?? "Dashboard";
 
   async function signOut() {
@@ -112,7 +103,7 @@ export function AppHeader() {
     <>
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col bg-sidebar lg:flex">{nav}</aside>
       {menuOpen && <div className="fixed inset-0 z-50 lg:hidden"><div className="absolute inset-0 bg-navy/60" onClick={() => setMenuOpen(false)} /><aside className="relative flex h-full w-[min(18rem,85vw)] flex-col bg-sidebar shadow-lifted">{nav}</aside></div>}
-      <header className="sticky top-0 z-30 border-b border-border bg-card lg:ml-60">
+      <header className="sticky top-0 z-30 pt-[env(safe-area-inset-top)] border-b border-border bg-card lg:ml-60">
          <div className="mx-auto grid h-14 max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:px-5 lg:flex lg:justify-between">
           <Button variant="ghost" size="icon" aria-label="Open menu" className="lg:hidden" onClick={() => setMenuOpen(true)}><Menu /></Button>
            {location.pathname === "/dashboard" ? (
@@ -159,7 +150,7 @@ export function AppHeader() {
           Your plan is paused. Contact us to reactivate your account features.
         </div>
       )}
-      <div className="pointer-events-none fixed bottom-3 left-1/2 z-30 flex -translate-x-1/2 gap-1 rounded-md border border-border bg-card p-1 shadow-lifted lg:hidden">
+      <div className="pointer-events-none fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-1/2 z-30 flex -translate-x-1/2 gap-1 rounded-md border border-border bg-card p-1 shadow-lifted lg:hidden">
         {[
           { to: "/dashboard", icon: LayoutDashboard, label: "Home" },
           { to: "/orders", icon: ClipboardList, label: "Orders" },
