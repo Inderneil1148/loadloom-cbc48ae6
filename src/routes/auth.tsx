@@ -44,7 +44,7 @@ function AuthPage() {
   const [businessName, setBusinessName] = useState("");
   const [busy, setBusy] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
-  const returnUrl = () => (next ? `${window.location.origin}/auth?next=${encodeURIComponent(next)}` : window.location.origin);
+  const returnUrl = () => (next ? `${window.location.origin}/auth?next=${encodeURIComponent(next)}` : `${window.location.origin}/auth`);
 
   useEffect(() => {
     if (loading || !session) return;
