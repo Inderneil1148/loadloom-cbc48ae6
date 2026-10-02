@@ -9,8 +9,7 @@ import { ArrowRight, Building2, Lock, Mail } from "lucide-react";
 import { lovable } from "@/integrations/lovable";
 import logoIcon from "@/assets/loadloom-icon.png.asset.json";
 import { useSession } from "@/hooks/use-session";
-import { planPickedKey } from "@/hooks/use-plan-payment";
-import { DEMO_EMAIL } from "@/lib/demo";
+import { landingFor } from "@/lib/landing";
 
 export const Route = createFileRoute("/auth")({
   staticData: { sitemap: false },
@@ -89,8 +88,7 @@ function AuthPage() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        if (next) { window.location.href = next; return; }
-        navigate({ to: "/dashboard", replace: true });
+        // The session effect above sends them to the right page.
       }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Something went wrong. Try again.");
