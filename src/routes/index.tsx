@@ -1,4 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { landingFor } from "@/lib/landing";
 import {
   ClipboardList,
   Truck,
@@ -75,6 +78,12 @@ const PILLARS = [
 function Home() {
   const { data: settings } = usePlanSettings();
   const plans = plansWithSettings(settings);
+  const navigate = useNavigate();
+  useEffect(() => {
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (data.session) navigate({ to: await landingFor(data.session), replace: true });
+    });
+  }, [navigate]);
   return (
     <SiteShell>
       <section className="relative overflow-hidden bg-navy text-navy-foreground">

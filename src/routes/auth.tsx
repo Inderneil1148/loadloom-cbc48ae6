@@ -49,10 +49,7 @@ function AuthPage() {
   useEffect(() => {
     if (loading || !session) return;
     if (next) { window.location.href = next; return; }
-    const u = session.user;
-    const isNew = Date.now() - new Date(u.created_at).getTime() < 7 * 86400_000;
-    const picked = localStorage.getItem(planPickedKey(u.id));
-    navigate({ to: isNew && !picked && u.email !== DEMO_EMAIL ? "/choose-plan" : "/dashboard", replace: true });
+    landingFor(session).then((to) => navigate({ to, replace: true }));
   }, [loading, session, navigate, next]);
 
   async function handleOAuth(provider: "google" | "apple") {
