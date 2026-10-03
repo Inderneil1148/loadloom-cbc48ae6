@@ -1,9 +1,12 @@
-import type { ReactNode } from "react";
-import { Calculator, Truck } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, type ReactNode } from "react";
+import { Calculator, Truck, UserPlus, MapPin } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { formatINR } from "@/lib/plans";
 
 type FormValues = Record<string, string>;
@@ -19,6 +22,11 @@ const numberValue = (value: string | undefined) => {
 };
 
 export function OrderDispatchForm({ values, onChange }: { values: FormValues; onChange: (values: FormValues) => void }) {
+  const queryClient = useQueryClient();
+  const [adding, setAdding] = useState<"customer" | "site" | null>(null);
+  const [newName, setNewName] = useState("");
+  const [newExtra, setNewExtra] = useState("");
+  const [savingNew, setSavingNew] = useState(false);
   const { data, isPending } = useQuery({
     queryKey: ["dispatch-order-options"],
     queryFn: async () => {
@@ -53,13 +61,51 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
   const balance = Math.max(total - advance, 0);
 
   function selectCustomer(id: string) {
+    if (id === "__new__") { openAdd("customer"); return; }
     const selected = data?.customers.find((row) => row.id === id);
     onChange({ ...values, customer_id: id, customer_name: String(selected?.["name"] ?? "") });
   }
 
   function selectSite(id: string) {
+    if (id === "__new__") { openAdd("site"); return; }
     const selected = data?.sites.find((row) => row.id === id);
     onChange({ ...values, site_id: id, site: String(selected?.["name"] ?? "") });
+  }
+
+  function openAdd(kind: "customer" | "site") {
+    setNewName("");
+    setNewExtra("");
+    setAdding(kind);
+  }
+
+  async function saveNew() {
+    if (!adding) return;
+    const name = newName.trim();
+    if (!name) { toast.error(adding === "customer" ? "Customer name is required" : "Site name is required"); return; }
+    setSavingNew(true);
+    try {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) throw new Error("Please sign in again");
+      const owner_id = userData.user.id;
+      if (adding === "customer") {
+        const { data: row, error } = await supabase.from("customers").insert({ owner_id, name, phone: newExtra.trim() || null }).select("id, name").single();
+        if (error) throw error;
+        await queryClient.invalidateQueries({ queryKey: ["dispatch-order-options"] });
+        onChange({ ...values, customer_id: row.id, customer_name: row.name });
+        toast.success("Customer added");
+      } else {
+        const { data: row, error } = await supabase.from("delivery_sites").insert({ owner_id, name, address: newExtra.trim() || null }).select("id, name").single();
+        if (error) throw error;
+        await queryClient.invalidateQueries({ queryKey: ["dispatch-order-options"] });
+        onChange({ ...values, site_id: row.id, site: row.name });
+        toast.success("Delivery site added");
+      }
+      setAdding(null);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Couldn't save");
+    } finally {
+      setSavingNew(false);
+    }
   }
 
   function selectMaterial(name: string) {
@@ -84,12 +130,14 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
           <select id="dispatch-customer" className={selectClass} value={values["customer_id"] ?? ""} onChange={(event) => selectCustomer(event.target.value)} disabled={isPending}>
             <option value="">Select customer</option>
             {data?.customers.map((row) => <option key={row.id} value={row.id}>{String(row["name"])}</option>)}
+            <option value="__new__">+ Add new customer</option>
           </select>
         </Field>
         <Field label="Project Delivery Destination Site" htmlFor="dispatch-site" required>
           <select id="dispatch-site" className={selectClass} value={values["site_id"] ?? ""} onChange={(event) => selectSite(event.target.value)} disabled={isPending}>
             <option value="">Select delivery site</option>
             {data?.sites.map((row) => <option key={row.id} value={row.id}>{String(row["name"])}</option>)}
+            <option value="__new__">+ Add new site</option>
           </select>
         </Field>
       </div>
@@ -163,6 +211,34 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
         <p className="text-xs text-muted-foreground">Add customers, delivery sites, and materials from their menu pages before authorizing a dispatch.</p>
       ) : null}
       <div className="flex items-center gap-2 text-xs text-muted-foreground"><Truck className="size-4" /> Truck and driver can be assigned now or later from Deliveries.</div>
+
+      <Dialog open={adding !== null} onOpenChange={(open) => { if (!open) setAdding(null); }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {adding === "customer" ? <UserPlus className="size-5 text-accent" /> : <MapPin className="size-5 text-accent" />}
+              {adding === "customer" ? "Add new customer" : "Add new delivery site"}
+            </DialogTitle>
+            <DialogDescription>
+              {adding === "customer" ? "Saved to your Customers page and selected here." : "Saved to your Delivery Sites page and selected here."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="new-entity-name">{adding === "customer" ? "Customer name" : "Site name"} *</Label>
+              <Input id="new-entity-name" value={newName} onChange={(event) => setNewName(event.target.value)} placeholder={adding === "customer" ? "e.g. Shree Constructions" : "e.g. Hinjewadi Phase 2"} autoFocus />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="new-entity-extra">{adding === "customer" ? "Phone (optional)" : "Address (optional)"}</Label>
+              <Input id="new-entity-extra" value={newExtra} onChange={(event) => setNewExtra(event.target.value)} placeholder={adding === "customer" ? "e.g. 98220 12345" : "e.g. Survey No. 42, Pune"} />
+            </div>
+            <div className="flex gap-2">
+              <Button type="button" variant="outline" className="flex-1" onClick={() => setAdding(null)} disabled={savingNew}>Cancel</Button>
+              <Button type="button" variant="action" className="flex-1" onClick={() => void saveNew()} disabled={savingNew}>{savingNew ? "Saving…" : "Save & select"}</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
