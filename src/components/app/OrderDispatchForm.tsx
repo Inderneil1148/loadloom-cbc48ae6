@@ -22,6 +22,11 @@ const numberValue = (value: string | undefined) => {
 };
 
 export function OrderDispatchForm({ values, onChange }: { values: FormValues; onChange: (values: FormValues) => void }) {
+  const queryClient = useQueryClient();
+  const [adding, setAdding] = useState<"customer" | "site" | null>(null);
+  const [newName, setNewName] = useState("");
+  const [newExtra, setNewExtra] = useState("");
+  const [savingNew, setSavingNew] = useState(false);
   const { data, isPending } = useQuery({
     queryKey: ["dispatch-order-options"],
     queryFn: async () => {
