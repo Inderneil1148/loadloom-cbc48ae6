@@ -1,0 +1,1 @@
+ALTER TABLE public.delivery_sites ADD COLUMN latitude double precision, ADD COLUMN longitude double precision;
