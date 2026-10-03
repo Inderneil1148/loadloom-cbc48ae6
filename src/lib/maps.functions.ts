@@ -34,7 +34,7 @@ function queryFromUrl(url: string): string | null {
     const q = u.searchParams.get("q") ?? u.searchParams.get("query");
     if (q) return q;
     const place = u.pathname.match(/\/maps\/place\/([^/]+)/);
-    if (place) return decodeURIComponent(place[1]).replace(/\+/g, " ");
+    if (place?.[1]) return decodeURIComponent(place[1]).replace(/\+/g, " ");
   } catch {
     /* ignore */
   }
