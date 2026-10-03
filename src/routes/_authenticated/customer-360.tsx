@@ -1,5 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { MessageCircle, Phone } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { MessageCircle, Phone, UserPlus } from "lucide-react";
 import { AppPage, StatCard } from "@/components/app/PlanGate";
 import { StatusBadge, fmtDate } from "@/components/app/RecordManager";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,15 @@ function C360() {
   const navigate = useNavigate();
   const { data, isPending } = useOps();
   if (isPending || !data) return <Skeleton className="h-64 w-full" />;
-  if (!data.customers.length) return <p className="rounded-md border border-border bg-card p-8 text-center text-sm text-muted-foreground">Add a customer first on the Customers page.</p>;
+  if (!data.customers.length)
+    return (
+      <div className="rounded-md border border-border bg-card p-8 text-center">
+        <p className="text-sm text-muted-foreground">Add a customer first to see their full account here.</p>
+        <Button asChild variant="action" className="mt-4">
+          <Link to="/customers" search={{ new: true }}><UserPlus className="size-4" /> Add customer</Link>
+        </Button>
+      </div>
+    );
   const c = data.customers.find((x) => x.id === id) ?? data.customers[0]!;
   const match = (r: { customer_id?: string | null; customer_name?: string }) => r.customer_id === c.id || r.customer_name === c.name;
   const orders = data.orders.filter(match);
