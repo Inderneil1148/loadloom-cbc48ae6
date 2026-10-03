@@ -24,7 +24,7 @@ function coordsFromUrl(url: string): { lat: number; lng: number } | null {
   const bang = url.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
   if (bang) return { lat: Number(bang[1]), lng: Number(bang[2]) };
   const q = url.match(/[?&](?:q|query|ll)=(-?\d+\.\d+),(-?\d+\.\d+)/);
-  if (q) return { lat: Number(q[1]), lng: Number(q[2]) };
+  if (q?.[1] && q[2]) return { lat: Number(q[1]), lng: Number(q[2]) };
   return null;
 }
 
