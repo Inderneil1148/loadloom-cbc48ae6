@@ -89,7 +89,7 @@ export const FREE_PLAN = {
   audience: "For small suppliers trying LoadLoom with essential dispatch tools.",
   highlights: [
     "Orders with automatic totals",
-    "Dispatch board, deliveries and invoices",
+    "Dispatch board and deliveries",
     "Payments and outstanding tracking",
     "Fleet intelligence overview",
   ],
@@ -126,9 +126,10 @@ export type Tier = "free" | PlanId;
 export const TIER_ORDER: Tier[] = ["free", "starter", "growth", "fleet"];
 export const TIER_NAMES: Record<Tier, string> = { free: "Free", starter: "Starter", growth: "Growth", fleet: "Fleet" };
 
-export type Feature = "csv_export" | "quotations" | "reports" | "command_centre" | "analytics" | "ai_tools";
+export type Feature = "csv_export" | "invoices" | "quotations" | "reports" | "command_centre" | "analytics" | "ai_tools";
 export const FEATURE_MIN: Record<Feature, Tier> = {
   csv_export: "starter",
+  invoices: "starter",
   quotations: "growth",
   reports: "growth",
   command_centre: "fleet",
@@ -137,6 +138,7 @@ export const FEATURE_MIN: Record<Feature, Tier> = {
 };
 export const FEATURE_LABEL: Record<Feature, string> = {
   csv_export: "CSV export",
+  invoices: "Invoices & bill printing",
   quotations: "Quotations",
   reports: "Reports",
   command_centre: "Dispatch Command Centre",
@@ -154,8 +156,8 @@ export const LIMITS: Record<Tier, { trucks: number | null; customers: number | n
 };
 
 export const SIGNUP_TIERS: { id: Tier; name: string; price: number; tagline: string; points: string[] }[] = [
-  { id: "free", name: "Free", price: 0, tagline: "Try LoadLoom", points: ["20 orders / month", "Up to 4 trucks, 5 customers", "Dispatch, invoices, payments"] },
-  { id: "starter", name: "Starter", price: 999, tagline: "Essential Dispatch", points: ["Unlimited orders & trucks", "10 customers", "CSV export"] },
+  { id: "free", name: "Free", price: 0, tagline: "Try LoadLoom", points: ["20 orders / month", "Up to 4 trucks, 5 customers", "Dispatch and payments"] },
+  { id: "starter", name: "Starter", price: 999, tagline: "Essential Dispatch", points: ["Unlimited orders & trucks", "10 customers", "Invoices & bill printing"] },
   { id: "growth", name: "Growth", price: 2499, tagline: "Full Operations", points: ["Quotations → Convert to Order", "Unlimited customers", "12 reports"] },
   { id: "fleet", name: "Fleet", price: 4999, tagline: "Advanced Operations", points: ["Command Centre", "Advanced analytics", "AI tools"] },
 ];

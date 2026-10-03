@@ -245,3 +245,10 @@
 }
 
 @media (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }
+
+/* Print only the bill when printing from the bill dialog */
+@media print {
+  body * { visibility: hidden; }
+  #ll-bill, #ll-bill * { visibility: visible; }
+  #ll-bill { position: fixed; inset: 0; padding: 32px; background: #fff; overflow: visible; }
+}

@@ -43,3 +43,7 @@ instead of the spec's Firebase/React Router.
 
 - [x] UPI QR payment flow: choose plan, pay + screenshot, 24h bar, emails, admin verify
 - [ ] Owner to add UPI ID / QR in Admin > Payments
+
+## Current
+- [x] Printable bill (common template) for each payment on the Payments page
+- [x] Invoice making/printing gated to paid plans; Free users get an upgrade popup
