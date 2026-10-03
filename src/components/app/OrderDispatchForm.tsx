@@ -130,12 +130,14 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
           <select id="dispatch-customer" className={selectClass} value={values["customer_id"] ?? ""} onChange={(event) => selectCustomer(event.target.value)} disabled={isPending}>
             <option value="">Select customer</option>
             {data?.customers.map((row) => <option key={row.id} value={row.id}>{String(row["name"])}</option>)}
+            <option value="__new__">+ Add new customer</option>
           </select>
         </Field>
         <Field label="Project Delivery Destination Site" htmlFor="dispatch-site" required>
           <select id="dispatch-site" className={selectClass} value={values["site_id"] ?? ""} onChange={(event) => selectSite(event.target.value)} disabled={isPending}>
             <option value="">Select delivery site</option>
             {data?.sites.map((row) => <option key={row.id} value={row.id}>{String(row["name"])}</option>)}
+            <option value="__new__">+ Add new site</option>
           </select>
         </Field>
       </div>
