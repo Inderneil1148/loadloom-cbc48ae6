@@ -173,6 +173,8 @@ export type Database = {
           contact_name: string | null
           created_at: string
           id: string
+          latitude: number | null
+          longitude: number | null
           map_url: string | null
           name: string
           owner_id: string
@@ -184,6 +186,8 @@ export type Database = {
           contact_name?: string | null
           created_at?: string
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           map_url?: string | null
           name: string
           owner_id?: string
@@ -195,6 +199,8 @@ export type Database = {
           contact_name?: string | null
           created_at?: string
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           map_url?: string | null
           name?: string
           owner_id?: string
