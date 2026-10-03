@@ -211,6 +211,34 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
         <p className="text-xs text-muted-foreground">Add customers, delivery sites, and materials from their menu pages before authorizing a dispatch.</p>
       ) : null}
       <div className="flex items-center gap-2 text-xs text-muted-foreground"><Truck className="size-4" /> Truck and driver can be assigned now or later from Deliveries.</div>
+
+      <Dialog open={adding !== null} onOpenChange={(open) => { if (!open) setAdding(null); }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {adding === "customer" ? <UserPlus className="size-5 text-accent" /> : <MapPin className="size-5 text-accent" />}
+              {adding === "customer" ? "Add new customer" : "Add new delivery site"}
+            </DialogTitle>
+            <DialogDescription>
+              {adding === "customer" ? "Saved to your Customers page and selected here." : "Saved to your Delivery Sites page and selected here."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="new-entity-name">{adding === "customer" ? "Customer name" : "Site name"} *</Label>
+              <Input id="new-entity-name" value={newName} onChange={(event) => setNewName(event.target.value)} placeholder={adding === "customer" ? "e.g. Shree Constructions" : "e.g. Hinjewadi Phase 2"} autoFocus />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="new-entity-extra">{adding === "customer" ? "Phone (optional)" : "Address (optional)"}</Label>
+              <Input id="new-entity-extra" value={newExtra} onChange={(event) => setNewExtra(event.target.value)} placeholder={adding === "customer" ? "e.g. 98220 12345" : "e.g. Survey No. 42, Pune"} />
+            </div>
+            <div className="flex gap-2">
+              <Button type="button" variant="outline" className="flex-1" onClick={() => setAdding(null)} disabled={savingNew}>Cancel</Button>
+              <Button type="button" variant="action" className="flex-1" onClick={() => void saveNew()} disabled={savingNew}>{savingNew ? "Saving…" : "Save & select"}</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
