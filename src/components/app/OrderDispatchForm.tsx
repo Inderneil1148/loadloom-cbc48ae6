@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { formatINR } from "@/lib/plans";
+import { resolveMapLink } from "@/lib/maps.functions";
 
 type FormValues = Record<string, string>;
 type OptionRow = { id: string; [key: string]: string | number | null };
@@ -26,6 +27,9 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
   const [adding, setAdding] = useState<"customer" | "site" | null>(null);
   const [newName, setNewName] = useState("");
   const [newExtra, setNewExtra] = useState("");
+  const [newMapLink, setNewMapLink] = useState("");
+  const [newCoords, setNewCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [resolving, setResolving] = useState(false);
   const [savingNew, setSavingNew] = useState(false);
   const { data, isPending } = useQuery({
     queryKey: ["dispatch-order-options"],
@@ -75,7 +79,26 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
   function openAdd(kind: "customer" | "site") {
     setNewName("");
     setNewExtra("");
+    setNewMapLink("");
+    setNewCoords(null);
     setAdding(kind);
+  }
+
+  async function resolveLink() {
+    const link = newMapLink.trim();
+    if (!link) { toast.error("Paste a Google Maps link first"); return; }
+    setResolving(true);
+    try {
+      const result = await resolveMapLink({ data: { url: link } });
+      setNewExtra(result.address);
+      setNewMapLink(result.mapUrl);
+      setNewCoords({ lat: result.latitude, lng: result.longitude });
+      toast.success("Location found — address filled in");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Couldn't read that link");
+    } finally {
+      setResolving(false);
+    }
   }
 
   async function saveNew() {
@@ -94,7 +117,14 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
         onChange({ ...values, customer_id: row.id, customer_name: row.name });
         toast.success("Customer added");
       } else {
-        const { data: row, error } = await supabase.from("delivery_sites").insert({ owner_id, name, address: newExtra.trim() || null }).select("id, name").single();
+        const { data: row, error } = await supabase.from("delivery_sites").insert({
+          owner_id,
+          name,
+          address: newExtra.trim() || null,
+          map_url: newMapLink.trim() || null,
+          latitude: newCoords?.lat ?? null,
+          longitude: newCoords?.lng ?? null,
+        }).select("id, name").single();
         if (error) throw error;
         await queryClient.invalidateQueries({ queryKey: ["dispatch-order-options"] });
         onChange({ ...values, site_id: row.id, site: row.name });
@@ -228,6 +258,16 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
               <Label htmlFor="new-entity-name">{adding === "customer" ? "Customer name" : "Site name"} *</Label>
               <Input id="new-entity-name" value={newName} onChange={(event) => setNewName(event.target.value)} placeholder={adding === "customer" ? "e.g. Shree Constructions" : "e.g. Hinjewadi Phase 2"} autoFocus />
             </div>
+            {adding === "site" && (
+              <div className="space-y-1.5">
+                <Label htmlFor="new-entity-map">Google Maps link (optional)</Label>
+                <div className="flex gap-2">
+                  <Input id="new-entity-map" value={newMapLink} onChange={(event) => setNewMapLink(event.target.value)} placeholder="Paste a Maps share link" />
+                  <Button type="button" variant="outline" onClick={() => void resolveLink()} disabled={resolving}>{resolving ? "Finding…" : "Get location"}</Button>
+                </div>
+                {newCoords && <p className="text-xs text-success">Location found: {newCoords.lat.toFixed(5)}, {newCoords.lng.toFixed(5)}</p>}
+              </div>
+            )}
             <div className="space-y-1.5">
               <Label htmlFor="new-entity-extra">{adding === "customer" ? "Phone (optional)" : "Address (optional)"}</Label>
               <Input id="new-entity-extra" value={newExtra} onChange={(event) => setNewExtra(event.target.value)} placeholder={adding === "customer" ? "e.g. 98220 12345" : "e.g. Survey No. 42, Pune"} />
