@@ -61,13 +61,51 @@ export function OrderDispatchForm({ values, onChange }: { values: FormValues; on
   const balance = Math.max(total - advance, 0);
 
   function selectCustomer(id: string) {
+    if (id === "__new__") { openAdd("customer"); return; }
     const selected = data?.customers.find((row) => row.id === id);
     onChange({ ...values, customer_id: id, customer_name: String(selected?.["name"] ?? "") });
   }
 
   function selectSite(id: string) {
+    if (id === "__new__") { openAdd("site"); return; }
     const selected = data?.sites.find((row) => row.id === id);
     onChange({ ...values, site_id: id, site: String(selected?.["name"] ?? "") });
+  }
+
+  function openAdd(kind: "customer" | "site") {
+    setNewName("");
+    setNewExtra("");
+    setAdding(kind);
+  }
+
+  async function saveNew() {
+    if (!adding) return;
+    const name = newName.trim();
+    if (!name) { toast.error(adding === "customer" ? "Customer name is required" : "Site name is required"); return; }
+    setSavingNew(true);
+    try {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) throw new Error("Please sign in again");
+      const owner_id = userData.user.id;
+      if (adding === "customer") {
+        const { data: row, error } = await supabase.from("customers").insert({ owner_id, name, phone: newExtra.trim() || null }).select("id, name").single();
+        if (error) throw error;
+        await queryClient.invalidateQueries({ queryKey: ["dispatch-order-options"] });
+        onChange({ ...values, customer_id: row.id, customer_name: row.name });
+        toast.success("Customer added");
+      } else {
+        const { data: row, error } = await supabase.from("delivery_sites").insert({ owner_id, name, address: newExtra.trim() || null }).select("id, name").single();
+        if (error) throw error;
+        await queryClient.invalidateQueries({ queryKey: ["dispatch-order-options"] });
+        onChange({ ...values, site_id: row.id, site: row.name });
+        toast.success("Delivery site added");
+      }
+      setAdding(null);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Couldn't save");
+    } finally {
+      setSavingNew(false);
+    }
   }
 
   function selectMaterial(name: string) {
