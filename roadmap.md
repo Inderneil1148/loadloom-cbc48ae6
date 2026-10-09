@@ -4,7 +4,7 @@ Stack note: TanStack Start + Lovable Cloud (auth, database, storage, server func
 instead of the spec's Firebase/React Router.
 
 ## Stage 1 — Marketing site + auth (done)
-- [x] Design system: Midnight Navy / Construction Orange, Manrope + Inter
+- [x] Design system: LoadLoom Red / Yellow / White / Black, Manrope + Inter
 - [x] Public routes: /, /features, /pricing, /demo, /contact, /privacy, /terms
 - [x] Sign in / sign up with email + Google, /login redirect
 - [x] Protected shell with placeholder /dashboard
