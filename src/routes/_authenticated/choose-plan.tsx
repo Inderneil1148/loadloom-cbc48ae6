@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ArrowRight, Check } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import logoIcon from "@/assets/loadloom-icon.png.asset.json";
+import logoIcon from "@/assets/loadloom-icon.png";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
 import { usePlan } from "@/hooks/use-plan";
@@ -51,7 +51,7 @@ function ChoosePlan() {
     <div className="min-h-screen bg-navy px-4 py-10 text-navy-foreground">
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-center gap-3">
-          <img src={logoIcon.url} alt="LoadLoom" className="size-10 rounded-lg" />
+          <img src={logoIcon} alt="LoadLoom" className="size-10 rounded-lg" />
           <p className="text-xl font-extrabold">LoadLoom</p>
         </div>
         <h1 className="mt-6 text-center text-2xl font-extrabold sm:text-3xl">Choose your plan</h1>
