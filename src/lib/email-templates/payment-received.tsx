@@ -21,7 +21,7 @@ const PaymentReceived = ({ planName, amount, reference }: Props) => (
           {amount ? ` (${amount})` : ''}.
         </Text>
         <Section style={box}>
-          <Text style={{ ...text, margin: 0, color: '#0B132B', fontWeight: 'bold' }}>
+          <Text style={{ ...text, margin: 0, color: '#000000', fontWeight: 'bold' }}>
             Your plan will start working within 24 hours.
           </Text>
         </Section>
@@ -41,8 +41,8 @@ export const template = {
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Inter, Arial, sans-serif' }
 const container = { padding: '24px 25px' }
-const brand = { fontSize: '16px', fontWeight: 'bold' as const, color: '#F97316', margin: '0 0 12px' }
-const h1 = { fontSize: '22px', fontWeight: 'bold' as const, color: '#0B132B', margin: '0 0 16px', borderBottom: '3px solid #F97316', paddingBottom: '8px' }
+const brand = { fontSize: '16px', fontWeight: 'bold' as const, color: '#e33825', margin: '0 0 12px' }
+const h1 = { fontSize: '22px', fontWeight: 'bold' as const, color: '#000000', margin: '0 0 16px', borderBottom: '3px solid #e33825', paddingBottom: '8px' }
 const text = { fontSize: '14px', color: '#55575d', lineHeight: '1.6', margin: '0 0 14px' }
 const small = { fontSize: '12px', color: '#8a8c92', margin: '0 0 14px' }
-const box = { backgroundColor: '#fff4ec', borderLeft: '4px solid #F97316', borderRadius: '6px', padding: '14px', margin: '0 0 14px' }
+const box = { backgroundColor: '#ffde5f', borderLeft: '4px solid #e33825', borderRadius: '6px', padding: '14px', margin: '0 0 14px' }
