@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Download, Share, X } from "lucide-react";
-import logoIcon from "@/assets/loadloom-icon.png.asset.json";
+import logoIcon from "@/assets/loadloom-icon.png";
 import { Button } from "@/components/ui/button";
 
 const KEY = "ll-install-dismissed";
@@ -26,7 +26,7 @@ export function InstallPrompt() {
 
   return (
     <div role="dialog" aria-label="Install LoadLoom" className="fixed inset-x-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-[60] mx-auto flex max-w-md items-center gap-3 rounded-lg border border-navy-foreground/15 bg-navy p-3 text-navy-foreground shadow-lifted lg:bottom-4">
-      <img src={logoIcon.url} alt="" className="size-10 shrink-0 rounded-md" />
+      <img src={logoIcon} alt="" className="size-10 shrink-0 rounded-md" />
       <div className="min-w-0 flex-1 text-xs">
         <p className="text-sm font-bold">Install LoadLoom on your phone</p>
         {evt ? <p className="text-navy-foreground/70">Open it from your home screen like an app.</p>

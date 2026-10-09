@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import logoIcon from "@/assets/loadloom-icon.png.asset.json";
+import logoIcon from "@/assets/loadloom-icon.png";
 
 const SPLASH_KEY = "ll-splash-done";
 
@@ -47,7 +47,7 @@ export function DashboardSplash() {
       }`}
     >
       <img
-        src={logoIcon.url}
+        src={logoIcon}
         alt=""
         className="splash-icon size-20 rounded-xl shadow-lifted sm:size-24"
       />

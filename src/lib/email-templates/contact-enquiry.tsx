@@ -12,7 +12,7 @@ interface Props {
 
 const Row = ({ label, value }: { label: string; value?: string | undefined }) => (
   <Text style={row}>
-    <strong style={{ color: '#0B132B' }}>{label}:</strong> {value || '—'}
+    <strong style={{ color: '#000000' }}>{label}:</strong> {value || '—'}
   </Text>
 )
 
@@ -45,6 +45,6 @@ export const template = {
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Inter, Arial, sans-serif' }
 const container = { padding: '20px 25px' }
-const h1 = { fontSize: '22px', fontWeight: 'bold' as const, color: '#0B132B', margin: '0 0 20px', borderBottom: '3px solid #F97316', paddingBottom: '8px' }
+const h1 = { fontSize: '22px', fontWeight: 'bold' as const, color: '#000000', margin: '0 0 20px', borderBottom: '3px solid #e33825', paddingBottom: '8px' }
 const row = { fontSize: '14px', color: '#55575d', lineHeight: '1.5', margin: '0 0 8px' }
 const box = { backgroundColor: '#f6f7f9', borderRadius: '8px', padding: '14px', marginTop: '12px' }
