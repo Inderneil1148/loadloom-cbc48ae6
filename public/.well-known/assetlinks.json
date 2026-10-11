@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "online.loadloom.twa",
+        "sha256_cert_fingerprints": ["43:EF:E7:60:57:5A:47:A2:FF:4C:0B:EA:CA:D4:A9:86:4A:B1:8D:E7:42:68:06:B3:F9:AC:BD:E9:C4:DC:35:73"]
+      }
+    }]

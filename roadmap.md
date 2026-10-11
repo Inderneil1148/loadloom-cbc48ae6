@@ -1,51 +1,7 @@
-# LoadLoom roadmap
-
-Stack note: TanStack Start + Lovable Cloud (auth, database, storage, server functions)
-instead of the spec's Firebase/React Router.
-
-## Stage 1 — Marketing site + auth (done)
-- [x] Design system: LoadLoom Red / Yellow / White / Black, Manrope + Inter
-- [x] Public routes: /, /features, /pricing, /demo, /contact, /privacy, /terms
-- [x] Sign in / sign up with email + Google, /login redirect
-- [x] Protected shell with placeholder /dashboard
-
-## Stage 2 — Organization foundation
-- [ ] organizations, org_members, user_roles (separate table), subscription on org
-- [x] Plan entitlement config + admin-controlled pricing and limit enforcement
-- [ ] First-time onboarding wizard (business, units, first material)
-- [x] App shell: desktop sidebar, mobile bottom nav, quick add
-- [ ] Global search across records
-
-## Stage 3 — Core operations
-- [x] Customers, sites, materials, vehicles, drivers: basic records and contact links
-- [x] Orders + create order with calculations
-- [ ] Dispatch board and trips with controlled status transitions
-- [ ] Delivery proof (photo, signature, OTP, weighbridge slip) in storage
-
-## Stage 4 — Money
-- [ ] Quotations + Convert to Order
-- [ ] Invoices, payments, outstanding ledger
-
-## Stage 5 — Insight & extras
-- [ ] Reports, analytics, activity timeline, audit log
-- [ ] Settings (business, users, roles, subscription, notifications, import/export)
-- [ ] CSV import/export, PWA, driver experience, WhatsApp share, AI (Fleet)
-
-## Open items needing the user
-- [ ] Contact form currently only confirms on screen; needs a destination (inbox or stored enquiries)
-- [ ] Real company contact details, support email and legal review of privacy/terms
-
-- [x] Add/edit/delete screens for orders, trucks, deliveries, invoices, payments
-- [x] Mobile-first navigation, dispatch board, material page, record search/filter/CSV export
-- [x] Driver portal summary, customer directory, delivery sites, call and map links
-- [x] Branding: favicon, logo, footer "© 2026 The Social INK / INDERNEILK", contact enquiries emailed to inderneilkanagali@gmail.com
-- [x] Final full-app review
-
-- [x] UPI QR payment flow: choose plan, pay + screenshot, 24h bar, emails, admin verify
-- [ ] Owner to add UPI ID / QR in Admin > Payments
-
-## Current
-- [x] Printable bill (common template) for each payment on the Payments page
-- [x] Invoice making/printing gated to paid plans; Free users get an upgrade popup
-- [x] Launch compliance pass (legal pages, cookie consent, deletion requests, honest copy)
-- [ ] Registered address + phone for legal pages (waiting on owner)
+# Roadmap
+- [x] Mac desktop app (.zip, Apple Silicon + Intel)
+- [x] Windows desktop app (.zip)
+- [x] Android APK
+- [x] /download page with Mac, Windows, Android buttons + iPhone steps, linked in header/footer
+- [x] Contact form on /download ("we reply within 24 hours")
+- [ ] Optional: LoadLoom icon on the Mac/Windows apps (they currently use the default app icon)

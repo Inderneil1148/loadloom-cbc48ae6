@@ -16,6 +16,7 @@ import { Route as BrandRouteImport } from './routes/brand'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CookiePolicyRouteImport } from './routes/cookie-policy'
 import { Route as DemoRouteImport } from './routes/demo'
+import { Route as DownloadRouteImport } from './routes/download'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as McpRouteImport } from './routes/mcp'
@@ -51,6 +52,7 @@ import { Route as AuthenticatedSitesRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedTrucksRouteImport } from './routes/_authenticated/trucks'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedCheckoutPlanRouteImport } from './routes/_authenticated/checkout.$plan'
+import { Route as ApiPublicDownloadFileRouteImport } from './routes/api/public/download.$file'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -87,6 +89,11 @@ const CookiePolicyRoute = CookiePolicyRouteImport.update({
 const DemoRoute = DemoRouteImport.update({
   id: '/demo',
   path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DownloadRoute = DownloadRouteImport.update({
+  id: '/download',
+  path: '/download',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
@@ -269,6 +276,11 @@ const AuthenticatedCheckoutPlanRoute =
     path: '/checkout/$plan',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicDownloadFileRoute = ApiPublicDownloadFileRouteImport.update({
+  id: '/api/public/download/$file',
+  path: '/api/public/download/$file',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/lovable/email/auth/preview',
   path: '/lovable/email/auth/preview',
@@ -293,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
   '/demo': typeof DemoRoute
+  '/download': typeof DownloadRoute
   '/features': typeof FeaturesRoute
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
@@ -328,6 +341,7 @@ export interface FileRoutesByFullPath {
   '/trucks': typeof AuthenticatedTrucksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
+  '/api/public/download/$file': typeof ApiPublicDownloadFileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -339,6 +353,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
   '/demo': typeof DemoRoute
+  '/download': typeof DownloadRoute
   '/features': typeof FeaturesRoute
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
@@ -374,6 +389,7 @@ export interface FileRoutesByTo {
   '/trucks': typeof AuthenticatedTrucksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
+  '/api/public/download/$file': typeof ApiPublicDownloadFileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -387,6 +403,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
   '/demo': typeof DemoRoute
+  '/download': typeof DownloadRoute
   '/features': typeof FeaturesRoute
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
@@ -422,6 +439,7 @@ export interface FileRoutesById {
   '/_authenticated/trucks': typeof AuthenticatedTrucksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
+  '/api/public/download/$file': typeof ApiPublicDownloadFileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -435,6 +453,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookie-policy'
     | '/demo'
+    | '/download'
     | '/features'
     | '/login'
     | '/mcp'
@@ -470,6 +489,7 @@ export interface FileRouteTypes {
     | '/trucks'
     | '/.lovable/oauth/consent'
     | '/checkout/$plan'
+    | '/api/public/download/$file'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -481,6 +501,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookie-policy'
     | '/demo'
+    | '/download'
     | '/features'
     | '/login'
     | '/mcp'
@@ -516,6 +537,7 @@ export interface FileRouteTypes {
     | '/trucks'
     | '/.lovable/oauth/consent'
     | '/checkout/$plan'
+    | '/api/public/download/$file'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -528,6 +550,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookie-policy'
     | '/demo'
+    | '/download'
     | '/features'
     | '/login'
     | '/mcp'
@@ -563,6 +586,7 @@ export interface FileRouteTypes {
     | '/_authenticated/trucks'
     | '/.lovable/oauth/consent'
     | '/_authenticated/checkout/$plan'
+    | '/api/public/download/$file'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -576,6 +600,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CookiePolicyRoute: typeof CookiePolicyRoute
   DemoRoute: typeof DemoRoute
+  DownloadRoute: typeof DownloadRoute
   FeaturesRoute: typeof FeaturesRoute
   LoginRoute: typeof LoginRoute
   McpRoute: typeof McpRoute
@@ -586,6 +611,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  ApiPublicDownloadFileRoute: typeof ApiPublicDownloadFileRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -640,6 +666,13 @@ declare module '@tanstack/react-router' {
       path: '/demo'
       fullPath: '/demo'
       preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/download': {
+      id: '/download'
+      path: '/download'
+      fullPath: '/download'
+      preLoaderRoute: typeof DownloadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -887,6 +920,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCheckoutPlanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/download/$file': {
+      id: '/api/public/download/$file'
+      path: '/api/public/download/$file'
+      fullPath: '/api/public/download/$file'
+      preLoaderRoute: typeof ApiPublicDownloadFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/auth/preview': {
       id: '/lovable/email/auth/preview'
       path: '/lovable/email/auth/preview'
@@ -978,6 +1018,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CookiePolicyRoute: CookiePolicyRoute,
   DemoRoute: DemoRoute,
+  DownloadRoute: DownloadRoute,
   FeaturesRoute: FeaturesRoute,
   LoginRoute: LoginRoute,
   McpRoute: McpRoute,
@@ -989,6 +1030,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  ApiPublicDownloadFileRoute: ApiPublicDownloadFileRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
