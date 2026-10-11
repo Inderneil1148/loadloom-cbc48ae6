@@ -74,7 +74,7 @@ export function RequestDeletion() {
     mutationFn: async (reason: string) => {
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) throw new Error("Not signed in");
-      const { error } = await supabase.from("deletion_requests").insert({ user_id: u.user.id, email: u.user.email, reason: reason || null });
+      const { error } = await supabase.from("deletion_requests").insert({ user_id: u.user.id, email: u.user.email ?? null, reason: reason || null });
       if (error) throw error;
     },
     onSuccess: () => {

@@ -47,3 +47,5 @@ instead of the spec's Firebase/React Router.
 ## Current
 - [x] Printable bill (common template) for each payment on the Payments page
 - [x] Invoice making/printing gated to paid plans; Free users get an upgrade popup
+- [x] Launch compliance pass (legal pages, cookie consent, deletion requests, honest copy)
+- [ ] Registered address + phone for legal pages (waiting on owner)
