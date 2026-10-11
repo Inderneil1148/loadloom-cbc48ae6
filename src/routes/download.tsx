@@ -25,6 +25,8 @@ export const Route = createFileRoute("/download")({
     ],
     links: [{ rel: "canonical", href: "https://loadloom.online/download" }],
   }),
+  validateSearch: (s: Record<string, unknown>): { unavailable?: string } =>
+    typeof s.unavailable === "string" ? { unavailable: s.unavailable } : {},
   component: DownloadPage,
 });
 
@@ -47,6 +49,8 @@ function Steps({ items }: { items: string[] }) {
 }
 
 function DownloadPage() {
+  const { unavailable } = Route.useSearch();
+  const label = unavailable?.endsWith(".dmg") ? "Mac" : unavailable?.endsWith(".apk") ? "Android" : unavailable ? "Windows" : null;
   return (
     <SiteShell>
       <section className="border-b border-border bg-navy text-navy-foreground">
@@ -57,6 +61,11 @@ function DownloadPage() {
             Download for Mac, Windows or Android, or add it to your iPhone. No app store needed. Sign in with your
             usual account; your data and plan are the same everywhere, and updates arrive automatically.
           </p>
+          {label && (
+            <p role="status" className="mt-5 max-w-2xl rounded-md bg-secondary px-4 py-3 text-sm font-semibold text-secondary-foreground">
+              The {label} app is being prepared and isn't ready to download yet. Please check back soon, or use LoadLoom in your browser meanwhile.
+            </p>
+          )}
         </div>
       </section>
 
