@@ -734,6 +734,8 @@ export type Database = {
       }
       subscriptions: {
         Row: {
+          auto_pay: boolean
+          auto_pay_updated_at: string | null
           business_name: string | null
           created_at: string
           email: string | null
@@ -746,6 +748,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          auto_pay?: boolean
+          auto_pay_updated_at?: string | null
           business_name?: string | null
           created_at?: string
           email?: string | null
@@ -758,6 +762,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          auto_pay?: boolean
+          auto_pay_updated_at?: string | null
           business_name?: string | null
           created_at?: string
           email?: string | null

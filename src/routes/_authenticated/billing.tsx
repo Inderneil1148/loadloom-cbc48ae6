@@ -137,6 +137,7 @@ function BillingPage() {
                 <p className="mt-1 text-sm text-muted-foreground">
                   {setting ? `${formatINR(setting.price)} per month` : "—"}
                   {sub?.status === "suspended" && " · Paused"}
+                  {sub?.auto_pay && " · Auto pay: On"}
                 </p>
               </div>
               <div className="text-right text-xs text-muted-foreground">
