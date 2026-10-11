@@ -187,41 +187,6 @@ function Home() {
         </div>
       </section>
 
-      <section className="border-b border-border bg-navy text-navy-foreground">
-        <div className="mx-auto w-full max-w-6xl px-5 py-14 md:py-16">
-          <div className="flex items-start gap-4">
-            <Plug className="mt-1 size-6 shrink-0 text-accent" />
-            <div className="min-w-0">
-              <p className="eyebrow text-accent">AI plugin</p>
-              <h2 className="mt-2 text-2xl font-bold md:text-3xl">
-                Use LoadLoom inside your AI assistant
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-navy-foreground/70">
-                LoadLoom is also available as a custom MCP plugin. Add it to ChatGPT, Claude or any
-                other AI that supports MCP, sign in with your LoadLoom account, and ask about your
-                orders, customers and money owed — your data stays private to your business.
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {["ChatGPT", "Claude", "Cursor", "Any MCP-ready AI"].map((n) => (
-                  <span
-                    key={n}
-                    className="rounded-md border border-navy-foreground/20 px-3 py-1 text-xs font-semibold"
-                  >
-                    {n}
-                  </span>
-                ))}
-              </div>
-              <p className="mt-5 text-xs text-navy-foreground/60">
-                Plugin address:{" "}
-                <code className="break-all font-mono text-accent">
-                  https://loadloom.lovable.app/mcp
-                </code>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="mx-auto w-full max-w-6xl px-5 py-16 md:py-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
