@@ -235,6 +235,16 @@ function AuthPage() {
                     />
                   </div>
                 </div>
+                {isSignUp && (
+                  <label className="flex items-start gap-2 text-sm text-navy-foreground/80">
+                    <input type="checkbox" required className="mt-1 h-4 w-4 accent-[var(--accent)]" />
+                    <span>
+                      I am 18 or older and agree to the{" "}
+                      <a href="/terms" target="_blank" className="underline">Terms</a> and{" "}
+                      <a href="/privacy" target="_blank" className="underline">Privacy Policy</a>.
+                    </span>
+                  </label>
+                )}
                 <Button type="submit" variant="action" size="lg" className="w-full shadow-lg shadow-accent/25" disabled={busy}>
                   {busy ? "Please wait…" : isSignUp ? "Create account" : "Sign in to Operations"}
                   {!busy && <ArrowRight />}
