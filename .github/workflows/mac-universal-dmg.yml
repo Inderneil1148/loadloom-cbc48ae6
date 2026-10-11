@@ -1,0 +1,61 @@
+name: Build universal Mac DMG
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - '_agent-publish'
+      - 'edit/**'
+
+jobs:
+  build-universal-dmg:
+    runs-on: macos-15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.3
+      - run: bun install --frozen-lockfile
+      - run: bun run desktop:mac
+      - run: bun run desktop:dmg
+      - run: hdiutil verify desktop-release/dmg/LoadLoom-universal.dmg
+      - run: shasum -a 256 -c desktop-release/dmg/LoadLoom-universal.dmg.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LoadLoom-universal-dmg
+          path: |
+            desktop-release/dmg/LoadLoom-universal.dmg
+            desktop-release/dmg/LoadLoom-universal.dmg.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+  smoke-intel:
+    needs: build-universal-dmg
+    runs-on: macos-15-large
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.3
+      - run: bun install --frozen-lockfile
+      - run: bun run desktop:mac
+      - run: bun run desktop:smoke:mac
+
+  smoke-apple-silicon:
+    needs: build-universal-dmg
+    runs-on: macos-15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.3
+      - run: bun install --frozen-lockfile
+      - run: bun run desktop:mac
+      - run: bun run desktop:smoke:mac
