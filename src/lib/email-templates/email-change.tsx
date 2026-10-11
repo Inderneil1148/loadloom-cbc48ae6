@@ -59,6 +59,9 @@ export const EmailChangeEmail = ({
           If you didn't request this change, please secure your account
           immediately.
         </Text>
+        <Text style={{ fontSize: '11px', color: '#999999', margin: '24px 0 0' }}>
+          LoadLoom by The Social INK, India. You received this because of activity on your LoadLoom account or website.
+        </Text>
       </Container>
     </Body>
   </Html>

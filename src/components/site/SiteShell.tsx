@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
 import { useSession } from "@/hooks/use-session";
+import { openConsent } from "@/lib/consent";
 
 const NAV = [
   { to: "/features", label: "Features" },
@@ -40,6 +41,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[70] focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:ring-2 focus:ring-ring">
+        Skip to content
+      </a>
       <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur">
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5">
           <Logo />
@@ -88,7 +92,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
         )}
       </header>
 
-      <main className="flex-1">{children}</main>
+      <main id="main" className="flex-1">{children}</main>
 
       <footer className="border-t border-border bg-navy text-navy-foreground">
         <div className="mx-auto w-full max-w-6xl px-5 py-12">
@@ -129,11 +133,21 @@ export function SiteShell({ children }: { children: ReactNode }) {
                 <Link to="/terms" className="text-navy-foreground/70 hover:text-navy-foreground">
                   Terms
                 </Link>
+                <Link to="/refund-policy" className="text-navy-foreground/70 hover:text-navy-foreground">
+                  Refund Policy
+                </Link>
+                <Link to="/cookie-policy" className="text-navy-foreground/70 hover:text-navy-foreground">
+                  Cookie Policy
+                </Link>
+                <button type="button" onClick={openConsent} className="text-left text-navy-foreground/70 hover:text-navy-foreground">
+                  Cookie settings
+                </button>
               </div>
             </div>
           </div>
           <p className="mt-10 border-t border-navy-foreground/10 pt-6 text-xs text-navy-foreground/50">
-            © 2026 The Social INK / INDERNEILK
+            © 2026 The Social INK, India · LoadLoom ·{" "}
+              <a href="mailto:inderneilkanagali@gmail.com" className="underline">inderneilkanagali@gmail.com</a>
           </p>
         </div>
       </footer>

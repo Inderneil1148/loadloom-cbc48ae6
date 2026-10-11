@@ -93,6 +93,9 @@ function Contact() {
               placeholder="Materials you supply, number of vehicles, loads per day, how you invoice today"
             />
           </div>
+          <p className="text-xs text-muted-foreground">
+            We use these details only to reply to your enquiry. See our <a href="/privacy" className="underline">Privacy Policy</a>.
+          </p>
           <Button type="submit" variant="action" size="lg" disabled={sending}>
             {sending ? "Sending…" : "Send enquiry"}
           </Button>

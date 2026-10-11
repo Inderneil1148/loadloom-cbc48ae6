@@ -8,6 +8,13 @@
       "when": 1791014371788,
       "tag": "0000_delivery_sites_lat_lng",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791719386275,
+      "tag": "0001_deletion_requests",
+      "breakpoints": true
     }
   ]
 }

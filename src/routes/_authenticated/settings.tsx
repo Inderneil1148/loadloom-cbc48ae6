@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatINR } from "@/lib/plans";
+import { RequestDeletion } from "@/components/app/DeletionRequests";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   staticData: { sitemap: false },
@@ -123,8 +124,10 @@ function SettingsPage() {
           <TabsList className="w-full sm:w-auto">
             <TabsTrigger value="profile" className="flex-1">Enterprise Profile</TabsTrigger>
             <TabsTrigger value="materials" className="flex-1">Material Catalog</TabsTrigger>
+            <TabsTrigger value="account" className="flex-1">Account</TabsTrigger>
           </TabsList>
           <TabsContent value="profile" className="mt-6"><EnterpriseProfile /></TabsContent>
+          <TabsContent value="account" className="mt-6"><RequestDeletion /></TabsContent>
           <TabsContent value="materials" className="mt-6">
             <RecordManager
               embedded

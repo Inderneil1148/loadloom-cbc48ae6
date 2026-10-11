@@ -10,7 +10,7 @@ export const Route = createFileRoute("/features")({
       {
         name: "description",
         content:
-          "Orders, dispatch board, driver app, delivery proof, weighbridge slips, quotations, invoices, payments, outstanding, reports and analytics.",
+          "Orders, dispatch board, driver portal, delivery tracking, quotations, invoices, payments, outstanding, reports and analytics.",
       },
       { property: "og:title", content: "Features — LoadLoom dispatch and operations" },
       { property: "og:type", content: "website" },
@@ -56,13 +56,12 @@ const GROUPS = [
     ],
   },
   {
-    title: "Delivery proof",
+    title: "Delivery records",
     items: [
-      "Delivery photo",
-      "Customer signature",
-      "Received quantity and remarks",
-      "Delivery OTP",
-      "Weighbridge slip upload",
+      "Delivered status with date and time",
+      "Vehicle and driver on every trip",
+      "Delivery site with map location",
+      "Customer 360 history",
     ],
   },
   {

@@ -55,8 +55,8 @@ const PILLARS = [
   },
   {
     icon: CheckCircle2,
-    title: "Proof for every delivery",
-    body: "Delivery photo, customer signature, received quantity, OTP and the weighbridge slip, attached to the trip.",
+    title: "Every delivery on record",
+    body: "Each load keeps its customer, site, vehicle, driver, status and delivered time, so disputes are settled with facts.",
   },
   {
     icon: FileText,

@@ -15,6 +15,7 @@ import { fmtDate } from "@/components/app/RecordManager";
 import { TIER_NAMES, TIER_ORDER, type Tier } from "@/lib/plans";
 import { PLAN_SETTINGS_QUERY_KEY, usePlanSettings, type PlanSetting } from "@/hooks/use-plan-settings";
 import { AdminPayments } from "@/components/app/AdminPayments";
+import { AdminDeletionRequests } from "@/components/app/DeletionRequests";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   staticData: { sitemap: false },
@@ -75,11 +76,13 @@ function Admin() {
   const pending = data.filter((r) => r.status === "pending").length;
   return (
     <Tabs defaultValue="accounts" className="space-y-5">
-      <TabsList className="grid w-full grid-cols-3 sm:w-[28rem]">
+      <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 sm:w-[36rem]">
         <TabsTrigger value="accounts">Accounts</TabsTrigger>
         <TabsTrigger value="payments">Payments</TabsTrigger>
         <TabsTrigger value="plans">Plan settings</TabsTrigger>
+        <TabsTrigger value="deletions">Deletion requests</TabsTrigger>
       </TabsList>
+      <TabsContent value="deletions"><AdminDeletionRequests /></TabsContent>
       <TabsContent value="payments"><AdminPayments /></TabsContent>
       <TabsContent value="accounts" className="space-y-5">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">

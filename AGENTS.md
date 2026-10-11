@@ -19,3 +19,5 @@ Use the specialized dispatch order form for order creation and editing while Rec
 - Paid plans are bought by UPI QR + screenshot: `plan_payments` rows (private `payment-proofs` bucket) are approved by the admin, which activates the subscription; this keeps billing manual with no payment provider.
 - In-app notifications live in the `notifications` table, created by SECURITY DEFINER triggers on subscriptions (plan activated) and plan_payments (rejected); `useNotifications` + `NotificationBell` in AppHeader render them with realtime toast, so approval feedback reaches users instantly without polling.
 - MCP server lives in src/lib/mcp (OAuth via the backend's OAuth server, tools query as the signed-in user so RLS applies); /auth honours a same-origin ?next= so the consent page round-trips.
+- Optional third-party scripts (Analytics, AdSense) load only via `src/lib/consent.ts` after cookie consent, so nothing tracks before the visitor agrees.
+- Account deletion goes through `deletion_requests` and an admin-only server function that removes owner rows and the auth user, so deletion is auditable and manual.

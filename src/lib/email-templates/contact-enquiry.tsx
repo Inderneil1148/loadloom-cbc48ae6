@@ -30,6 +30,9 @@ const ContactEnquiry = ({ name, business, phone, email, message }: Props) => (
         <Section style={box}>
           <Text style={{ ...row, margin: 0, whiteSpace: 'pre-wrap' }}>{message || '—'}</Text>
         </Section>
+        <Text style={{ fontSize: '11px', color: '#999999', margin: '24px 0 0' }}>
+          LoadLoom by The Social INK, India. You received this because of activity on your LoadLoom account or website.
+        </Text>
       </Container>
     </Body>
   </Html>
