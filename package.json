@@ -78,6 +78,7 @@
   },
   "devDependencies": {
     "@electron/packager": "20.3.0",
+    "@electron/universal": "3.0.6",
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-tanstack-config": "2.25.3",
     "@types/node": "^22.16.5",
@@ -88,6 +89,7 @@
     "drizzle-kit": "^0.31.11",
     "drizzle-orm": "^0.45.3",
     "electron": "44.7.0",
+    "electron-installer-dmg": "5.0.1",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.6",
