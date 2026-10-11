@@ -102,7 +102,7 @@ function Pricing() {
                 </dl>
 
                 <Button asChild variant={featured ? "action" : "outline"} size="lg" className="mt-7">
-                  <Link to="/auth" search={{ mode: "signup" }}>
+                  <Link to="/dashboard">
                     {plan.id === "free" ? "Start Free" : `Start with ${plan.name}`}
                   </Link>
                 </Button>

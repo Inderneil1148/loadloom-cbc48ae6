@@ -1,7 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { landingFor } from "@/lib/landing";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ClipboardList,
   Truck,
@@ -77,12 +74,6 @@ const PILLARS = [
 function Home() {
   const { data: settings } = usePlanSettings();
   const plans = plansWithSettings(settings);
-  const navigate = useNavigate();
-  useEffect(() => {
-    supabase.auth.getSession().then(async ({ data }) => {
-      if (data.session) navigate({ to: await landingFor(data.session), replace: true });
-    });
-  }, [navigate]);
   return (
     <SiteShell>
       <section className="relative overflow-hidden bg-navy text-navy-foreground">
@@ -107,7 +98,7 @@ function Home() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild variant="action" size="xl">
-              <Link to="/auth" search={{ mode: "signup" }}>
+              <Link to="/dashboard">
                 Start free trial
               </Link>
             </Button>
@@ -222,7 +213,7 @@ function Home() {
           </div>
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="action" size="xl">
-              <Link to="/auth" search={{ mode: "signup" }}>
+              <Link to="/dashboard">
                 Create your account
               </Link>
             </Button>

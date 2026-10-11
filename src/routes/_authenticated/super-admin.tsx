@@ -60,7 +60,7 @@ function SecureSignOut() {
     <Button variant="outline" onClick={async () => {
       await qc.cancelQueries(); qc.clear();
       await supabase.auth.signOut({ scope: "global" });
-      navigate({ to: "/auth", replace: true });
+      navigate({ to: "/dashboard", replace: true });
     }}><LogOut className="size-4" /> Sign out everywhere</Button>
   );
 }
