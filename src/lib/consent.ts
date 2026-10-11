@@ -1,4 +1,5 @@
 import { initAnalytics } from "./analytics";
+import { initFirebase } from "./firebase";
 
 export type Consent = "all" | "essential";
 const KEY = "loadloom-cookie-consent";
@@ -21,6 +22,7 @@ export function openConsent() {
 
 export function loadOptionalScripts() {
   initAnalytics();
+  void initFirebase();
   if (document.querySelector('script[src*="adsbygoogle.js"]')) return;
   const s = document.createElement("script");
   s.async = true;
