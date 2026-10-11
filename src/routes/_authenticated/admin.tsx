@@ -76,7 +76,7 @@ function Admin() {
   const pending = data.filter((r) => r.status === "pending").length;
   return (
     <Tabs defaultValue="accounts" className="space-y-5">
-      <TabsList className="grid w-full grid-cols-3 sm:w-[28rem]">
+      <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 sm:w-[36rem]">
         <TabsTrigger value="accounts">Accounts</TabsTrigger>
         <TabsTrigger value="payments">Payments</TabsTrigger>
         <TabsTrigger value="plans">Plan settings</TabsTrigger>

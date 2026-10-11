@@ -12,7 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { initAnalytics } from "../lib/analytics";
+import { CookieBanner } from "@/components/site/CookieBanner";
 import { Toaster } from "@/components/ui/sonner";
 import { InstallPrompt } from "@/components/app/InstallPrompt";
 import { supabase } from "@/integrations/supabase/client";
@@ -112,13 +112,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
-    scripts: [
-      {
-        src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2111917614213434",
-        async: true,
-        crossOrigin: "anonymous",
-      },
-    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -145,10 +138,6 @@ function RootComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    initAnalytics();
-  }, []);
-
-  useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
@@ -163,6 +152,7 @@ function RootComponent() {
       <Outlet />
       <Toaster />
       <InstallPrompt />
+      <CookieBanner />
     </QueryClientProvider>
   );
 }
