@@ -113,6 +113,39 @@ export type Database = {
         }
         Relationships: []
       }
+      deletion_requests: {
+        Row: {
+          admin_note: string | null
+          created_at: string
+          email: string | null
+          id: string
+          reason: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          reason?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          reason?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       deliveries: {
         Row: {
           created_at: string
