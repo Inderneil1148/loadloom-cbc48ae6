@@ -62,10 +62,9 @@ function DownloadPage() {
 
       <section className="mx-auto grid w-full max-w-6xl gap-4 px-5 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <Card icon={<Apple className="size-5" />} title="Mac">
-          <Button asChild variant="action"><a href={dl("LoadLoom-mac-apple-silicon.zip")}><Download /> Apple Silicon (M1–M4)</a></Button>
-          <Button asChild variant="outline"><a href={dl("LoadLoom-mac-intel.zip")}><Download /> Intel Mac</a></Button>
-          <Steps items={["Open the downloaded .zip.", "Drag LoadLoom into Applications.", "First time only: right-click LoadLoom → Open → Open."]} />
-          <p className="text-xs">Not sure which Mac? Apple menu → About This Mac. "Chip: Apple M…" means Apple Silicon.</p>
+          <Button asChild variant="action"><a href={dl("LoadLoom-universal.dmg")}><Download /> Download for Mac</a></Button>
+          <Steps items={["Open LoadLoom-universal.dmg.", "Drag LoadLoom into Applications.", "First time only: right-click LoadLoom → Open → Open."]} />
+          <p className="text-xs">One universal app for Intel Macs and Apple Silicon Macs (M1 and newer).</p>
         </Card>
         <Card icon={<Monitor className="size-5" />} title="Windows PC">
           <Button asChild variant="action"><a href={dl("LoadLoom-windows.zip")}><Download /> Windows 10 / 11</a></Button>

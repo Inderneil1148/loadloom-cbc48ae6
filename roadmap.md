@@ -1,7 +1,7 @@
 # Roadmap
-- [x] Mac desktop app (.zip, Apple Silicon + Intel)
+- [ ] Universal Mac desktop app (.dmg, Apple Silicon + Intel) — awaiting native macOS build and launch checks
 - [x] Windows desktop app (.zip)
 - [x] Android APK
 - [x] /download page with Mac, Windows, Android buttons + iPhone steps, linked in header/footer
 - [x] Contact form on /download ("we reply within 24 hours")
-- [ ] Optional: LoadLoom icon on the Mac/Windows apps (they currently use the default app icon)
+- [x] LoadLoom icon assets for Mac, Windows, and Android apps

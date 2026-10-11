@@ -2,8 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 // Fixed allow-list: only these app files can be downloaded.
 const FILES = new Set([
-  "LoadLoom-mac-apple-silicon.zip",
-  "LoadLoom-mac-intel.zip",
+  "LoadLoom-universal.dmg",
   "LoadLoom-windows.zip",
   "LoadLoom.apk",
 ]);

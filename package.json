@@ -1,5 +1,7 @@
 {
   "name": "tanstack_start_ts",
+  "productName": "LoadLoom",
+  "version": "1.0.0",
   "private": true,
   "sideEffects": false,
   "type": "module",
@@ -9,7 +11,10 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "desktop:mac": "node desktop/scripts/build-mac-universal.mjs",
+    "desktop:dmg": "node desktop/scripts/create-dmg.mjs",
+    "desktop:smoke:mac": "node desktop/scripts/smoke-mac.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1"
