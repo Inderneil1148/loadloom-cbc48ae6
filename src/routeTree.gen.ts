@@ -26,7 +26,6 @@ import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
-import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
@@ -49,6 +48,7 @@ import { Route as AuthenticatedQuotationsRouteImport } from './routes/_authentic
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSitesRouteImport } from './routes/_authenticated/sites'
+import { Route as AuthenticatedSuperAdminRouteImport } from './routes/_authenticated/super-admin'
 import { Route as AuthenticatedTrucksRouteImport } from './routes/_authenticated/trucks'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedCheckoutPlanRouteImport } from './routes/_authenticated/checkout.$plan'
@@ -142,11 +142,6 @@ const Char91DotwellKnownChar93OauthProtectedResourceRoute =
     path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
-const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -260,6 +255,11 @@ const AuthenticatedSitesRoute = AuthenticatedSitesRouteImport.update({
   path: '/sites',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSuperAdminRoute = AuthenticatedSuperAdminRouteImport.update({
+  id: '/super-admin',
+  path: '/super-admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTrucksRoute = AuthenticatedTrucksRouteImport.update({
   id: '/trucks',
   path: '/trucks',
@@ -315,7 +315,6 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/assistant': typeof AuthenticatedAssistantRoute
   '/billing': typeof AuthenticatedBillingRoute
@@ -338,6 +337,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
+  '/super-admin': typeof AuthenticatedSuperAdminRoute
   '/trucks': typeof AuthenticatedTrucksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
@@ -363,7 +363,6 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/assistant': typeof AuthenticatedAssistantRoute
   '/billing': typeof AuthenticatedBillingRoute
@@ -386,6 +385,7 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
+  '/super-admin': typeof AuthenticatedSuperAdminRoute
   '/trucks': typeof AuthenticatedTrucksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
@@ -413,7 +413,6 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
@@ -436,6 +435,7 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/sites': typeof AuthenticatedSitesRoute
+  '/_authenticated/super-admin': typeof AuthenticatedSuperAdminRoute
   '/_authenticated/trucks': typeof AuthenticatedTrucksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
@@ -463,7 +463,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/.well-known/oauth-protected-resource'
-    | '/admin'
     | '/analytics'
     | '/assistant'
     | '/billing'
@@ -486,6 +485,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/sites'
+    | '/super-admin'
     | '/trucks'
     | '/.lovable/oauth/consent'
     | '/checkout/$plan'
@@ -511,7 +511,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/.well-known/oauth-protected-resource'
-    | '/admin'
     | '/analytics'
     | '/assistant'
     | '/billing'
@@ -534,6 +533,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/sites'
+    | '/super-admin'
     | '/trucks'
     | '/.lovable/oauth/consent'
     | '/checkout/$plan'
@@ -560,7 +560,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/.well-known/oauth-protected-resource'
-    | '/_authenticated/admin'
     | '/_authenticated/analytics'
     | '/_authenticated/assistant'
     | '/_authenticated/billing'
@@ -583,6 +582,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/sites'
+    | '/_authenticated/super-admin'
     | '/_authenticated/trucks'
     | '/.lovable/oauth/consent'
     | '/_authenticated/checkout/$plan'
@@ -738,13 +738,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/analytics': {
       id: '/_authenticated/analytics'
       path: '/analytics'
@@ -899,6 +892,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSitesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/super-admin': {
+      id: '/_authenticated/super-admin'
+      path: '/super-admin'
+      fullPath: '/super-admin'
+      preLoaderRoute: typeof AuthenticatedSuperAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/trucks': {
       id: '/_authenticated/trucks'
       path: '/trucks'
@@ -952,7 +952,6 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
@@ -975,12 +974,12 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSitesRoute: typeof AuthenticatedSitesRoute
+  AuthenticatedSuperAdminRoute: typeof AuthenticatedSuperAdminRoute
   AuthenticatedTrucksRoute: typeof AuthenticatedTrucksRoute
   AuthenticatedCheckoutPlanRoute: typeof AuthenticatedCheckoutPlanRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
@@ -1003,6 +1002,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSitesRoute: AuthenticatedSitesRoute,
+  AuthenticatedSuperAdminRoute: AuthenticatedSuperAdminRoute,
   AuthenticatedTrucksRoute: AuthenticatedTrucksRoute,
   AuthenticatedCheckoutPlanRoute: AuthenticatedCheckoutPlanRoute,
 }

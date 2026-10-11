@@ -129,13 +129,13 @@ function SettingsPage() {
             <TabsTrigger value="profile" className="flex-1">Enterprise Profile</TabsTrigger>
             <TabsTrigger value="materials" className="flex-1">Material Catalog</TabsTrigger>
             <TabsTrigger value="account" className="flex-1">Account</TabsTrigger>
-            {isAdmin && <TabsTrigger value="admin" className="flex-1">Admin</TabsTrigger>}
+            {isAdmin && <TabsTrigger value="admin" className="flex-1">Super Admin</TabsTrigger>}
           </TabsList>
           <TabsContent value="profile" className="mt-6"><EnterpriseProfile /></TabsContent>
           <TabsContent value="account" className="mt-6"><RequestDeletion /></TabsContent>
           {isAdmin && (
             <TabsContent value="admin" className="mt-6 space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-2"><p className="text-sm text-muted-foreground">Only you can see this tab.</p><Button asChild size="sm" variant="outline"><Link to="/admin">Payments, plan settings & deletions</Link></Button></div>
+              <div className="flex flex-wrap items-center justify-between gap-2"><p className="text-sm text-muted-foreground">Only you can see this tab.</p><Button asChild size="sm" variant="outline"><Link to="/super-admin">Open Super Admin</Link></Button></div>
               <AdminAccounts />
             </TabsContent>
           )}

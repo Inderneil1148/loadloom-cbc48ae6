@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Save, Search } from "lucide-react";
+import { Check, LogOut, Save, Search } from "lucide-react";
+import { SuperAdminReports } from "@/components/app/super-admin/Reports";
+import { SuperAdminAnnouncements } from "@/components/app/super-admin/Announcements";
+import { SuperAdminSupport } from "@/components/app/super-admin/Support";
+import { SuperAdminAudit, SuperAdminHealth } from "@/components/app/super-admin/AuditHealth";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { usePlan } from "@/hooks/use-plan";
@@ -18,7 +22,7 @@ import { AdminAccounts } from "@/components/app/AdminAccounts";
 import { AdminPayments } from "@/components/app/AdminPayments";
 import { AdminDeletionRequests } from "@/components/app/DeletionRequests";
 
-export const Route = createFileRoute("/_authenticated/admin")({
+export const Route = createFileRoute("/_authenticated/super-admin")({
   staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Admin — LoadLoom" }, { name: "description", content: "Private administration." },
