@@ -118,6 +118,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
               </div>
               <div className="flex flex-col gap-2">
                 <span className="eyebrow text-accent">Company</span>
+                <Link to="/brand" className="text-navy-foreground/70 hover:text-navy-foreground">
+                  Brand
+                </Link>
                 <Link to="/contact" className="text-navy-foreground/70 hover:text-navy-foreground">
                   Contact
                 </Link>
