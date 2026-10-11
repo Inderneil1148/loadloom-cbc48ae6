@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ImagePlus, Loader2, Sparkles, X } from "lucide-react";
 import { AppPage } from "@/components/app/PlanGate";
+import { ContactSupport } from "@/components/app/ContactSupport";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -79,6 +80,7 @@ function Help() {
           {answer && <div className="mt-3 whitespace-pre-wrap text-sm leading-relaxed">{renderBold(answer)}</div>}
         </div>
       </div>
+      <ContactSupport />
     </AppPage>
   );
 }

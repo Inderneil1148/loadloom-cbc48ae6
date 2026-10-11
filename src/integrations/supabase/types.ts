@@ -14,6 +14,93 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor: string | null
+          created_at: string
+          details: Json | null
+          id: number
+          target_user: string | null
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: never
+          target_user?: string | null
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: never
+          target_user?: string | null
+        }
+        Relationships: []
+      }
+      announcement_templates: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          kind: string
+          name: string
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          name: string
+          title: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          name?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      announcements: {
+        Row: {
+          audience: string
+          body: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          recipient_count: number
+          title: string
+        }
+        Insert: {
+          audience?: string
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          recipient_count?: number
+          title: string
+        }
+        Update: {
+          audience?: string
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          recipient_count?: number
+          title?: string
+        }
+        Relationships: []
+      }
       business_profiles: {
         Row: {
           address: string | null
@@ -380,6 +467,7 @@ export type Database = {
       }
       notifications: {
         Row: {
+          announcement_id: string | null
           body: string | null
           created_at: string
           id: string
@@ -389,6 +477,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          announcement_id?: string | null
           body?: string | null
           created_at?: string
           id?: string
@@ -398,6 +487,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          announcement_id?: string | null
           body?: string | null
           created_at?: string
           id?: string
@@ -777,6 +867,74 @@ export type Database = {
         }
         Relationships: []
       }
+      support_tickets: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          kind: string
+          message: string
+          resolved_at: string | null
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          kind?: string
+          message: string
+          resolved_at?: string | null
+          status?: string
+          subject: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          kind?: string
+          message?: string
+          resolved_at?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ticket_notes: {
+        Row: {
+          created_at: string
+          id: string
+          note: string
+          ticket_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note: string
+          ticket_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_notes_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -833,6 +991,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      announcement_reads: {
+        Args: never
+        Returns: {
+          announcement_id: string
+          read_count: number
+        }[]
+      }
       current_plan: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
@@ -842,7 +1007,21 @@ export type Database = {
         Returns: boolean
       }
       is_demo_user: { Args: { _user_id: string }; Returns: boolean }
+      is_super_admin: { Args: { _user_id: string }; Returns: boolean }
       request_plan: { Args: { _plan: string }; Returns: undefined }
+      send_announcement: {
+        Args: {
+          _audience: string
+          _body: string
+          _kind: string
+          _plan: string
+          _title: string
+          _user_ids: string[]
+        }
+        Returns: number
+      }
+      super_admin_health: { Args: never; Returns: Json }
+      super_admin_report: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"

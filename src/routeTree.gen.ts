@@ -49,6 +49,7 @@ import { Route as AuthenticatedQuotationsRouteImport } from './routes/_authentic
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSitesRouteImport } from './routes/_authenticated/sites'
+import { Route as AuthenticatedSuperAdminRouteImport } from './routes/_authenticated/super-admin'
 import { Route as AuthenticatedTrucksRouteImport } from './routes/_authenticated/trucks'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedCheckoutPlanRouteImport } from './routes/_authenticated/checkout.$plan'
@@ -260,6 +261,11 @@ const AuthenticatedSitesRoute = AuthenticatedSitesRouteImport.update({
   path: '/sites',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSuperAdminRoute = AuthenticatedSuperAdminRouteImport.update({
+  id: '/super-admin',
+  path: '/super-admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTrucksRoute = AuthenticatedTrucksRouteImport.update({
   id: '/trucks',
   path: '/trucks',
@@ -338,6 +344,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
+  '/super-admin': typeof AuthenticatedSuperAdminRoute
   '/trucks': typeof AuthenticatedTrucksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/sites': typeof AuthenticatedSitesRoute
+  '/super-admin': typeof AuthenticatedSuperAdminRoute
   '/trucks': typeof AuthenticatedTrucksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
@@ -436,6 +444,7 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/sites': typeof AuthenticatedSitesRoute
+  '/_authenticated/super-admin': typeof AuthenticatedSuperAdminRoute
   '/_authenticated/trucks': typeof AuthenticatedTrucksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
@@ -486,6 +495,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/sites'
+    | '/super-admin'
     | '/trucks'
     | '/.lovable/oauth/consent'
     | '/checkout/$plan'
@@ -534,6 +544,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/sites'
+    | '/super-admin'
     | '/trucks'
     | '/.lovable/oauth/consent'
     | '/checkout/$plan'
@@ -583,6 +594,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/sites'
+    | '/_authenticated/super-admin'
     | '/_authenticated/trucks'
     | '/.lovable/oauth/consent'
     | '/_authenticated/checkout/$plan'
@@ -899,6 +911,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSitesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/super-admin': {
+      id: '/_authenticated/super-admin'
+      path: '/super-admin'
+      fullPath: '/super-admin'
+      preLoaderRoute: typeof AuthenticatedSuperAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/trucks': {
       id: '/_authenticated/trucks'
       path: '/trucks'
@@ -975,6 +994,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSitesRoute: typeof AuthenticatedSitesRoute
+  AuthenticatedSuperAdminRoute: typeof AuthenticatedSuperAdminRoute
   AuthenticatedTrucksRoute: typeof AuthenticatedTrucksRoute
   AuthenticatedCheckoutPlanRoute: typeof AuthenticatedCheckoutPlanRoute
 }
@@ -1003,6 +1023,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSitesRoute: AuthenticatedSitesRoute,
+  AuthenticatedSuperAdminRoute: AuthenticatedSuperAdminRoute,
   AuthenticatedTrucksRoute: AuthenticatedTrucksRoute,
   AuthenticatedCheckoutPlanRoute: AuthenticatedCheckoutPlanRoute,
 }
