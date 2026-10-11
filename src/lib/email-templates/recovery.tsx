@@ -39,6 +39,9 @@ export const RecoveryEmail = ({
           If you didn't request a password reset, you can safely ignore this
           email. Your password will not be changed.
         </Text>
+        <Text style={{ fontSize: '11px', color: '#999999', margin: '24px 0 0' }}>
+          LoadLoom by The Social INK, India. You received this because of activity on your LoadLoom account or website.
+        </Text>
       </Container>
     </Body>
   </Html>

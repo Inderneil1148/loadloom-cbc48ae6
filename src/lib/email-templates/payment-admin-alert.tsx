@@ -22,6 +22,9 @@ const PaymentAdminAlert = ({ email, business, planName, amount, reference }: Pro
         <Text style={row}><strong>Plan:</strong> {planName || '—'} {amount ? `(${amount})` : ''}</Text>
         <Text style={row}><strong>Reference:</strong> {reference || '—'}</Text>
         <Text style={row}>Open the Admin panel, Payments tab, to see the screenshot and approve.</Text>
+        <Text style={{ fontSize: '11px', color: '#999999', margin: '24px 0 0' }}>
+          LoadLoom by The Social INK, India. You received this because of activity on your LoadLoom account or website.
+        </Text>
       </Container>
     </Body>
   </Html>

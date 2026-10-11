@@ -27,6 +27,9 @@ const PaymentReceived = ({ planName, amount, reference }: Props) => (
         </Section>
         {reference ? <Text style={small}>Reference: {reference}</Text> : null}
         <Text style={text}>Until then you can keep using LoadLoom on the Free plan.</Text>
+        <Text style={{ fontSize: '11px', color: '#999999', margin: '24px 0 0' }}>
+          LoadLoom by The Social INK, India. You received this because of activity on your LoadLoom account or website.
+        </Text>
       </Container>
     </Body>
   </Html>

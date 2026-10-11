@@ -53,6 +53,9 @@ export const SignupEmail = ({
         <Text style={footer}>
           If you didn't create an account, you can safely ignore this email.
         </Text>
+        <Text style={{ fontSize: '11px', color: '#999999', margin: '24px 0 0' }}>
+          LoadLoom by The Social INK, India. You received this because of activity on your LoadLoom account or website.
+        </Text>
       </Container>
     </Body>
   </Html>
