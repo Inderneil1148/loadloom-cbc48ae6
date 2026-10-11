@@ -7,10 +7,9 @@ export const getRouter = () => {
   const queryClient = new QueryClient({
     mutationCache: new MutationCache({
       onError: (error) => {
-        // Demo accounts are read-only in the database; send visitors to sign up instead.
+        // Show a warning for RLS errors but don't redirect away from the dashboard.
         if (typeof window !== "undefined" && error instanceof Error && /row-level security/i.test(error.message)) {
-          toast.info("This is a read-only demo. Pick a plan and create your account to add your own data.");
-          router.navigate({ to: "/pricing" });
+          toast.info("Some features may be limited without an account. Data changes require sign-in.");
         }
       },
     }),

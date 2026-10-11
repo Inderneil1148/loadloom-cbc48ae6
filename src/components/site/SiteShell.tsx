@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
-import { useSession } from "@/hooks/use-session";
 import { openConsent } from "@/lib/consent";
 
 const NAV = [
@@ -15,25 +14,10 @@ const NAV = [
 ] as const;
 
 function AuthActions({ onNavigate }: { onNavigate?: () => void }) {
-  const { session } = useSession();
-  if (session) {
-    return (
-      <Button asChild variant="action" size="sm" onClick={onNavigate}>
-        <Link to="/dashboard">Open LoadLoom</Link>
-      </Button>
-    );
-  }
   return (
-    <>
-      <Button asChild variant="ghost" size="sm" onClick={onNavigate}>
-        <Link to="/auth">Sign in</Link>
-      </Button>
-      <Button asChild variant="action" size="sm" onClick={onNavigate}>
-        <Link to="/auth" search={{ mode: "signup" }}>
-          Start free trial
-        </Link>
-      </Button>
-    </>
+    <Button asChild variant="action" size="sm" onClick={onNavigate}>
+      <Link to="/dashboard">Open LoadLoom</Link>
+    </Button>
   );
 }
 
@@ -128,7 +112,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
                 <Link to="/contact" className="text-navy-foreground/70 hover:text-navy-foreground">
                   Contact
                 </Link>
-                <Link to="/auth" className="text-navy-foreground/70 hover:text-navy-foreground">
+                <Link to="/dashboard" className="text-navy-foreground/70 hover:text-navy-foreground">
                   Sign in
                 </Link>
               </div>

@@ -132,7 +132,7 @@ function Features() {
         </div>
         <div className="mt-14 flex flex-wrap gap-3 border-t border-border pt-10">
           <Button asChild variant="action" size="lg">
-            <Link to="/auth" search={{ mode: "signup" }}>
+            <Link to="/dashboard">
               Start free trial
             </Link>
           </Button>

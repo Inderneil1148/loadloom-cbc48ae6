@@ -100,8 +100,8 @@ function Demo() {
 
         <div className="mt-10 flex flex-wrap gap-3">
           <Button asChild variant="action" size="lg">
-            <Link to="/auth" search={{ mode: "signup" }}>
-              Create your account
+            <Link to="/dashboard">
+              Go to Dashboard
             </Link>
           </Button>
           <ViewDemoButton />

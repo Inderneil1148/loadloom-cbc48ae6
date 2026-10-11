@@ -63,7 +63,7 @@ export function AppHeader() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate(isDemo ? { to: "/demo", replace: true } : { to: "/auth", replace: true });
+    navigate({ to: "/dashboard", replace: true });
   }
 
   const nav = (
@@ -93,7 +93,7 @@ export function AppHeader() {
         ))}
       </div>
       <div className="border-t border-sidebar-border p-3">
-        <p className="mb-2 truncate px-2 text-xs text-sidebar-foreground">{session?.user.email}</p>
+        <p className="mb-2 truncate px-2 text-xs text-sidebar-foreground">{session?.user.email ?? "Guest User"}</p>
         <Button variant="ghost" className="w-full justify-between text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" onClick={signOut}>Sign out <LogOut className="size-4" /></Button>
       </div>
     </>
