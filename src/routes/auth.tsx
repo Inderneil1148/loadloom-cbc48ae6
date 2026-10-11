@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import type { AuthError } from "@supabase/supabase-js";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, Building2, Lock, Mail } from "lucide-react";
-import { lovable } from "@/integrations/lovable";
 import logoIcon from "@/assets/loadloom-icon.png";
 import { useSession } from "@/hooks/use-session";
 import { landingFor } from "@/lib/landing";
+import { confirmPendingAccount, createAccount } from "@/lib/auth.functions";
 
 export const Route = createFileRoute("/auth")({
   staticData: { sitemap: false },
@@ -33,6 +34,11 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+function isEmailNotConfirmed(error: AuthError | null) {
+  if (!error) return false;
+  return error.code === "email_not_confirmed" || /not confirmed/i.test(error.message ?? "");
+}
+
 function AuthPage() {
   const { mode, next } = Route.useSearch();
   const navigate = useNavigate();
@@ -42,54 +48,68 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [busy, setBusy] = useState(false);
-  const [checkEmail, setCheckEmail] = useState(false);
-  const returnUrl = () => (next ? `${window.location.origin}/auth?next=${encodeURIComponent(next)}` : `${window.location.origin}/auth`);
 
   useEffect(() => {
     if (loading || !session) return;
-    if (next) { window.location.href = next; return; }
+    if (next) {
+      window.location.href = next;
+      return;
+    }
     landingFor(session).then((to) => navigate({ to, replace: true }));
   }, [loading, session, navigate, next]);
-
-  async function handleOAuth(provider: "google" | "apple") {
-    setBusy(true);
-    try {
-      const result = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: returnUrl(),
-      });
-      if (result.error) throw result.error;
-      // redirected: browser is leaving for the provider — nothing to do
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Something went wrong. Try again.");
-      setBusy(false);
-    }
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
+    // Emails are matched case-insensitively, so always send the same form.
+    const cleanEmail = email.trim().toLowerCase();
     try {
       if (isSignUp) {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: returnUrl(),
-            data: { business_name: businessName, requested_plan: "free" },
-          },
+        // Account is created already confirmed, then signed in right away: no
+        // confirmation email is sent and nothing is left for the user to click.
+        const created = await createAccount({
+          data: { email: cleanEmail, password, businessName },
         });
-        if (error) throw error;
-        if (!data.session) {
-          setCheckEmail(true);
+        const signIn = await supabase.auth.signInWithPassword({
+          email: cleanEmail,
+          password,
+        });
+        if (signIn.error) {
+          if (created.status === "existing") {
+            setIsSignUp(false);
+            toast.error(
+              "That email already has an account. Sign in with its existing password instead.",
+            );
+            return;
+          }
+          throw signIn.error;
+        }
+        if (next) {
+          window.location.href = next;
           return;
         }
-        if (next) { window.location.href = next; return; }
         navigate({ to: "/choose-plan", replace: true });
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        // The session effect above sends them to the right page.
+        return;
       }
+
+      const attempt = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
+      if (!attempt.error) return; // the session effect above sends them on
+      if (isEmailNotConfirmed(attempt.error)) {
+        // Older account created while confirmation emails were switched on:
+        // activate it now instead of leaving the person stuck with no email.
+        const activated = await confirmPendingAccount({ data: { email: cleanEmail } }).catch(
+          () => null,
+        );
+        if (activated?.confirmed) {
+          const retry = await supabase.auth.signInWithPassword({
+            email: cleanEmail,
+            password,
+          });
+          if (!retry.error) return;
+          throw retry.error;
+        }
+      }
+      throw attempt.error;
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Something went wrong. Try again.");
     } finally {
@@ -112,159 +132,107 @@ function AuthPage() {
             </div>
           </div>
           <h1 className="mt-6 text-xl font-bold">
-            {checkEmail ? "Confirm your email" : isSignUp ? "Create your business account" : "Sign in to dispatch OS"}
+            {isSignUp ? "Create your business account" : "Sign in to dispatch OS"}
           </h1>
           <p className="mt-1 text-sm text-navy-foreground/60">Every Load. Accounted For.</p>
         </div>
 
         <div className="mt-8 rounded-2xl border border-navy-foreground/10 bg-navy-foreground/[0.03] p-6 shadow-2xl sm:p-8">
-          {checkEmail ? (
-            <div className="text-center">
-              <p className="text-sm text-navy-foreground/70">
-                We sent a confirmation link to <span className="font-semibold text-navy-foreground">{email}</span>.
-                Open it to activate your account.
-              </p>
-              <Button
-                variant="onNavy"
-                className="mt-6 w-full"
-                onClick={() => {
-                  setCheckEmail(false);
-                  setIsSignUp(false);
-                }}
-              >
-                Back to sign in
-              </Button>
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            {isSignUp && (
+              <div className="space-y-2">
+                <Label htmlFor="business">Business name</Label>
+                <div className="relative">
+                  <Building2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-foreground/40" />
+                  <Input
+                    id="business"
+                    required
+                    className={field}
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
+                    placeholder="e.g. Shree Sand Suppliers"
+                  />
+                </div>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="email">Email address</Label>
+              <div className="relative">
+                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-foreground/40" />
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className={field}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="operations@yourcompany.com"
+                />
+              </div>
             </div>
-          ) : (
-            <>
-              <div className="space-y-3">
-                <Button
-                  type="button"
-                  variant="onNavy"
-                  size="lg"
-                  className="w-full"
-                  disabled={busy}
-                  onClick={() => handleOAuth("google")}
-                >
-                  <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
-                    <path fill="#4285F4" d="M23.5 12.27c0-.85-.08-1.66-.22-2.45H12v4.64h6.45a5.52 5.52 0 0 1-2.39 3.62v3h3.87c2.26-2.09 3.57-5.16 3.57-8.81Z" />
-                    <path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.94-2.91l-3.87-3c-1.07.72-2.44 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.96H1.29v3.1A12 12 0 0 0 12 24Z" />
-                    <path fill="#FBBC05" d="M5.27 14.28A7.2 7.2 0 0 1 4.89 12c0-.79.14-1.56.38-2.28v-3.1H1.29a12 12 0 0 0 0 10.76l3.98-3.1Z" />
-                    <path fill="#EA4335" d="M12 4.76c1.76 0 3.34.61 4.58 1.8l3.44-3.44A11.97 11.97 0 0 0 12 0 12 12 0 0 0 1.29 6.62l3.98 3.1C6.22 6.87 8.87 4.76 12 4.76Z" />
-                  </svg>
-                  Continue with Google
-                </Button>
-                <Button
-                  type="button"
-                  variant="onNavy"
-                  size="lg"
-                  className="w-full"
-                  disabled={busy}
-                  onClick={() => handleOAuth("apple")}
-                >
-                  <svg viewBox="0 0 24 24" className="size-5 fill-current" aria-hidden="true">
-                    <path d="M17.05 12.54c-.03-2.89 2.36-4.27 2.47-4.34-1.35-1.97-3.44-2.24-4.18-2.27-1.78-.18-3.47 1.05-4.37 1.05-.9 0-2.29-1.02-3.77-1-1.94.03-3.72 1.13-4.72 2.86-2.01 3.49-.51 8.66 1.45 11.5.96 1.39 2.1 2.95 3.6 2.89 1.45-.06 2-.94 3.75-.94s2.25.94 3.78.91c1.56-.03 2.55-1.41 3.5-2.81 1.1-1.61 1.55-3.17 1.58-3.25-.04-.02-3.03-1.16-3.09-4.6ZM14.15 4.06c.8-.97 1.34-2.31 1.19-3.66-1.15.05-2.55.77-3.38 1.74-.74.86-1.39 2.23-1.22 3.55 1.29.1 2.6-.65 3.41-1.63Z" />
-                  </svg>
-                  Continue with Apple
-                </Button>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                {!isSignUp && (
+                  <button type="button" onClick={handleForgot} className="text-xs text-accent hover:underline">
+                    Forgot password?
+                  </button>
+                )}
               </div>
-              {isSignUp && (
-                <p className="mt-3 text-center text-xs text-navy-foreground/50">
-                  You'll choose your plan on the next step. By continuing with Google or Apple you confirm you are 18+ and agree to the{" "}
-                  <a href="/terms" target="_blank" className="underline">Terms</a> and{" "}
-                  <a href="/privacy" target="_blank" className="underline">Privacy Policy</a>.
+              <div className="relative">
+                <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-foreground/40" />
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete={isSignUp ? "new-password" : "current-password"}
+                  required
+                  minLength={8}
+                  className={field}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+            {isSignUp && (
+              <>
+                <p className="rounded-lg border border-accent/25 bg-accent/10 px-3 py-2 text-xs text-navy-foreground/75">
+                  No email confirmation needed — your account is ready as soon as you tap Create
+                  account.
                 </p>
-              )}
-              <div className="my-5 flex items-center gap-3 text-xs text-navy-foreground/45">
-                <span className="h-px flex-1 bg-navy-foreground/10" />
-                or continue with email
-                <span className="h-px flex-1 bg-navy-foreground/10" />
-              </div>
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                {isSignUp && (
-                  <div className="space-y-2">
-                    <Label htmlFor="business">Business name</Label>
-                    <div className="relative">
-                      <Building2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-foreground/40" />
-                      <Input
-                        id="business"
-                        required
-                        className={field}
-                        value={businessName}
-                        onChange={(e) => setBusinessName(e.target.value)}
-                        placeholder="e.g. Shree Sand Suppliers"
-                      />
-                    </div>
-                  </div>
-                )}
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email address</Label>
-                  <div className="relative">
-                    <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-foreground/40" />
-                    <Input
-                      id="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      className={field}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="operations@yourcompany.com"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
-                    {!isSignUp && (
-                      <button type="button" onClick={handleForgot} className="text-xs text-accent hover:underline">
-                        Forgot password?
-                      </button>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-foreground/40" />
-                    <Input
-                      id="password"
-                      type="password"
-                      autoComplete={isSignUp ? "new-password" : "current-password"}
-                      required
-                      minLength={8}
-                      className={field}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                    />
-                  </div>
-                </div>
-                {isSignUp && (
-                  <label className="flex items-start gap-2 text-sm text-navy-foreground/80">
-                    <input type="checkbox" required className="mt-1 h-4 w-4 accent-[var(--accent)]" />
-                    <span>
-                      I am 18 or older and agree to the{" "}
-                      <a href="/terms" target="_blank" className="underline">Terms</a> and{" "}
-                      <a href="/privacy" target="_blank" className="underline">Privacy Policy</a>.
-                    </span>
-                  </label>
-                )}
-                <Button type="submit" variant="action" size="lg" className="w-full shadow-lg shadow-accent/25" disabled={busy}>
-                  {busy ? "Please wait…" : isSignUp ? "Create account" : "Sign in to Operations"}
-                  {!busy && <ArrowRight />}
-                </Button>
-              </form>
+                <label className="flex items-start gap-2 text-sm text-navy-foreground/80">
+                  <input type="checkbox" required className="mt-1 h-4 w-4 accent-[var(--accent)]" />
+                  <span>
+                    I am 18 or older and agree to the{" "}
+                    <a href="/terms" target="_blank" className="underline">
+                      Terms
+                    </a>{" "}
+                    and{" "}
+                    <a href="/privacy" target="_blank" className="underline">
+                      Privacy Policy
+                    </a>
+                    .
+                  </span>
+                </label>
+              </>
+            )}
+            <Button type="submit" variant="action" size="lg" className="w-full shadow-lg shadow-accent/25" disabled={busy}>
+              {busy ? "Please wait…" : isSignUp ? "Create account" : "Sign in to Operations"}
+              {!busy && <ArrowRight />}
+            </Button>
+          </form>
 
-              <p className="mt-6 border-t border-navy-foreground/10 pt-5 text-center text-sm text-navy-foreground/60">
-                {isSignUp ? "Already have an account?" : "New business to LoadLoom?"}{" "}
-                <button
-                  type="button"
-                  className="font-semibold text-accent hover:underline"
-                  onClick={() => setIsSignUp((v) => !v)}
-                >
-                  {isSignUp ? "Sign in" : "Create an account"}
-                </button>
-              </p>
-            </>
-          )}
+          <p className="mt-6 border-t border-navy-foreground/10 pt-5 text-center text-sm text-navy-foreground/60">
+            {isSignUp ? "Already have an account?" : "New business to LoadLoom?"}{" "}
+            <button
+              type="button"
+              className="font-semibold text-accent hover:underline"
+              onClick={() => setIsSignUp((v) => !v)}
+            >
+              {isSignUp ? "Sign in" : "Create an account"}
+            </button>
+          </p>
         </div>
 
         <p className="mt-6 text-center text-xs text-navy-foreground/45">
@@ -281,7 +249,7 @@ function AuthPage() {
       toast.error("Enter your email address first.");
       return;
     }
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
       redirectTo: `${window.location.origin}/auth`,
     });
     if (error) toast.error(error.message);
