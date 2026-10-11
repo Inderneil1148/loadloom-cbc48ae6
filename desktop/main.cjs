@@ -10,8 +10,6 @@ const APP_ORIGINS = new Set([
   "https://loadloom.lovable.app",
 ]);
 const AUTH_ORIGINS = new Set([
-  "https://accounts.google.com",
-  "https://appleid.apple.com",
   "https://auth.lovable.app",
 ]);
 let mainWindow;

@@ -13,5 +13,9 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
-  vite: { plugins: [mcpPlugin()] },
+  vite: {
+    plugins: [mcpPlugin()],
+    // Dev-server only: accept the hosted preview/tunnel hosts that proxy this sandbox server.
+    server: { allowedHosts: [".e2b.app"] },
+  },
 });
