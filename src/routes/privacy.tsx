@@ -1,70 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SiteShell, PageHeader } from "@/components/site/SiteShell";
+import { BUSINESS, LegalPage, legalHead } from "@/components/site/LegalPage";
 
 export const Route = createFileRoute("/privacy")({
   staticData: { sitemap: true },
-  head: () => ({
-    meta: [
-      { title: "Privacy Policy — LoadLoom" },
-      {
-        name: "description",
-        content:
-          "How LoadLoom collects, stores and protects your business, customer, delivery and payment data.",
-      },
-      { property: "og:title", content: "Privacy Policy — LoadLoom" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { property: "og:description", content: "LoadLoom privacy policy for supplier accounts." },
-    ],
-  }),
-  component: Privacy,
+  head: () =>
+    legalHead("/privacy", "Privacy Policy — LoadLoom", "What LoadLoom collects, why, who processes it, and how to request deletion of your data."),
+  component: () => (
+    <LegalPage title="Privacy Policy" lead="What we collect, why, and the choices you have." sections={SECTIONS} />
+  ),
 });
 
 const SECTIONS = [
-  {
-    title: "What we store",
-    body: "Your business profile, users, customers, sites, materials, vehicles, drivers, orders, trips, delivery proof, invoices and payments — the records you create while operating LoadLoom.",
-  },
-  {
-    title: "Organization isolation",
-    body: "Every record belongs to one organization. Users can only read and write data inside the organization they were invited to, enforced on the server and in the database.",
-  },
-  {
-    title: "Documents and images",
-    body: "Delivery photos, signatures and weighbridge slips are stored as private files linked to the trip they belong to. They are not public.",
-  },
-  {
-    title: "Who can see your data",
-    body: "Your own users, according to their role. We do not sell your data and we do not share your customer list with other suppliers.",
-  },
-  {
-    title: "Retention and deletion",
-    body: "Your records stay available while your account is active. On request we delete your organization's data, subject to statutory record-keeping requirements.",
-  },
-  {
-    title: "Contact",
-    body: "For any privacy request, reach us through the contact page and we will respond to the account owner.",
-  },
+  { title: "Who we are", body: `LoadLoom is operated by ${BUSINESS.name} (India). We are responsible for the personal data described here. Contact: ${BUSINESS.email}.` },
+  { title: "What we collect", body: "Account: email, password (stored only as a secure hash by our sign-in service), business name.\nBusiness records you enter: profile, customers, delivery sites, drivers, vehicles, materials, orders, deliveries, quotations, invoices and payments.\nPlan payments: the UPI reference and screenshot you upload.\nContact form: name, business, phone, email and message.\nOptional: usage analytics, only if you accept analytics cookies." },
+  { title: "Why we collect it", body: "To provide the service you signed up for, verify plan payments, answer enquiries, send transactional emails (sign-in, receipts, plan updates), and — with consent — understand how the site is used. We collect only what these purposes need." },
+  { title: "Services that process data for us", body: "Lovable Cloud (hosting, database, sign-in, file storage, email delivery and the AI problem-diagnosis feature).\nGoogle and Apple (only if you choose to sign in with them).\nGoogle Maps (resolving map links you paste for delivery sites).\nGoogle Analytics and Google AdSense (only after you choose \"Accept all\" on the cookie banner).\nWe do not sell your data or share your customer list with other suppliers." },
+  { title: "Data isolation", body: "Every record belongs to your account. Other users cannot read or change it; this is enforced in the database." },
+  { title: "Retention", body: "We keep your data while your account is active. Payment records may be retained as required by Indian tax law after an account is deleted." },
+  { title: "Your rights and deletion", body: "You can view and edit your records in the app at any time. To delete your account and all its data, use Settings → Account → Request account deletion, or email us. We process requests promptly and confirm by email." },
+  { title: "Age", body: "LoadLoom is a business tool for people aged 18 or over. We do not knowingly collect data from children. If you believe a child has created an account, contact us and we will delete it." },
+  { title: "Changes", body: "We will update the date at the top of this page when this policy changes, and notify account holders of significant changes." },
 ];
-
-function Privacy() {
-  return (
-    <SiteShell>
-      <PageHeader eyebrow="Legal" title="Privacy Policy" lead="How your operational data is handled." />
-      <section className="mx-auto w-full max-w-3xl px-5 py-16">
-        <div className="space-y-9">
-          {SECTIONS.map((section) => (
-            <div key={section.title}>
-              <h2 className="text-lg font-bold">{section.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{section.body}</p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-12 border-t border-border pt-6 text-xs text-muted-foreground">
-          This policy is a plain-language summary and is not legal advice. Have it reviewed before you
-          publish it to customers.
-        </p>
-      </section>
-    </SiteShell>
-  );
-}
