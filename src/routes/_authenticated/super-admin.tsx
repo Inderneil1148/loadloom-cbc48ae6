@@ -25,8 +25,8 @@ import { AdminDeletionRequests } from "@/components/app/DeletionRequests";
 export const Route = createFileRoute("/_authenticated/super-admin")({
   staticData: { sitemap: false },
   head: () => ({ meta: [
-    { title: "Admin — LoadLoom" }, { name: "description", content: "Private administration." },
-    { property: "og:title", content: "Admin — LoadLoom" }, { property: "og:description", content: "Private administration." },
+    { title: "Super Admin — LoadLoom" }, { name: "description", content: "Private platform administration." },
+    { property: "og:title", content: "Super Admin — LoadLoom" }, { property: "og:description", content: "Private platform administration." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex, nofollow" },
   ] }),
   component: AdminGate,
@@ -34,32 +34,60 @@ export const Route = createFileRoute("/_authenticated/super-admin")({
 
 function AdminGate() {
   const { isAdmin, loading } = usePlan();
-  if (loading) return <div className="p-8"><Skeleton className="h-40 w-full" /></div>;
-  if (!isAdmin) return (
+  const superQ = useQuery({
+    queryKey: ["is-super-admin"],
+    enabled: isAdmin,
+    queryFn: async () => {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) return false;
+      const { data } = await supabase.rpc("is_super_admin", { _user_id: u.user.id });
+      return !!data;
+    },
+  });
+  if (loading || (isAdmin && superQ.isLoading)) return <div className="p-8"><Skeleton className="h-40 w-full" /></div>;
+  if (!isAdmin || !superQ.data) return (
     <div className="grid min-h-screen place-items-center bg-background p-6 text-center">
       <div><h1 className="text-2xl font-extrabold">Page not found</h1><Button asChild variant="outline" className="mt-4"><Link to="/dashboard">Go to dashboard</Link></Button></div>
     </div>
   );
-  return <AppPage eyebrow="Private" title="Admin — Accounts & Plans" description="Only you can see this page."><Admin /></AppPage>;
+  return <AppPage eyebrow="Private" title="Super Admin" description="Only your account can open this page." actions={<SecureSignOut />}><Admin /></AppPage>;
+}
+
+function SecureSignOut() {
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+  return (
+    <Button variant="outline" onClick={async () => {
+      await qc.cancelQueries(); qc.clear();
+      await supabase.auth.signOut({ scope: "global" });
+      navigate({ to: "/auth", replace: true });
+    }}><LogOut className="size-4" /> Sign out everywhere</Button>
+  );
 }
 
 const sel = "h-9 rounded-md border border-input bg-background px-2 text-sm";
 
 function Admin() {
+  const tabs = [
+    ["accounts", "Accounts"], ["reports", "Reports"], ["payments", "Payments"], ["announcements", "Announcements"],
+    ["support", "Support"], ["audit", "Audit log"], ["health", "System health"], ["plans", "Plan settings"], ["deletions", "Deletion requests"],
+  ] as const;
   return (
     <Tabs defaultValue="accounts" className="space-y-5">
-      <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 sm:w-[36rem]">
-        <TabsTrigger value="accounts">Accounts</TabsTrigger>
-        <TabsTrigger value="payments">Payments</TabsTrigger>
-        <TabsTrigger value="plans">Plan settings</TabsTrigger>
-        <TabsTrigger value="deletions">Deletion requests</TabsTrigger>
-      </TabsList>
-      <TabsContent value="deletions"><AdminDeletionRequests /></TabsContent>
-      <TabsContent value="payments"><AdminPayments /></TabsContent>
+      <div className="overflow-x-auto pb-1">
+        <TabsList className="inline-flex w-max">
+          {tabs.map(([v, l]) => <TabsTrigger key={v} value={v}>{l}</TabsTrigger>)}
+        </TabsList>
+      </div>
       <TabsContent value="accounts"><AdminAccounts /></TabsContent>
-      <TabsContent value="plans">
-        <PlanSettings />
-      </TabsContent>
+      <TabsContent value="reports"><SuperAdminReports /></TabsContent>
+      <TabsContent value="payments"><AdminPayments /></TabsContent>
+      <TabsContent value="announcements"><SuperAdminAnnouncements /></TabsContent>
+      <TabsContent value="support"><SuperAdminSupport /></TabsContent>
+      <TabsContent value="audit"><SuperAdminAudit /></TabsContent>
+      <TabsContent value="health"><SuperAdminHealth /></TabsContent>
+      <TabsContent value="plans"><PlanSettings /></TabsContent>
+      <TabsContent value="deletions"><AdminDeletionRequests /></TabsContent>
     </Tabs>
   );
 }
