@@ -12,7 +12,6 @@ import {
   Gauge,
   MessageSquareOff,
 } from "lucide-react";
-import { Plug } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteShell } from "@/components/site/SiteShell";
 import { WORKFLOW, formatINR } from "@/lib/plans";
