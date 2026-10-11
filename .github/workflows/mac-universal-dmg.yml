@@ -2,6 +2,11 @@ name: Build universal Mac DMG
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+      - '_agent-publish'
+      - 'edit/**'
 
 jobs:
   build-universal-dmg:
