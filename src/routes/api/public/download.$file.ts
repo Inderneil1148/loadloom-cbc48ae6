@@ -16,7 +16,13 @@ export const Route = createFileRoute("/api/public/download/$file")({
         const { data, error } = await supabaseAdmin.storage
           .from("app-downloads")
           .createSignedUrl(params.file, 60 * 10, { download: params.file });
-        if (error || !data) return new Response("Download unavailable", { status: 503 });
+        if (error || !data) {
+          // File not uploaded yet: send the visitor back to the download page with a friendly notice.
+          return new Response(null, {
+            status: 302,
+            headers: { Location: `/download?unavailable=${encodeURIComponent(params.file)}`, "Cache-Control": "no-store" },
+          });
+        }
         return new Response(null, { status: 302, headers: { Location: data.signedUrl, "Cache-Control": "no-store" } });
       },
     },
