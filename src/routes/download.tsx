@@ -26,7 +26,7 @@ export const Route = createFileRoute("/download")({
     links: [{ rel: "canonical", href: "https://loadloom.online/download" }],
   }),
   validateSearch: (s: Record<string, unknown>): { unavailable?: string } =>
-    typeof s.unavailable === "string" ? { unavailable: s.unavailable } : {},
+    typeof s["unavailable"] === "string" ? { unavailable: s["unavailable"] } : {},
   component: DownloadPage,
 });
 
