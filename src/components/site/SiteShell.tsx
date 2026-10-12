@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
 import { openConsent } from "@/lib/consent";
+import { ProductHuntCard } from "./ProductHuntCard";
 
 const NAV = [
   { to: "/features", label: "Features" },
@@ -136,6 +137,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               </div>
             </div>
           </div>
+          <ProductHuntCard />
           <p className="mt-10 border-t border-navy-foreground/10 pt-6 text-xs text-navy-foreground/50">
             © 2026 The Social INK, India · LoadLoom ·{" "}
               <a href="mailto:inderneilkanagali@gmail.com" className="underline">inderneilkanagali@gmail.com</a>
